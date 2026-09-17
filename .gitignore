@@ -1,0 +1,6 @@
+.env
+out
+migrations
+out
+README.md
+.env-postgresql

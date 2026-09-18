@@ -11,7 +11,7 @@ USERS TABLE
 | password_hashed | VARCHAR(64)  | NOT NULL              |                                                                                       |         |
 | phone_number    | VARCHAR      | NOT NULL              | CHECK char_length(phone_number) BETWEEN 10 AND 15<br>CHECK phone_number ± '^+[0-9]+$' |         |
 | version         | BIGINT       | DEFAULT 1<br>NOT NULL |                                                                                       |         |
-| address         | VARCHAR      |                       |                                                                                       |         |
+| role            | VARCHAR(50)  | NOT NULL              | DEFAULT 'USER'                                                                        |         |
 
 ### SQL CODE FOR INITIALIZATION
 
@@ -27,5 +27,6 @@ CREATE TABLE tamagochi.users(
 	char_length(phone_number) BETWEEN 10 AND 15
 	AND phone_number ± '^+[0-9]+$'),
 	version BIGINT NOT NULL DEFAULT 1,
+	role VARCHAR(50) NOT NULL DEFAULT 'USER'
 )
 ```

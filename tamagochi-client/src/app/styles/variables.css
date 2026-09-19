@@ -1,0 +1,16 @@
+:root {
+  /* Typography */
+  --font-family-primary: 'Handjet', sans-serif;
+
+  /* Colors */
+  --color-background: #000000;
+  --color-text-primary: #ffffff;
+
+  /* Layout */
+  --container-width: 1620px;
+
+  /* Border radius */
+  --border-radius-small: 14px;
+  --border-radius-medium: 38px;
+  --border-radius-big: 68px;
+}

@@ -1,66 +1,55 @@
 include .env
 export
 
-export PROJECT_ROOT=${shell pwd}
-env-up:
-<<<<<<< HEAD
-	docker-compose up -d tamagochi-postgres port-forwarder
-=======
-	docker-compose up -d tamagochi-postgres
->>>>>>> 866c57fa312b7430b51e751d93075a6c5b19f7fe
+COMPOSE ?= docker-compose
+DB_SERVICE := tamagochi-postgres
+FORWARDER_SERVICE := port-forwarder
+MIGRATION_SERVICE := tamagochi-postgres-migrate
 
+export PROJECT_ROOT := $(CURDIR)
+
+.PHONY: env-up env-down env-dropdown migrate-create migrate-up migrate-down migrate-action
+
+env-up:
+	$(COMPOSE) up -d --wait $(DB_SERVICE) $(FORWARDER_SERVICE)
 
 env-down:
-	docker-compose down tamagochi-postgres
+	$(COMPOSE) down $(DB_SERVICE) $(FORWARDER_SERVICE)
 
 env-dropdown:
-	@read -p "Drop all volumes? WARNING!!! [y/N] : " ans; \
+	@read -p "Drop all database data? WARNING! [y/N]: " ans; \
 	if [ "$$ans" = "y" ]; then \
-	docker-compose down tamagochi-postgres && \
-	rm -rf out/pgdata && \
-	echo "Files were complietly down";\
+		$(COMPOSE) down --remove-orphans; \
+		rm -rf out/pgdata; \
+		echo "Database data removed."; \
 	else \
-		echo "Action cancelled. Data is still"; \
+		echo "Action cancelled. Database data was kept."; \
 	fi
-<<<<<<< HEAD
-	@docker-compose down port-forwarder \
-	echo "Port forwarder closed";
-=======
->>>>>>> 866c57fa312b7430b51e751d93075a6c5b19f7fe
 
 migrate-create:
 	@if [ -z "$(seq)" ]; then \
-		echo "check the input/call make migrate-create seq='value'"; \
+		echo "Usage: make migrate-create seq=<name>"; \
 		exit 1; \
-	fi; \
-	docker-compose run --rm tamagochi-postgres-migrate \
-		create \
-		-ext sql \
-		-dir /migrations \
-		-seq "$(seq)"
-migrate-up:
-	make migrate-action action=up
+	fi
+	$(COMPOSE) run --rm $(MIGRATION_SERVICE) create -ext sql -dir /migrations -seq "$(seq)"
 
-migrate-down:
-	make migrate-action action=down	
-<<<<<<< HEAD
+migrate-up: env-up
+	$(MAKE) migrate-action action=up
 
+migrate-down: env-up
+	$(MAKE) migrate-action action=down
 
-=======
->>>>>>> 866c57fa312b7430b51e751d93075a6c5b19f7fe
 migrate-action:
-
 	@if [ -z "$(action)" ]; then \
-		echo "check the input/call make migrate-action 'action=value'"; \
+		echo "Usage: make migrate-action action=up|down"; \
 		exit 1; \
-	fi; \
-
-	@read -p "Do you want to make migration up/down [y/N] : " ans; \
-	docker-compose run --rm tamagochi-postgres-migrate \
-		-path /migrations \
-		-database postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@tamagochi-postgres:5432/${POSTGRES_DB}?sslmode=disable \
-<<<<<<< HEAD
-		"$(action)"
-=======
-		"$(action)"
->>>>>>> 866c57fa312b7430b51e751d93075a6c5b19f7fe
+	fi
+	@read -p "Run migration $(action)? [y/N]: " ans; \
+	if [ "$$ans" = "y" ]; then \
+		$(COMPOSE) run --rm --no-deps $(MIGRATION_SERVICE) \
+			-path /migrations \
+			-database "postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@$(DB_SERVICE):5432/$(POSTGRES_DB)?sslmode=disable" \
+			"$(action)"; \
+	else \
+		echo "Migration cancelled."; \
+	fi

@@ -3,19 +3,27 @@ services:
     image: postgres:18.1-bookworm
     container_name: tamagochi-env-postgresql
     environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - ${PROJECT_ROOT}/out/pgdata:/var/lib/postgresql
-    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 5s
+    restart: unless-stopped
 
   tamagochi-postgres-migrate:
     image: migrate/migrate:v4.19.1
     volumes:
-      - ${PROJECT_ROOT}/migrations:/migrations
+      - ${PROJECT_ROOT}/migrations:/migrations:ro
+    depends_on:
+      tamagochi-postgres:
+        condition: service_healthy
 
-<<<<<<< HEAD
   port-forwarder:
     image: alpine/socat
     command:
@@ -24,12 +32,6 @@ services:
     ports:
       - "127.0.0.1:5432:5432"
     depends_on:
-      - tamagochi-postgres
-    restart: always
-=======
-  # tamagochi-socat:
-  #   image: alpine/socat
-  #   container_name: tamagochi-PG-socat
-  #   volumes:
-  #     - 
->>>>>>> 866c57fa312b7430b51e751d93075a6c5b19f7fe
+      tamagochi-postgres:
+        condition: service_healthy
+    restart: unless-stopped

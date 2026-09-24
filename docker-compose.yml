@@ -15,8 +15,13 @@ services:
     volumes:
       - ${PROJECT_ROOT}/migrations:/migrations
 
-  # tamagochi-socat:
-  #   image: alpine/socat
-  #   container_name: tamagochi-PG-socat
-  #   volumes:
-  #     - 
+  port-forwarder:
+    image: alpine/socat
+    command:
+      - TCP4-LISTEN:5432,fork,reuseaddr
+      - TCP4:tamagochi-postgres:5432
+    ports:
+      - "127.0.0.1:5432:5432"
+    depends_on:
+      - tamagochi-postgres
+    restart: always

@@ -3,7 +3,7 @@ export
 
 export PROJECT_ROOT=${shell pwd}
 env-up:
-	docker-compose up -d tamagochi-postgres
+	docker-compose up -d tamagochi-postgres port-forwarder
 
 
 env-down:
@@ -18,6 +18,8 @@ env-dropdown:
 	else \
 		echo "Action cancelled. Data is still"; \
 	fi
+	@docker-compose down port-forwarder \
+	echo "Port forwarder closed";
 
 migrate-create:
 	@if [ -z "$(seq)" ]; then \
@@ -34,6 +36,8 @@ migrate-up:
 
 migrate-down:
 	make migrate-action action=down	
+
+
 migrate-action:
 
 	@if [ -z "$(action)" ]; then \

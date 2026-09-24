@@ -3,7 +3,11 @@ export
 
 export PROJECT_ROOT=${shell pwd}
 env-up:
+<<<<<<< HEAD
 	docker-compose up -d tamagochi-postgres port-forwarder
+=======
+	docker-compose up -d tamagochi-postgres
+>>>>>>> 866c57fa312b7430b51e751d93075a6c5b19f7fe
 
 
 env-down:
@@ -18,8 +22,11 @@ env-dropdown:
 	else \
 		echo "Action cancelled. Data is still"; \
 	fi
+<<<<<<< HEAD
 	@docker-compose down port-forwarder \
 	echo "Port forwarder closed";
+=======
+>>>>>>> 866c57fa312b7430b51e751d93075a6c5b19f7fe
 
 migrate-create:
 	@if [ -z "$(seq)" ]; then \
@@ -36,8 +43,11 @@ migrate-up:
 
 migrate-down:
 	make migrate-action action=down	
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 866c57fa312b7430b51e751d93075a6c5b19f7fe
 migrate-action:
 
 	@if [ -z "$(action)" ]; then \
@@ -49,4 +59,8 @@ migrate-action:
 	docker-compose run --rm tamagochi-postgres-migrate \
 		-path /migrations \
 		-database postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@tamagochi-postgres:5432/${POSTGRES_DB}?sslmode=disable \
+<<<<<<< HEAD
 		"$(action)"
+=======
+		"$(action)"
+>>>>>>> 866c57fa312b7430b51e751d93075a6c5b19f7fe

@@ -15,6 +15,7 @@ services:
     volumes:
       - ${PROJECT_ROOT}/migrations:/migrations
 
+<<<<<<< HEAD
   port-forwarder:
     image: alpine/socat
     command:
@@ -25,3 +26,10 @@ services:
     depends_on:
       - tamagochi-postgres
     restart: always
+=======
+  # tamagochi-socat:
+  #   image: alpine/socat
+  #   container_name: tamagochi-PG-socat
+  #   volumes:
+  #     - 
+>>>>>>> 866c57fa312b7430b51e751d93075a6c5b19f7fe

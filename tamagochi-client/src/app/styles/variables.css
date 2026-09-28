@@ -1,15 +1,25 @@
 :root {
   /* Typography */
   --font-family-primary: 'Handjet', sans-serif;
+  --letter-spacing: 0.04em;
 
   /* Colors */
   --color-background: #000000;
   --color-text-primary: #ffffff;
+  --color-pink: #ff55e4;
+  --color-error: #ff8e8e;
+  --color-white: #ffffff;
+
+  /* Buttons */
+  --color-box-shadow-light: #ff55e4;
+  --text-color-light: #ff55e4;
+  --bg-color-light: #ffffff;
 
   /* Layout */
-  --container-width: 1620px;
+  --container-width: 1220px;
 
   /* Border radius */
+  --border-radius-xs: 4px;
   --border-radius-small: 14px;
   --border-radius-medium: 38px;
   --border-radius-big: 68px;

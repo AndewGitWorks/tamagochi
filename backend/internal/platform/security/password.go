@@ -12,20 +12,50 @@ import (
 )
 
 const passwordIterations = 210_000
-const passwordKeyLength = 32
+const passwordKeyLength = 24 // 192-bit key; keeps the complete encoding within VARCHAR(64).
+const passwordSaltLength = 16
+const passwordHashVersion = 1
+const passwordIterationBytes = 3
 
-// HashPassword uses PBKDF2-HMAC-SHA256 with a unique random salt.
+// HashPassword uses PBKDF2-HMAC-SHA256 with a unique random salt. The compact
+// versioned encoding stores version, iteration count, salt, and derived key in
+// one base64 value so it fits the existing password_hashed VARCHAR(64) column.
 func HashPassword(password string) (string, error) {
-	salt := make([]byte, 16)
+	salt := make([]byte, passwordSaltLength)
 	if _, err := rand.Read(salt); err != nil {
 		return "", fmt.Errorf("create password salt: %w", err)
 	}
-	key := pbkdf2SHA256([]byte(password), salt, passwordIterations, passwordKeyLength)
-	return fmt.Sprintf("pbkdf2-sha256$%d$%s$%s", passwordIterations,
-		base64.RawURLEncoding.EncodeToString(salt), base64.RawURLEncoding.EncodeToString(key)), nil
+	derived := pbkdf2SHA256([]byte(password), salt, passwordIterations, passwordKeyLength)
+	encoded := make([]byte, 1+passwordIterationBytes+len(salt)+len(derived))
+	encoded[0] = passwordHashVersion
+	encoded[1] = byte(passwordIterations >> 16)
+	encoded[2] = byte(passwordIterations >> 8 & 0xff)
+	encoded[3] = byte(passwordIterations & 0xff)
+	copy(encoded[4:], salt)
+	copy(encoded[4+len(salt):], derived)
+	return base64.RawURLEncoding.EncodeToString(encoded), nil
 }
 
 func VerifyPassword(password, encoded string) bool {
+	// Keep support for hashes created by the previous textual representation.
+	if strings.HasPrefix(encoded, "pbkdf2-sha256$") {
+		return verifyLegacyPassword(password, encoded)
+	}
+	data, err := base64.RawURLEncoding.DecodeString(encoded)
+	if err != nil || len(data) != 1+passwordIterationBytes+passwordSaltLength+passwordKeyLength || data[0] != passwordHashVersion {
+		return false
+	}
+	iterations := int(data[1])<<16 | int(data[2])<<8 | int(data[3])
+	if iterations < 1 {
+		return false
+	}
+	salt := data[4 : 4+passwordSaltLength]
+	expected := data[4+passwordSaltLength:]
+	actual := pbkdf2SHA256([]byte(password), salt, iterations, len(expected))
+	return subtle.ConstantTimeCompare(expected, actual) == 1
+}
+
+func verifyLegacyPassword(password, encoded string) bool {
 	parts := strings.Split(encoded, "$")
 	if len(parts) != 4 || parts[0] != "pbkdf2-sha256" {
 		return false

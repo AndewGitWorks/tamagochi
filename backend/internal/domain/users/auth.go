@@ -6,7 +6,9 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"net/mail"
 	"regexp"
+	"strconv"
 	"sync"
 	"time"
 
@@ -18,7 +20,10 @@ var (
 	ErrInvalidCredentials = errors.New("invalid login or password")
 )
 
-var loginPattern = regexp.MustCompile(`^[A-Za-z0-9_.-]{3,24}$`)
+var (
+	loginPattern = regexp.MustCompile(`^[A-Za-z0-9_.-]{3,24}$`)
+	phonePattern = regexp.MustCompile(`^\+[0-9]{9,14}$`)
+)
 
 type AuthConfig struct {
 	Store           Store
@@ -40,9 +45,12 @@ type AuthService struct {
 }
 
 type RegisterInput struct {
-	Login    string `json:"login"`
-	Name     string `json:"name"`
-	Password string `json:"password"`
+	Login       string `json:"login"`
+	Name        string `json:"name"`
+	Surname     string `json:"surname"`
+	Email       string `json:"email"`
+	PhoneNumber string `json:"phone_number"`
+	Password    string `json:"password"`
 }
 
 type LoginInput struct {
@@ -65,30 +73,38 @@ func NewAuthService(config AuthConfig) *AuthService {
 	if config.RefreshTokenTTL <= 0 {
 		config.RefreshTokenTTL = 30 * 24 * time.Hour
 	}
-	return &AuthService{
-		store:           config.Store,
-		jwtSecret:       config.JWTSecret,
-		issuer:          config.Issuer,
-		accessTTL:       config.AccessTokenTTL,
-		refreshTTL:      config.RefreshTokenTTL,
-		now:             time.Now,
-		refreshSessions: make(map[string]string),
-	}
+	return &AuthService{store: config.Store, jwtSecret: config.JWTSecret, issuer: config.Issuer,
+		accessTTL: config.AccessTokenTTL, refreshTTL: config.RefreshTokenTTL,
+		now: time.Now, refreshSessions: make(map[string]string)}
 }
 
 func (s *AuthService) Register(ctx context.Context, input RegisterInput) (TokenPair, error) {
-	if !loginPattern.MatchString(input.Login) || len([]rune(input.Name)) < 2 || len([]rune(input.Name)) > 100 || len(input.Password) < 8 {
-		return TokenPair{}, fmt.Errorf("%w: login must be 3-24 allowed characters, name 2-100 characters, password at least 8 characters", ErrValidation)
+	if err := validateRegistration(input); err != nil {
+		return TokenPair{}, err
 	}
 	hash, err := security.HashPassword(input.Password)
 	if err != nil {
 		return TokenPair{}, err
 	}
-	user, err := s.store.Create(ctx, User{Login: input.Login, Name: input.Name, Role: "USER", PasswordHash: hash})
+	user, err := s.store.Create(ctx, User{Login: input.Login, Name: input.Name, Surname: input.Surname,
+		Email: input.Email, PhoneNumber: input.PhoneNumber, Role: "USER", PasswordHash: hash})
 	if err != nil {
 		return TokenPair{}, err
 	}
 	return s.issuePair(user)
+}
+
+func validateRegistration(input RegisterInput) error {
+	if !loginPattern.MatchString(input.Login) || len([]rune(input.Name)) < 3 || len([]rune(input.Name)) > 100 ||
+		len([]rune(input.Surname)) < 3 || len([]rune(input.Surname)) > 100 || len(input.Email) < 3 || len(input.Email) > 100 || len(input.Password) < 8 ||
+		len(input.PhoneNumber) < 10 || len(input.PhoneNumber) > 15 || !phonePattern.MatchString(input.PhoneNumber) {
+		return fmt.Errorf("%w: login, name, surname, email, phone number or password does not meet requirements", ErrValidation)
+	}
+	address, err := mail.ParseAddress(input.Email)
+	if err != nil || address.Address != input.Email {
+		return fmt.Errorf("%w: email is invalid", ErrValidation)
+	}
+	return nil
 }
 
 func (s *AuthService) Login(ctx context.Context, input LoginInput) (TokenPair, error) {
@@ -107,17 +123,21 @@ func (s *AuthService) Refresh(ctx context.Context, refreshToken string) (TokenPa
 	if err != nil {
 		return TokenPair{}, err
 	}
+	id, parseErr := strconv.ParseInt(claims.Subject, 10, 64)
+	if parseErr != nil {
+		return TokenPair{}, security.ErrInvalidToken
+	}
 	s.mu.Lock()
 	userID, found := s.refreshSessions[claims.ID]
 	if found && userID == claims.Subject {
-		delete(s.refreshSessions, claims.ID) // Refresh tokens are single-use.
+		delete(s.refreshSessions, claims.ID)
 	}
 	s.mu.Unlock()
 	if !found || userID != claims.Subject {
 		return TokenPair{}, security.ErrInvalidToken
 	}
-	user, found, err := s.store.FindByLogin(ctx, claims.Login)
-	if err != nil || !found || user.ID != claims.Subject {
+	user, found, err := s.store.FindByID(ctx, id)
+	if err != nil || !found || strconv.FormatInt(user.ID, 10) != claims.Subject || user.Login != claims.Login {
 		return TokenPair{}, security.ErrInvalidToken
 	}
 	return s.issuePair(user)
@@ -134,7 +154,7 @@ func (s *AuthService) issuePair(user User) (TokenPair, error) {
 		return TokenPair{}, err
 	}
 	s.mu.Lock()
-	s.refreshSessions[refreshID] = user.ID
+	s.refreshSessions[refreshID] = strconv.FormatInt(user.ID, 10)
 	s.mu.Unlock()
 	return TokenPair{AccessToken: access, RefreshToken: refresh, TokenType: "Bearer", AccessExpiresAt: accessExpiry, RefreshExpiresAt: refreshExpiry}, nil
 }
@@ -145,11 +165,9 @@ func (s *AuthService) issueToken(user User, tokenType string, ttl time.Duration,
 		return "", "", "", err
 	}
 	expiresAt := now.Add(ttl)
-	claims := security.Claims{
-		Issuer: s.issuer, Subject: user.ID, Login: user.Login, Name: user.Name, Role: user.Role,
+	claims := security.Claims{Issuer: s.issuer, Subject: strconv.FormatInt(user.ID, 10), Login: user.Login, Name: user.Name, Role: user.Role,
 		TimeCreation: now.Format(time.RFC3339), TimeExpiration: expiresAt.Format(time.RFC3339),
-		IssuedAt: now.Unix(), ExpiresAt: expiresAt.Unix(), ID: id, TokenType: tokenType,
-	}
+		IssuedAt: now.Unix(), ExpiresAt: expiresAt.Unix(), ID: id, TokenType: tokenType}
 	token, err = security.SignJWT(claims, s.jwtSecret)
 	return token, claims.TimeExpiration, id, err
 }

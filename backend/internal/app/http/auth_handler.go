@@ -90,7 +90,7 @@ func writeAuthError(w http.ResponseWriter, err error) {
 	switch {
 	case errors.Is(err, users.ErrValidation):
 		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid_request", "message": err.Error()})
-	case errors.Is(err, users.ErrLoginTaken):
+	case errors.Is(err, users.ErrLoginTaken), errors.Is(err, users.ErrUserConflict):
 		writeJSON(w, http.StatusConflict, map[string]string{"error": "login_taken", "message": err.Error()})
 	case errors.Is(err, users.ErrInvalidCredentials), errors.Is(err, security.ErrInvalidToken):
 		w.Header().Set("WWW-Authenticate", `Bearer realm="tamagochi-api"`)

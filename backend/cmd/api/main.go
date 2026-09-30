@@ -2,10 +2,12 @@ package main
 
 import (
 	"bufio"
+	"context"
 	"errors"
 	"fmt"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 	"strconv"
 	"strings"
@@ -13,6 +15,8 @@ import (
 
 	apphttp "github.com/AndewGitWorks/tamagochi/backend/internal/app/http"
 	"github.com/AndewGitWorks/tamagochi/backend/internal/domain/users"
+	"github.com/AndewGitWorks/tamagochi/backend/internal/platform/database"
+	"github.com/AndewGitWorks/tamagochi/backend/internal/repository"
 )
 
 func main() {
@@ -23,20 +27,41 @@ func main() {
 	if len(secret) < 32 {
 		log.Fatal("JWT_SECRET must be set and contain at least 32 characters")
 	}
-
-	service := users.NewAuthService(users.AuthConfig{
-		Store:           users.NewMemoryStore(),
-		JWTSecret:       []byte(secret),
-		Issuer:          envOrDefault("JWT_ISSUER", "tamagochi-api"),
-		AccessTokenTTL:  envDurationSeconds("JWT_ACCESS_TTL_SECONDS", 15*time.Minute),
-		RefreshTokenTTL: envDurationSeconds("JWT_REFRESH_TTL_SECONDS", 30*24*time.Hour),
-	})
-
+	dsn, err := databaseURLFromEnv()
+	if err != nil {
+		log.Fatal(err)
+	}
+	db, err := database.OpenPostgres(context.Background(), dsn)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+	service := users.NewAuthService(users.AuthConfig{Store: repository.NewPostgresUserStore(db), JWTSecret: []byte(secret),
+		Issuer: envOrDefault("JWT_ISSUER", "tamagochi-api"), AccessTokenTTL: envDurationSeconds("JWT_ACCESS_TTL_SECONDS", 15*time.Minute),
+		RefreshTokenTTL: envDurationSeconds("JWT_REFRESH_TTL_SECONDS", 30*24*time.Hour)})
 	address := ":" + envOrDefault("PORT", "8080")
 	log.Printf("Tamagochi API listening on %s", address)
 	if err := http.ListenAndServe(address, apphttp.NewRouter(service)); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func databaseURLFromEnv() (string, error) {
+	if dsn := os.Getenv("DATABASE_URL"); dsn != "" {
+		return dsn, nil
+	}
+	user, password, dbName := os.Getenv("POSTGRES_USER"), os.Getenv("POSTGRES_PASSWORD"), os.Getenv("POSTGRES_DB")
+	if user == "" || password == "" || dbName == "" {
+		return "", fmt.Errorf("set DATABASE_URL or POSTGRES_USER, POSTGRES_PASSWORD, and POSTGRES_DB")
+	}
+	host := envOrDefault("POSTGRES_HOST", "localhost")
+	port := envOrDefault("POSTGRES_PORT", "5432")
+	sslMode := envOrDefault("POSTGRES_SSLMODE", "disable")
+	u := url.URL{Scheme: "postgres", User: url.UserPassword(user, password), Host: host + ":" + port, Path: "/" + dbName}
+	q := u.Query()
+	q.Set("sslmode", sslMode)
+	u.RawQuery = q.Encode()
+	return u.String(), nil
 }
 
 func envOrDefault(name, fallback string) string {
@@ -74,7 +99,6 @@ func loadEnvFile(path string) error {
 		return err
 	}
 	defer file.Close()
-
 	scanner := bufio.NewScanner(file)
 	lineNumber := 0
 	for scanner.Scan() {

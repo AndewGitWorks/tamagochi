@@ -17,7 +17,15 @@ func NewRouter(auth *users.AuthService) http.Handler {
 	mux.HandleFunc("POST /register", register(auth))
 	mux.HandleFunc("POST /login", login(auth))
 	mux.HandleFunc("POST /refresh", refresh(auth))
+	mux.HandleFunc("GET /getentity", getEntity())
 	return cors(mux)
+}
+
+func getEntity() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		res := "response"
+		writeJSON(w, http.StatusOK, res)
+	}
 }
 
 func register(auth *users.AuthService) http.HandlerFunc {

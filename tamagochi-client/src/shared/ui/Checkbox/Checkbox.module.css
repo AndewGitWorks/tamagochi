@@ -5,6 +5,10 @@
   gap: 8px;
 }
 
+.checkboxWrapper label {
+  cursor: pointer;
+}
+
 .checkbox {
   appearance: none;
   width: 20px;
@@ -14,6 +18,8 @@
   transition: 500ms;
 
   position: relative;
+
+  flex-shrink: 0;
 }
 
 .checkbox::after {
@@ -30,6 +36,8 @@
   background-image: url('../../../assets/icons/check.svg');
   background-size: contain;
   background-repeat: no-repeat;
+
+  cursor: pointer;
 }
 
 .checkbox:checked::after {

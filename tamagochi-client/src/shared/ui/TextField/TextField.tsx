@@ -1,4 +1,4 @@
-import type { InputHTMLAttributes, ReactNode } from 'react';
+import { useId, type InputHTMLAttributes, type ReactNode } from 'react';
 import styles from './TextField.module.css';
 
 type TextFieldProps = InputHTMLAttributes<HTMLInputElement> & {
@@ -8,13 +8,15 @@ type TextFieldProps = InputHTMLAttributes<HTMLInputElement> & {
 };
 
 export const TextField = ({ label, error, endAdornment, ...props }: TextFieldProps) => {
+  const generatedId = useId();
+  const id = props.id || generatedId;
   return (
     <div className={styles.textFieldWrapper}>
       <div className={styles.labelWrapper}>
-        <label htmlFor={props.id}>{label}:</label>
+        <label htmlFor={id}>{label}:</label>
       </div>
       <div className={`${styles.inputWrapper} ${!!error ? styles.error : ''}`}>
-        <input className={styles.input} {...props} />
+        <input type="text" className={styles.input} {...props} id={id} />
         {endAdornment && <div className={styles.endAdornment}>{endAdornment}</div>}
       </div>
       {error && <span className={styles.errorMessage}>{error}</span>}

@@ -1,0 +1,18 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.memory {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: var(--letter-spacing);
+  margin: 12px 0;
+}
+
+.link {
+  color: var(--color-pink);
+}

@@ -2,6 +2,7 @@ package integration_test
 
 import (
 	"context"
+	"errors"
 	"os"
 	"strconv"
 	"testing"
@@ -9,6 +10,7 @@ import (
 
 	"github.com/AndewGitWorks/tamagochi/backend/internal/domain/users"
 	"github.com/AndewGitWorks/tamagochi/backend/internal/platform/database"
+	"github.com/AndewGitWorks/tamagochi/backend/internal/platform/security"
 	"github.com/AndewGitWorks/tamagochi/backend/internal/repository"
 )
 
@@ -31,7 +33,8 @@ func TestPostgresRegistrationCreatesProfileAndSupportsUserCRUD(t *testing.T) {
 		PhoneNumber: "+15551234567", Password: "test-password-long-enough",
 	}
 	service := users.NewAuthService(users.AuthConfig{
-		Store: store, JWTSecret: []byte("integration-test-secret-at-least-32-characters"), Issuer: "test-api",
+		Store: store, RefreshSessions: repository.NewPostgresRefreshSessionStore(db),
+		JWTSecret: []byte("integration-test-secret-at-least-32-characters"), Issuer: "test-api",
 	})
 	pair, err := service.Register(ctx, input)
 	if err != nil {
@@ -45,6 +48,12 @@ func TestPostgresRegistrationCreatesProfileAndSupportsUserCRUD(t *testing.T) {
 	t.Cleanup(func() { _ = store.Delete(context.Background(), user.ID) })
 	if pair.AccessToken == "" || pair.RefreshToken == "" {
 		t.Fatal("registration did not issue tokens")
+	}
+	if _, err := service.Refresh(ctx, pair.RefreshToken); err != nil {
+		t.Fatalf("refresh token stored in PostgreSQL could not be consumed: %v", err)
+	}
+	if _, err := service.Refresh(ctx, pair.RefreshToken); !errors.Is(err, security.ErrInvalidToken) {
+		t.Fatalf("expected used refresh token to be rejected, got %v", err)
 	}
 	var profileCount int
 	if err := db.QueryRowContext(ctx, `SELECT count(*) FROM tamagochi.profiles WHERE user_id=$1`, user.ID).Scan(&profileCount); err != nil {

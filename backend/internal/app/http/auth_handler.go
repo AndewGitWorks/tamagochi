@@ -3,6 +3,8 @@ package http
 import (
 	"encoding/json"
 	"errors"
+
+	"log"
 	"net/http"
 	"strings"
 
@@ -116,6 +118,7 @@ func writeJSON(w http.ResponseWriter, status int, value any) {
 
 func cors(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log.Printf("CORS: %s %s", r.Method, r.URL.Path)
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")

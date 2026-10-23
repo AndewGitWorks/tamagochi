@@ -36,7 +36,7 @@ func main() {
 		log.Fatal(err)
 	}
 	defer db.Close()
-	service := users.NewAuthService(users.AuthConfig{Store: repository.NewPostgresUserStore(db), JWTSecret: []byte(secret),
+	service := users.NewAuthService(users.AuthConfig{Store: repository.NewPostgresUserStore(db), RefreshSessions: repository.NewPostgresRefreshSessionStore(db), JWTSecret: []byte(secret),
 		Issuer: envOrDefault("JWT_ISSUER", "tamagochi-api"), AccessTokenTTL: envDurationSeconds("JWT_ACCESS_TTL_SECONDS", 15*time.Minute),
 		RefreshTokenTTL: envDurationSeconds("JWT_REFRESH_TTL_SECONDS", 30*24*time.Hour)})
 	address := ":" + envOrDefault("PORT", "8080")

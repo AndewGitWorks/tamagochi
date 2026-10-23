@@ -9,7 +9,6 @@ import (
 	"net/mail"
 	"regexp"
 	"strconv"
-	"sync"
 	"time"
 
 	"github.com/AndewGitWorks/tamagochi/backend/internal/platform/security"
@@ -31,6 +30,7 @@ type AuthConfig struct {
 	Issuer          string
 	AccessTokenTTL  time.Duration
 	RefreshTokenTTL time.Duration
+	RefreshSessions RefreshSessionStore
 }
 
 type AuthService struct {
@@ -40,8 +40,7 @@ type AuthService struct {
 	accessTTL       time.Duration
 	refreshTTL      time.Duration
 	now             func() time.Time
-	refreshSessions map[string]string
-	mu              sync.Mutex
+	refreshSessions RefreshSessionStore
 }
 
 type RegisterInput struct {
@@ -73,9 +72,12 @@ func NewAuthService(config AuthConfig) *AuthService {
 	if config.RefreshTokenTTL <= 0 {
 		config.RefreshTokenTTL = 30 * 24 * time.Hour
 	}
+	if config.RefreshSessions == nil {
+		config.RefreshSessions = NewMemoryRefreshSessionStore()
+	}
 	return &AuthService{store: config.Store, jwtSecret: config.JWTSecret, issuer: config.Issuer,
 		accessTTL: config.AccessTokenTTL, refreshTTL: config.RefreshTokenTTL,
-		now: time.Now, refreshSessions: make(map[string]string)}
+		now: time.Now, refreshSessions: config.RefreshSessions}
 }
 
 func (s *AuthService) Register(ctx context.Context, input RegisterInput) (TokenPair, error) {
@@ -91,7 +93,7 @@ func (s *AuthService) Register(ctx context.Context, input RegisterInput) (TokenP
 	if err != nil {
 		return TokenPair{}, err
 	}
-	return s.issuePair(user)
+	return s.issuePair(ctx, user)
 }
 
 func validateRegistration(input RegisterInput) error {
@@ -115,7 +117,7 @@ func (s *AuthService) Login(ctx context.Context, input LoginInput) (TokenPair, e
 	if !found || !security.VerifyPassword(input.Password, user.PasswordHash) {
 		return TokenPair{}, ErrInvalidCredentials
 	}
-	return s.issuePair(user)
+	return s.issuePair(ctx, user)
 }
 
 func (s *AuthService) Refresh(ctx context.Context, refreshToken string) (TokenPair, error) {
@@ -127,23 +129,21 @@ func (s *AuthService) Refresh(ctx context.Context, refreshToken string) (TokenPa
 	if parseErr != nil {
 		return TokenPair{}, security.ErrInvalidToken
 	}
-	s.mu.Lock()
-	userID, found := s.refreshSessions[claims.ID]
-	if found && userID == claims.Subject {
-		delete(s.refreshSessions, claims.ID)
+	consumed, err := s.refreshSessions.Consume(ctx, claims.ID, id)
+	if err != nil {
+		return TokenPair{}, err
 	}
-	s.mu.Unlock()
-	if !found || userID != claims.Subject {
+	if !consumed {
 		return TokenPair{}, security.ErrInvalidToken
 	}
 	user, found, err := s.store.FindByID(ctx, id)
 	if err != nil || !found || strconv.FormatInt(user.ID, 10) != claims.Subject || user.Login != claims.Login {
 		return TokenPair{}, security.ErrInvalidToken
 	}
-	return s.issuePair(user)
+	return s.issuePair(ctx, user)
 }
 
-func (s *AuthService) issuePair(user User) (TokenPair, error) {
+func (s *AuthService) issuePair(ctx context.Context, user User) (TokenPair, error) {
 	now := s.now().UTC()
 	access, accessExpiry, _, err := s.issueToken(user, "access", s.accessTTL, now)
 	if err != nil {
@@ -153,23 +153,23 @@ func (s *AuthService) issuePair(user User) (TokenPair, error) {
 	if err != nil {
 		return TokenPair{}, err
 	}
-	s.mu.Lock()
-	s.refreshSessions[refreshID] = strconv.FormatInt(user.ID, 10)
-	s.mu.Unlock()
-	return TokenPair{AccessToken: access, RefreshToken: refresh, TokenType: "Bearer", AccessExpiresAt: accessExpiry, RefreshExpiresAt: refreshExpiry}, nil
+	if err := s.refreshSessions.Create(ctx, RefreshSession{ID: refreshID, UserID: user.ID, ExpiresAt: refreshExpiry}); err != nil {
+		return TokenPair{}, err
+	}
+	return TokenPair{AccessToken: access, RefreshToken: refresh, TokenType: "Bearer", AccessExpiresAt: accessExpiry.Format(time.RFC3339), RefreshExpiresAt: refreshExpiry.Format(time.RFC3339)}, nil
 }
 
-func (s *AuthService) issueToken(user User, tokenType string, ttl time.Duration, now time.Time) (token, expiration, id string, err error) {
+func (s *AuthService) issueToken(user User, tokenType string, ttl time.Duration, now time.Time) (token string, expiresAt time.Time, id string, err error) {
 	id, err = randomID()
 	if err != nil {
-		return "", "", "", err
+		return "", time.Time{}, "", err
 	}
-	expiresAt := now.Add(ttl)
+	expiresAt = now.Add(ttl)
 	claims := security.Claims{Issuer: s.issuer, Subject: strconv.FormatInt(user.ID, 10), Login: user.Login, Name: user.Name, Role: user.Role,
 		TimeCreation: now.Format(time.RFC3339), TimeExpiration: expiresAt.Format(time.RFC3339),
 		IssuedAt: now.Unix(), ExpiresAt: expiresAt.Unix(), ID: id, TokenType: tokenType}
 	token, err = security.SignJWT(claims, s.jwtSecret)
-	return token, claims.TimeExpiration, id, err
+	return token, expiresAt, id, err
 }
 
 func randomID() (string, error) {

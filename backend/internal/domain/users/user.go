@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"sync"
+	"time"
 )
 
 var (
@@ -33,13 +34,27 @@ type Profile struct {
 }
 
 // Store is the persistence boundary for user CRUD. The PostgreSQL implementation
-// also creates the initial profile atomically; MemoryStore models users for unit tests.
+// also creates the initial profile atomically; MemoryStore is only for unit tests.
 type Store interface {
 	Create(ctx context.Context, user User) (User, error)
 	FindByLogin(ctx context.Context, login string) (User, bool, error)
 	FindByID(ctx context.Context, id int64) (User, bool, error)
 	Update(ctx context.Context, user User) (User, error)
 	Delete(ctx context.Context, id int64) error
+}
+
+// RefreshSessionStore persists single-use refresh-token identifiers. It is
+// separate from Store so that a database-backed implementation can rotate a
+// token atomically without coupling it to user CRUD.
+type RefreshSessionStore interface {
+	Create(ctx context.Context, session RefreshSession) error
+	Consume(ctx context.Context, id string, userID int64) (bool, error)
+}
+
+type RefreshSession struct {
+	ID        string
+	UserID    int64
+	ExpiresAt time.Time
 }
 
 // MemoryStore is used by isolated service tests and local development.
@@ -124,4 +139,33 @@ func (s *MemoryStore) Delete(_ context.Context, id int64) error {
 	delete(s.byLogin, user.Login)
 	delete(s.byEmail, user.Email)
 	return nil
+}
+
+// MemoryRefreshSessionStore is only the default for isolated unit tests.
+// The running API uses repository.PostgresRefreshSessionStore.
+type MemoryRefreshSessionStore struct {
+	mu       sync.Mutex
+	sessions map[string]RefreshSession
+}
+
+func NewMemoryRefreshSessionStore() *MemoryRefreshSessionStore {
+	return &MemoryRefreshSessionStore{sessions: make(map[string]RefreshSession)}
+}
+
+func (s *MemoryRefreshSessionStore) Create(_ context.Context, session RefreshSession) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.sessions[session.ID] = session
+	return nil
+}
+
+func (s *MemoryRefreshSessionStore) Consume(_ context.Context, id string, userID int64) (bool, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	session, found := s.sessions[id]
+	if !found || session.UserID != userID || !session.ExpiresAt.After(time.Now()) {
+		return false, nil
+	}
+	delete(s.sessions, id)
+	return true, nil
 }

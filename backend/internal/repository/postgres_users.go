@@ -86,7 +86,7 @@ func (s *PostgresUserStore) Update(ctx context.Context, user users.User) (users.
 func (s *PostgresUserStore) Delete(ctx context.Context, id int64) error {
 	result, err := s.db.ExecContext(ctx, `DELETE FROM tamagochi.users WHERE id=$1`, id)
 	if err != nil {
-		return fmt.Errorf("delete user: %w", err)
+		return mapCRUDError(fmt.Errorf("delete user: %w", err))
 	}
 	count, err := result.RowsAffected()
 	if err != nil {

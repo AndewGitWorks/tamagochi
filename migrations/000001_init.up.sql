@@ -1,0 +1,76 @@
+CREATE SCHEMA tamagochi;
+
+CREATE TABLE tamagochi.users (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL CHECK (char_length(name) BETWEEN 3 AND 100),
+    surname VARCHAR(100) NOT NULL CHECK (char_length(surname) BETWEEN 3 AND 100),
+    login VARCHAR(24) NOT NULL UNIQUE CHECK (char_length(login) BETWEEN 3 AND 24),
+    email VARCHAR(100) NOT NULL UNIQUE CHECK (char_length(email) BETWEEN 3 AND 100),
+    password_hashed VARCHAR(64) NOT NULL,
+    phone_number VARCHAR(15) NOT NULL CHECK (phone_number ~ '^\+[0-9]{9,14}$'),
+    version BIGINT NOT NULL DEFAULT 1,
+    role VARCHAR(50) NOT NULL DEFAULT 'USER' CHECK (role IN ('USER', 'ADMIN'))
+);
+
+CREATE TABLE tamagochi.profiles (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL UNIQUE REFERENCES tamagochi.users(id) ON DELETE CASCADE,
+    bio TEXT,
+    address TEXT,
+    orders_count BIGINT NOT NULL DEFAULT 0 CHECK (orders_count >= 0)
+);
+
+CREATE TABLE tamagochi.products (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(100) NOT NULL UNIQUE CHECK (char_length(title) BETWEEN 3 AND 100),
+    price NUMERIC(10,2) NOT NULL CHECK (price >= 0),
+    seria_title VARCHAR(100) NOT NULL DEFAULT 'NEWBIE' CHECK (char_length(seria_title) BETWEEN 3 AND 100),
+    bio TEXT,
+    description TEXT,
+    specifications JSONB
+);
+
+CREATE TABLE tamagochi.product_images (
+    id SERIAL PRIMARY KEY,
+    product_id INTEGER NOT NULL REFERENCES tamagochi.products(id) ON DELETE CASCADE,
+    storage_key VARCHAR(500) NOT NULL UNIQUE CHECK (char_length(btrim(storage_key)) > 0),
+    sort_order INTEGER NOT NULL DEFAULT 0 CHECK (sort_order >= 0),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX product_images_product_idx ON tamagochi.product_images(product_id, sort_order, id);
+
+CREATE TABLE tamagochi.orders (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES tamagochi.users(id) ON DELETE RESTRICT,
+    number VARCHAR(64) NOT NULL UNIQUE CHECK (char_length(number) BETWEEN 3 AND 64),
+    total_price NUMERIC(10,2) NOT NULL DEFAULT 0 CHECK (total_price >= 0),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(20) NOT NULL DEFAULT 'PENDING' CHECK (status IN
+        ('PENDING','PAID','PAYMENT_FAILED','DELIVERING','DELIVERED','CANCELLED'))
+);
+CREATE INDEX orders_user_idx ON tamagochi.orders(user_id, id);
+
+CREATE TABLE tamagochi.order_items (
+    id SERIAL PRIMARY KEY,
+    order_id INTEGER NOT NULL REFERENCES tamagochi.orders(id) ON DELETE CASCADE,
+    product_id INTEGER NOT NULL REFERENCES tamagochi.products(id) ON DELETE RESTRICT,
+    quantity INTEGER NOT NULL CHECK (quantity > 0),
+    price NUMERIC(10,2) NOT NULL CHECK (price >= 0),
+    UNIQUE (order_id, product_id)
+);
+CREATE INDEX order_items_product_idx ON tamagochi.order_items(product_id);
+
+CREATE TABLE tamagochi.user_liked_products (
+    user_id INTEGER NOT NULL REFERENCES tamagochi.users(id) ON DELETE CASCADE,
+    product_id INTEGER NOT NULL REFERENCES tamagochi.products(id) ON DELETE CASCADE,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, product_id)
+);
+CREATE INDEX liked_products_product_idx ON tamagochi.user_liked_products(product_id);
+
+CREATE TABLE tamagochi.refresh_sessions (
+    id TEXT PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES tamagochi.users(id) ON DELETE CASCADE,
+    expires_at TIMESTAMPTZ NOT NULL
+);
+CREATE INDEX refresh_sessions_expiry_idx ON tamagochi.refresh_sessions(expires_at);

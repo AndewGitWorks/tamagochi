@@ -14,23 +14,23 @@ var (
 )
 
 type User struct {
-	ID           int64
-	Name         string
-	Surname      string
-	Login        string
-	Email        string
-	PasswordHash string
-	PhoneNumber  string
-	Version      int64
-	Role         string
+	ID           int64  `json:"id"`
+	Name         string `json:"name"`
+	Surname      string `json:"surname"`
+	Login        string `json:"login"`
+	Email        string `json:"email"`
+	PasswordHash string `json:"-"`
+	PhoneNumber  string `json:"phone_number"`
+	Version      int64  `json:"version"`
+	Role         string `json:"role"`
 }
 
 type Profile struct {
-	ID          int64
-	UserID      int64
-	Bio         string
-	Address     string
-	OrdersCount int64
+	ID          int64  `json:"id"`
+	UserID      int64  `json:"user_id"`
+	Bio         string `json:"bio"`
+	Address     string `json:"address"`
+	OrdersCount int64  `json:"orders_count"`
 }
 
 // Store is the persistence boundary for user CRUD. The PostgreSQL implementation
@@ -52,8 +52,8 @@ type RefreshSessionStore interface {
 }
 
 type RefreshSession struct {
-	ID        string
-	UserID    int64
+	ID        string `json:"id"`
+	UserID    int64  `json:"user_id"`
 	ExpiresAt time.Time
 }
 

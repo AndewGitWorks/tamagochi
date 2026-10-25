@@ -179,3 +179,24 @@ func randomID() (string, error) {
 	}
 	return base64.RawURLEncoding.EncodeToString(bytes), nil
 }
+
+// AuthenticateAccess checks the token and reads the current role from the store.
+// Deleted users and users whose login changed cannot keep using an old token.
+func (s *AuthService) AuthenticateAccess(ctx context.Context, token string) (User, error) {
+	claims, err := security.VerifyJWT(token, s.jwtSecret, s.issuer, "access", s.now())
+	if err != nil {
+		return User{}, err
+	}
+	id, err := strconv.ParseInt(claims.Subject, 10, 64)
+	if err != nil || id <= 0 {
+		return User{}, security.ErrInvalidToken
+	}
+	user, found, err := s.store.FindByID(ctx, id)
+	if err != nil {
+		return User{}, err
+	}
+	if !found || user.Login != claims.Login {
+		return User{}, security.ErrInvalidToken
+	}
+	return user, nil
+}

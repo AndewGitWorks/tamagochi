@@ -3,6 +3,7 @@ package http
 import (
 	"encoding/json"
 	"errors"
+	"io"
 
 	"log"
 	"net/http"
@@ -14,12 +15,15 @@ import (
 
 const maxRequestBodySize = 16 << 10
 
-func NewRouter(auth *users.AuthService) http.Handler {
+func NewRouter(auth *users.AuthService, crud ...CRUDConfig) http.Handler {
 	mux := http.NewServeMux()
 	mux.HandleFunc("POST /register", register(auth))
 	mux.HandleFunc("POST /login", login(auth))
 	mux.HandleFunc("POST /refresh", refresh(auth))
 	mux.HandleFunc("GET /getentity", getEntity())
+	if len(crud) > 0 {
+		registerCRUD(mux, auth, crud[0])
+	}
 	return cors(mux)
 }
 
@@ -84,6 +88,10 @@ func decodeJSON(w http.ResponseWriter, r *http.Request, target any) bool {
 		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid_request", "message": "request body must be valid JSON"})
 		return false
 	}
+	if err := decoder.Decode(new(any)); err != io.EOF {
+		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid_request", "message": "request body must contain one JSON value"})
+		return false
+	}
 	return true
 }
 
@@ -120,7 +128,7 @@ func cors(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log.Printf("CORS: %s %s", r.Method, r.URL.Path)
 		w.Header().Set("Access-Control-Allow-Origin", "*")
-		w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
 		if r.Method == http.MethodOptions {
 			w.WriteHeader(http.StatusNoContent)

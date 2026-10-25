@@ -1,0 +1,9 @@
+DROP TABLE tamagochi.refresh_sessions;
+DROP TABLE tamagochi.user_liked_products;
+DROP TABLE tamagochi.order_items;
+DROP TABLE tamagochi.orders;
+DROP TABLE tamagochi.product_images;
+DROP TABLE tamagochi.products;
+DROP TABLE tamagochi.profiles;
+DROP TABLE tamagochi.users;
+DROP SCHEMA tamagochi;

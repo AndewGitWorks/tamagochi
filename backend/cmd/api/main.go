@@ -13,7 +13,7 @@ import (
 	"strings"
 	"time"
 
-	apphttp "github.com/AndewGitWorks/tamagochi/backend/internal/app/http"
+	apphttp "github.com/AndewGitWorks/tamagochi/backend/internal/app/http/handlers"
 	"github.com/AndewGitWorks/tamagochi/backend/internal/domain/users"
 	"github.com/AndewGitWorks/tamagochi/backend/internal/platform/database"
 	"github.com/AndewGitWorks/tamagochi/backend/internal/repository"

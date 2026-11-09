@@ -6,6 +6,7 @@ import (
 
 	"github.com/AndewGitWorks/tamagochi/backend/internal/domain"
 	"github.com/AndewGitWorks/tamagochi/backend/internal/domain/products"
+	"github.com/AndewGitWorks/tamagochi/backend/internal/domain/users"
 )
 
 type productInput struct {
@@ -17,12 +18,35 @@ type productInput struct {
 	Specifications json.RawMessage `json:"specifications"`
 }
 
+type ProductHandler struct {
+	Products products.Store
+	Images   products.ImageStore
+	auth     *users.AuthService
+}
+
+func NewProductHandler(productsStore products.Store, images products.ImageStore, auth *users.AuthService) *ProductHandler {
+	return &ProductHandler{Products: productsStore, Images: images, auth: auth}
+}
+
+func (h *ProductHandler) RegisterRoutes(mux *http.ServeMux) {
+	mux.HandleFunc("GET /products", h.listProducts)
+	mux.HandleFunc("GET /products/{id}", h.getProduct)
+	mux.HandleFunc("POST /products", requireUser(h.auth, true, h.createProduct))
+	mux.HandleFunc("PUT /products/{id}", requireUser(h.auth, true, h.updateProduct))
+	mux.HandleFunc("DELETE /products/{id}", requireUser(h.auth, true, h.deleteProduct))
+	mux.HandleFunc("GET /products/{productID}/images", h.listImages)
+	mux.HandleFunc("GET /products/{productID}/images/{id}", h.getImage)
+	mux.HandleFunc("POST /products/{productID}/images", requireUser(h.auth, true, h.createImage))
+	mux.HandleFunc("PUT /products/{productID}/images/{id}", requireUser(h.auth, true, h.updateImage))
+	mux.HandleFunc("DELETE /products/{productID}/images/{id}", requireUser(h.auth, true, h.deleteImage))
+}
+
 func (input productInput) product(id int64) products.Product {
 	return products.Product{ID: id, Title: input.Title, Price: input.Price, SeriaTitle: input.SeriaTitle,
 		Bio: input.Bio, Description: input.Description, Specifications: input.Specifications}
 }
 
-func (h *crudHandler) createProduct(w http.ResponseWriter, r *http.Request) {
+func (h *ProductHandler) createProduct(w http.ResponseWriter, r *http.Request) {
 	var input productInput
 	if !decodeJSON(w, r, &input) {
 		return
@@ -31,7 +55,7 @@ func (h *crudHandler) createProduct(w http.ResponseWriter, r *http.Request) {
 	respond(w, http.StatusCreated, product, err)
 }
 
-func (h *crudHandler) updateProduct(w http.ResponseWriter, r *http.Request) {
+func (h *ProductHandler) updateProduct(w http.ResponseWriter, r *http.Request) {
 	id, ok := pathID(w, r, "id")
 	if !ok {
 		return
@@ -44,7 +68,7 @@ func (h *crudHandler) updateProduct(w http.ResponseWriter, r *http.Request) {
 	respond(w, http.StatusOK, product, err)
 }
 
-func (h *crudHandler) getProduct(w http.ResponseWriter, r *http.Request) {
+func (h *ProductHandler) getProduct(w http.ResponseWriter, r *http.Request) {
 	id, ok := pathID(w, r, "id")
 	if !ok {
 		return
@@ -53,7 +77,7 @@ func (h *crudHandler) getProduct(w http.ResponseWriter, r *http.Request) {
 	respondFound(w, product, found, err)
 }
 
-func (h *crudHandler) listProducts(w http.ResponseWriter, r *http.Request) {
+func (h *ProductHandler) listProducts(w http.ResponseWriter, r *http.Request) {
 	limit, offset, ok := pagination(w, r)
 	if !ok {
 		return
@@ -62,7 +86,7 @@ func (h *crudHandler) listProducts(w http.ResponseWriter, r *http.Request) {
 	respond(w, http.StatusOK, result, err)
 }
 
-func (h *crudHandler) deleteProduct(w http.ResponseWriter, r *http.Request) {
+func (h *ProductHandler) deleteProduct(w http.ResponseWriter, r *http.Request) {
 	id, ok := pathID(w, r, "id")
 	if !ok {
 		return
@@ -70,7 +94,7 @@ func (h *crudHandler) deleteProduct(w http.ResponseWriter, r *http.Request) {
 	respondDeleted(w, h.Products.Delete(r.Context(), id))
 }
 
-func (h *crudHandler) imageProduct(w http.ResponseWriter, r *http.Request) (int64, bool) {
+func (h *ProductHandler) imageProduct(w http.ResponseWriter, r *http.Request) (int64, bool) {
 	id, ok := pathID(w, r, "productID")
 	if !ok {
 		return 0, false
@@ -92,7 +116,7 @@ type imageInput struct {
 	SortOrder  int    `json:"sort_order"`
 }
 
-func (h *crudHandler) createImage(w http.ResponseWriter, r *http.Request) {
+func (h *ProductHandler) createImage(w http.ResponseWriter, r *http.Request) {
 	productID, ok := h.imageProduct(w, r)
 	if !ok {
 		return
@@ -105,7 +129,7 @@ func (h *crudHandler) createImage(w http.ResponseWriter, r *http.Request) {
 	respond(w, http.StatusCreated, image, err)
 }
 
-func (h *crudHandler) updateImage(w http.ResponseWriter, r *http.Request) {
+func (h *ProductHandler) updateImage(w http.ResponseWriter, r *http.Request) {
 	productID, ok := h.imageProduct(w, r)
 	if !ok {
 		return
@@ -122,7 +146,7 @@ func (h *crudHandler) updateImage(w http.ResponseWriter, r *http.Request) {
 	respond(w, http.StatusOK, image, err)
 }
 
-func (h *crudHandler) getImage(w http.ResponseWriter, r *http.Request) {
+func (h *ProductHandler) getImage(w http.ResponseWriter, r *http.Request) {
 	productID, ok := h.imageProduct(w, r)
 	if !ok {
 		return
@@ -135,7 +159,7 @@ func (h *crudHandler) getImage(w http.ResponseWriter, r *http.Request) {
 	respondFound(w, image, found, err)
 }
 
-func (h *crudHandler) listImages(w http.ResponseWriter, r *http.Request) {
+func (h *ProductHandler) listImages(w http.ResponseWriter, r *http.Request) {
 	productID, ok := h.imageProduct(w, r)
 	if !ok {
 		return
@@ -148,7 +172,7 @@ func (h *crudHandler) listImages(w http.ResponseWriter, r *http.Request) {
 	respond(w, http.StatusOK, result, err)
 }
 
-func (h *crudHandler) deleteImage(w http.ResponseWriter, r *http.Request) {
+func (h *ProductHandler) deleteImage(w http.ResponseWriter, r *http.Request) {
 	productID, ok := h.imageProduct(w, r)
 	if !ok {
 		return

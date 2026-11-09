@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"io"
-
 	"log"
 	"net/http"
 	"strings"
@@ -15,69 +14,58 @@ import (
 
 const maxRequestBodySize = 16 << 10
 
-func NewRouter(auth *users.AuthService, crud ...CRUDConfig) http.Handler {
-	mux := http.NewServeMux()
-	mux.HandleFunc("POST /register", register(auth))
-	mux.HandleFunc("POST /login", login(auth))
-	mux.HandleFunc("POST /refresh", refresh(auth))
-	mux.HandleFunc("GET /getentity", getEntity())
-	if len(crud) > 0 {
-		registerCRUD(mux, auth, crud[0])
-	}
-	return cors(mux)
+type AuthHandler struct {
+	auth *users.AuthService
 }
 
-func getEntity() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		res := "response"
-		writeJSON(w, http.StatusOK, res)
-	}
+func NewAuthHandler(auth *users.AuthService) *AuthHandler {
+	return &AuthHandler{auth: auth}
 }
 
-func register(auth *users.AuthService) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		var input users.RegisterInput
-		if !decodeJSON(w, r, &input) {
-			return
-		}
-		pair, err := auth.Register(r.Context(), input)
-		if err != nil {
-			writeAuthError(w, err)
-			return
-		}
-		writeJSON(w, http.StatusCreated, pair)
-	}
+func (h *AuthHandler) RegisterRoutes(mux *http.ServeMux) {
+	mux.HandleFunc("POST /register", h.register)
+	mux.HandleFunc("POST /login", h.login)
+	mux.HandleFunc("POST /refresh", h.refresh)
 }
 
-func login(auth *users.AuthService) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		var input users.LoginInput
-		if !decodeJSON(w, r, &input) {
-			return
-		}
-		pair, err := auth.Login(r.Context(), input)
-		if err != nil {
-			writeAuthError(w, err)
-			return
-		}
-		writeJSON(w, http.StatusOK, pair)
+func (h *AuthHandler) register(w http.ResponseWriter, r *http.Request) {
+	var input users.RegisterInput
+	if !decodeJSON(w, r, &input) {
+		return
 	}
+	pair, err := h.auth.Register(r.Context(), input)
+	if err != nil {
+		writeAuthError(w, err)
+		return
+	}
+	writeJSON(w, http.StatusCreated, pair)
 }
 
-func refresh(auth *users.AuthService) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		token, ok := bearerToken(r.Header.Get("Authorization"))
-		if !ok {
-			writeAuthError(w, security.ErrInvalidToken)
-			return
-		}
-		pair, err := auth.Refresh(r.Context(), token)
-		if err != nil {
-			writeAuthError(w, err)
-			return
-		}
-		writeJSON(w, http.StatusOK, pair)
+func (h *AuthHandler) login(w http.ResponseWriter, r *http.Request) {
+	var input users.LoginInput
+	if !decodeJSON(w, r, &input) {
+		return
 	}
+	pair, err := h.auth.Login(r.Context(), input)
+	if err != nil {
+		writeAuthError(w, err)
+		return
+	}
+	writeJSON(w, http.StatusOK, pair)
+}
+
+func (h *AuthHandler) refresh(w http.ResponseWriter, r *http.Request) {
+	token, ok := bearerToken(r.Header.Get("Authorization"))
+	if !ok {
+		writeAuthError(w, security.ErrInvalidToken)
+		return
+	}
+	pair, err := h.auth.Refresh(r.Context(), token)
+	if err != nil {
+		writeAuthError(w, err)
+		return
+	}
+	writeJSON(w, http.StatusOK, pair)
 }
 
 func decodeJSON(w http.ResponseWriter, r *http.Request, target any) bool {

@@ -41,7 +41,7 @@ func main() {
 		RefreshTokenTTL: envDurationSeconds("JWT_REFRESH_TTL_SECONDS", 30*24*time.Hour)})
 	address := ":" + envOrDefault("PORT", "8080")
 	log.Printf("Tamagochi API listening on %s", address)
-	if err := http.ListenAndServe(address, apphttp.NewRouter(service, apphttp.CRUDConfig{
+	if err := http.ListenAndServe(address, apphttp.NewRouter(service, apphttp.RouterConfig{
 		Users:    repository.NewPostgresUserStore(db),
 		Profiles: repository.NewPostgresProfileStore(db),
 		Products: repository.NewPostgresProductStore(db),

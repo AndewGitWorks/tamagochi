@@ -7,9 +7,33 @@ import (
 
 	"github.com/AndewGitWorks/tamagochi/backend/internal/domain"
 	"github.com/AndewGitWorks/tamagochi/backend/internal/domain/orders"
+	"github.com/AndewGitWorks/tamagochi/backend/internal/domain/users"
 )
 
-func (h *crudHandler) ownedOrder(w http.ResponseWriter, r *http.Request) (orders.Order, bool) {
+type OrderHandler struct {
+	Orders orders.Store
+	Items  orders.ItemStore
+	auth   *users.AuthService
+}
+
+func NewOrderHandler(ordersStore orders.Store, items orders.ItemStore, auth *users.AuthService) *OrderHandler {
+	return &OrderHandler{Orders: ordersStore, Items: items, auth: auth}
+}
+
+func (h *OrderHandler) RegisterRoutes(mux *http.ServeMux) {
+	mux.HandleFunc("POST /orders", requireUser(h.auth, false, h.createOrder))
+	mux.HandleFunc("GET /orders", requireUser(h.auth, false, h.listOrders))
+	mux.HandleFunc("GET /orders/{orderID}", requireUser(h.auth, false, h.getOrder))
+	mux.HandleFunc("PUT /orders/{orderID}", requireUser(h.auth, false, h.updateOrder))
+	mux.HandleFunc("DELETE /orders/{orderID}", requireUser(h.auth, false, h.deleteOrder))
+	mux.HandleFunc("POST /orders/{orderID}/items", requireUser(h.auth, false, h.createItem))
+	mux.HandleFunc("GET /orders/{orderID}/items", requireUser(h.auth, false, h.listItems))
+	mux.HandleFunc("GET /orders/{orderID}/items/{id}", requireUser(h.auth, false, h.getItem))
+	mux.HandleFunc("PUT /orders/{orderID}/items/{id}", requireUser(h.auth, false, h.updateItem))
+	mux.HandleFunc("DELETE /orders/{orderID}/items/{id}", requireUser(h.auth, false, h.deleteItem))
+}
+
+func (h *OrderHandler) ownedOrder(w http.ResponseWriter, r *http.Request) (orders.Order, bool) {
 	id, ok := pathID(w, r, "orderID")
 	if !ok {
 		return orders.Order{}, false
@@ -27,7 +51,7 @@ func (h *crudHandler) ownedOrder(w http.ResponseWriter, r *http.Request) (orders
 	return order, true
 }
 
-func (h *crudHandler) createOrder(w http.ResponseWriter, r *http.Request) {
+func (h *OrderHandler) createOrder(w http.ResponseWriter, r *http.Request) {
 	// Order number, owner, status and total are assigned by the server.
 	var input struct{}
 	if !decodeJSON(w, r, &input) {
@@ -42,7 +66,7 @@ func (h *crudHandler) createOrder(w http.ResponseWriter, r *http.Request) {
 	respond(w, http.StatusCreated, order, err)
 }
 
-func (h *crudHandler) getOrder(w http.ResponseWriter, r *http.Request) {
+func (h *OrderHandler) getOrder(w http.ResponseWriter, r *http.Request) {
 	order, ok := h.ownedOrder(w, r)
 	if !ok {
 		return
@@ -50,7 +74,7 @@ func (h *crudHandler) getOrder(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, order)
 }
 
-func (h *crudHandler) listOrders(w http.ResponseWriter, r *http.Request) {
+func (h *OrderHandler) listOrders(w http.ResponseWriter, r *http.Request) {
 	limit, offset, ok := pagination(w, r)
 	if !ok {
 		return
@@ -59,7 +83,7 @@ func (h *crudHandler) listOrders(w http.ResponseWriter, r *http.Request) {
 	respond(w, http.StatusOK, result, err)
 }
 
-func (h *crudHandler) updateOrder(w http.ResponseWriter, r *http.Request) {
+func (h *OrderHandler) updateOrder(w http.ResponseWriter, r *http.Request) {
 	order, ok := h.ownedOrder(w, r)
 	if !ok {
 		return
@@ -84,7 +108,7 @@ func (h *crudHandler) updateOrder(w http.ResponseWriter, r *http.Request) {
 	respond(w, http.StatusOK, updated, err)
 }
 
-func (h *crudHandler) deleteOrder(w http.ResponseWriter, r *http.Request) {
+func (h *OrderHandler) deleteOrder(w http.ResponseWriter, r *http.Request) {
 	order, ok := h.ownedOrder(w, r)
 	if !ok {
 		return
@@ -96,7 +120,7 @@ func (h *crudHandler) deleteOrder(w http.ResponseWriter, r *http.Request) {
 	respondDeleted(w, h.Orders.Delete(r.Context(), order.ID))
 }
 
-func (h *crudHandler) createItem(w http.ResponseWriter, r *http.Request) {
+func (h *OrderHandler) createItem(w http.ResponseWriter, r *http.Request) {
 	order, ok := h.ownedOrder(w, r)
 	if !ok {
 		return
@@ -112,7 +136,7 @@ func (h *crudHandler) createItem(w http.ResponseWriter, r *http.Request) {
 	respond(w, http.StatusCreated, item, err)
 }
 
-func (h *crudHandler) getItem(w http.ResponseWriter, r *http.Request) {
+func (h *OrderHandler) getItem(w http.ResponseWriter, r *http.Request) {
 	order, ok := h.ownedOrder(w, r)
 	if !ok {
 		return
@@ -125,7 +149,7 @@ func (h *crudHandler) getItem(w http.ResponseWriter, r *http.Request) {
 	respondFound(w, item, found, err)
 }
 
-func (h *crudHandler) listItems(w http.ResponseWriter, r *http.Request) {
+func (h *OrderHandler) listItems(w http.ResponseWriter, r *http.Request) {
 	order, ok := h.ownedOrder(w, r)
 	if !ok {
 		return
@@ -138,7 +162,7 @@ func (h *crudHandler) listItems(w http.ResponseWriter, r *http.Request) {
 	respond(w, http.StatusOK, result, err)
 }
 
-func (h *crudHandler) updateItem(w http.ResponseWriter, r *http.Request) {
+func (h *OrderHandler) updateItem(w http.ResponseWriter, r *http.Request) {
 	order, ok := h.ownedOrder(w, r)
 	if !ok {
 		return
@@ -157,7 +181,7 @@ func (h *crudHandler) updateItem(w http.ResponseWriter, r *http.Request) {
 	respond(w, http.StatusOK, item, err)
 }
 
-func (h *crudHandler) deleteItem(w http.ResponseWriter, r *http.Request) {
+func (h *OrderHandler) deleteItem(w http.ResponseWriter, r *http.Request) {
 	order, ok := h.ownedOrder(w, r)
 	if !ok {
 		return

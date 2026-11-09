@@ -7,11 +7,32 @@ import (
 	"github.com/AndewGitWorks/tamagochi/backend/internal/platform/security"
 )
 
-func (h *crudHandler) getUser(w http.ResponseWriter, r *http.Request) {
+type UserHandler struct {
+	Users    UserCRUDStore
+	Profiles users.ProfileStore
+	auth     *users.AuthService
+}
+
+func NewUserHandler(usersStore UserCRUDStore, profiles users.ProfileStore, auth *users.AuthService) *UserHandler {
+	return &UserHandler{Users: usersStore, Profiles: profiles, auth: auth}
+}
+
+func (h *UserHandler) RegisterRoutes(mux *http.ServeMux) {
+	mux.HandleFunc("GET /users", requireUser(h.auth, true, h.listUsers))
+	mux.HandleFunc("GET /users/me", requireUser(h.auth, false, h.getUser))
+	mux.HandleFunc("PUT /users/me", requireUser(h.auth, false, h.updateUser))
+	mux.HandleFunc("DELETE /users/me", requireUser(h.auth, false, h.deleteUser))
+	mux.HandleFunc("POST /profiles/me", requireUser(h.auth, false, h.createProfile))
+	mux.HandleFunc("GET /profiles/me", requireUser(h.auth, false, h.getProfile))
+	mux.HandleFunc("PUT /profiles/me", requireUser(h.auth, false, h.updateProfile))
+	mux.HandleFunc("DELETE /profiles/me", requireUser(h.auth, false, h.deleteProfile))
+}
+
+func (h *UserHandler) getUser(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, currentUser(r))
 }
 
-func (h *crudHandler) listUsers(w http.ResponseWriter, r *http.Request) {
+func (h *UserHandler) listUsers(w http.ResponseWriter, r *http.Request) {
 	limit, offset, ok := pagination(w, r)
 	if !ok {
 		return
@@ -20,7 +41,7 @@ func (h *crudHandler) listUsers(w http.ResponseWriter, r *http.Request) {
 	respond(w, http.StatusOK, result, err)
 }
 
-func (h *crudHandler) updateUser(w http.ResponseWriter, r *http.Request) {
+func (h *UserHandler) updateUser(w http.ResponseWriter, r *http.Request) {
 	var input users.RegisterInput
 	if !decodeJSON(w, r, &input) {
 		return
@@ -44,7 +65,7 @@ func (h *crudHandler) updateUser(w http.ResponseWriter, r *http.Request) {
 	respond(w, http.StatusOK, updated, err)
 }
 
-func (h *crudHandler) deleteUser(w http.ResponseWriter, r *http.Request) {
+func (h *UserHandler) deleteUser(w http.ResponseWriter, r *http.Request) {
 	respondDeleted(w, h.Users.Delete(r.Context(), currentUser(r).ID))
 }
 
@@ -53,7 +74,7 @@ type profileInput struct {
 	Address string `json:"address"`
 }
 
-func (h *crudHandler) createProfile(w http.ResponseWriter, r *http.Request) {
+func (h *UserHandler) createProfile(w http.ResponseWriter, r *http.Request) {
 	var input profileInput
 	if !decodeJSON(w, r, &input) {
 		return
@@ -62,12 +83,12 @@ func (h *crudHandler) createProfile(w http.ResponseWriter, r *http.Request) {
 	respond(w, http.StatusCreated, profile, err)
 }
 
-func (h *crudHandler) getProfile(w http.ResponseWriter, r *http.Request) {
+func (h *UserHandler) getProfile(w http.ResponseWriter, r *http.Request) {
 	profile, found, err := h.Profiles.FindByUserID(r.Context(), currentUser(r).ID)
 	respondFound(w, profile, found, err)
 }
 
-func (h *crudHandler) updateProfile(w http.ResponseWriter, r *http.Request) {
+func (h *UserHandler) updateProfile(w http.ResponseWriter, r *http.Request) {
 	var input profileInput
 	if !decodeJSON(w, r, &input) {
 		return
@@ -76,6 +97,6 @@ func (h *crudHandler) updateProfile(w http.ResponseWriter, r *http.Request) {
 	respond(w, http.StatusOK, profile, err)
 }
 
-func (h *crudHandler) deleteProfile(w http.ResponseWriter, r *http.Request) {
+func (h *UserHandler) deleteProfile(w http.ResponseWriter, r *http.Request) {
 	respondDeleted(w, h.Profiles.Delete(r.Context(), currentUser(r).ID))
 }

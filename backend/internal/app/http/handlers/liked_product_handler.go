@@ -2,10 +2,27 @@ package http
 
 import (
 	"github.com/AndewGitWorks/tamagochi/backend/internal/domain/products"
+	"github.com/AndewGitWorks/tamagochi/backend/internal/domain/users"
 	"net/http"
 )
 
-func (h *crudHandler) createLike(w http.ResponseWriter, r *http.Request) {
+type LikedProductHandler struct {
+	Likes products.LikedProductStore
+	auth  *users.AuthService
+}
+
+func NewLikedProductHandler(likes products.LikedProductStore, auth *users.AuthService) *LikedProductHandler {
+	return &LikedProductHandler{Likes: likes, auth: auth}
+}
+
+func (h *LikedProductHandler) RegisterRoutes(mux *http.ServeMux) {
+	mux.HandleFunc("POST /likes/{productID}", requireUser(h.auth, false, h.createLike))
+	mux.HandleFunc("GET /likes", requireUser(h.auth, false, h.listLikes))
+	mux.HandleFunc("GET /likes/{productID}", requireUser(h.auth, false, h.getLike))
+	mux.HandleFunc("DELETE /likes/{productID}", requireUser(h.auth, false, h.deleteLike))
+}
+
+func (h *LikedProductHandler) createLike(w http.ResponseWriter, r *http.Request) {
 	productID, ok := pathID(w, r, "productID")
 	if !ok {
 		return
@@ -14,7 +31,7 @@ func (h *crudHandler) createLike(w http.ResponseWriter, r *http.Request) {
 	respond(w, http.StatusCreated, like, err)
 }
 
-func (h *crudHandler) getLike(w http.ResponseWriter, r *http.Request) {
+func (h *LikedProductHandler) getLike(w http.ResponseWriter, r *http.Request) {
 	productID, ok := pathID(w, r, "productID")
 	if !ok {
 		return
@@ -23,7 +40,7 @@ func (h *crudHandler) getLike(w http.ResponseWriter, r *http.Request) {
 	respondFound(w, like, found, err)
 }
 
-func (h *crudHandler) listLikes(w http.ResponseWriter, r *http.Request) {
+func (h *LikedProductHandler) listLikes(w http.ResponseWriter, r *http.Request) {
 	limit, offset, ok := pagination(w, r)
 	if !ok {
 		return
@@ -32,7 +49,7 @@ func (h *crudHandler) listLikes(w http.ResponseWriter, r *http.Request) {
 	respond(w, http.StatusOK, result, err)
 }
 
-func (h *crudHandler) deleteLike(w http.ResponseWriter, r *http.Request) {
+func (h *LikedProductHandler) deleteLike(w http.ResponseWriter, r *http.Request) {
 	productID, ok := pathID(w, r, "productID")
 	if !ok {
 		return

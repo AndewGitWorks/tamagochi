@@ -66,7 +66,7 @@ func TestCatalogWritesRequireAdminAccessToken(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			auth, access, refresh := crudTestAuth(t, tc.role)
 			spy := &productSpy{}
-			router := NewRouter(auth, CRUDConfig{Products: spy})
+			router := NewRouter(auth, RouterConfig{Products: spy})
 			req := httptest.NewRequest(http.MethodPost, "/products", strings.NewReader(`{"title":"Товар","price":"19.99"}`))
 			if tc.tokenKind == "access" {
 				req.Header.Set("Authorization", "Bearer "+access)
@@ -88,7 +88,7 @@ func TestCatalogWritesRequireAdminAccessToken(t *testing.T) {
 
 func TestCannotReadAnotherUsersOrderOrItems(t *testing.T) {
 	auth, token, _ := crudTestAuth(t, "USER")
-	router := NewRouter(auth, CRUDConfig{Orders: orderStub{}})
+	router := NewRouter(auth, RouterConfig{Orders: orderStub{}})
 	for _, path := range []string{"/orders/1", "/orders/1/items", "/orders/1/items/2"} {
 		req := httptest.NewRequest(http.MethodGet, path, nil)
 		req.Header.Set("Authorization", "Bearer "+token)
@@ -102,7 +102,7 @@ func TestCannotReadAnotherUsersOrderOrItems(t *testing.T) {
 
 func TestUserResponseOmitsPasswordHash(t *testing.T) {
 	auth, token, _ := crudTestAuth(t, "USER")
-	router := NewRouter(auth, CRUDConfig{})
+	router := NewRouter(auth, RouterConfig{})
 	req := httptest.NewRequest(http.MethodGet, "/users/me", nil)
 	req.Header.Set("Authorization", "Bearer "+token)
 	res := httptest.NewRecorder()
@@ -129,7 +129,7 @@ func TestProductBodyRejectsImmutableFieldsAndTrailingJSON(t *testing.T) {
 		`{"title":"Product","price":"1.00"} {}`,
 	} {
 		spy := &productSpy{}
-		router := NewRouter(auth, CRUDConfig{Products: spy})
+		router := NewRouter(auth, RouterConfig{Products: spy})
 		req := httptest.NewRequest(http.MethodPost, "/products", strings.NewReader(body))
 		req.Header.Set("Authorization", "Bearer "+token)
 		res := httptest.NewRecorder()

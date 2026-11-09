@@ -7,8 +7,6 @@ import (
 	"strconv"
 
 	"github.com/AndewGitWorks/tamagochi/backend/internal/domain"
-	"github.com/AndewGitWorks/tamagochi/backend/internal/domain/orders"
-	"github.com/AndewGitWorks/tamagochi/backend/internal/domain/products"
 	"github.com/AndewGitWorks/tamagochi/backend/internal/domain/users"
 )
 
@@ -17,17 +15,6 @@ type UserCRUDStore interface {
 	List(context.Context, int, int) ([]users.User, error)
 }
 
-type CRUDConfig struct {
-	Users    UserCRUDStore
-	Profiles users.ProfileStore
-	Products products.Store
-	Images   products.ImageStore
-	Orders   orders.Store
-	Items    orders.ItemStore
-	Likes    products.LikedProductStore
-}
-
-type crudHandler struct{ CRUDConfig }
 type userContextKey struct{}
 
 func currentUser(r *http.Request) users.User {
@@ -52,42 +39,6 @@ func requireUser(auth *users.AuthService, admin bool, next http.HandlerFunc) htt
 		}
 		next(w, r.WithContext(context.WithValue(r.Context(), userContextKey{}, user)))
 	}
-}
-
-func registerCRUD(mux *http.ServeMux, auth *users.AuthService, config CRUDConfig) {
-	h := &crudHandler{config}
-	mux.HandleFunc("GET /products", h.listProducts)
-	mux.HandleFunc("GET /products/{id}", h.getProduct)
-	mux.HandleFunc("POST /products", requireUser(auth, true, h.createProduct))
-	mux.HandleFunc("PUT /products/{id}", requireUser(auth, true, h.updateProduct))
-	mux.HandleFunc("DELETE /products/{id}", requireUser(auth, true, h.deleteProduct))
-	mux.HandleFunc("GET /products/{productID}/images", h.listImages)
-	mux.HandleFunc("GET /products/{productID}/images/{id}", h.getImage)
-	mux.HandleFunc("POST /products/{productID}/images", requireUser(auth, true, h.createImage))
-	mux.HandleFunc("PUT /products/{productID}/images/{id}", requireUser(auth, true, h.updateImage))
-	mux.HandleFunc("DELETE /products/{productID}/images/{id}", requireUser(auth, true, h.deleteImage))
-	mux.HandleFunc("GET /users", requireUser(auth, true, h.listUsers))
-	mux.HandleFunc("GET /users/me", requireUser(auth, false, h.getUser))
-	mux.HandleFunc("PUT /users/me", requireUser(auth, false, h.updateUser))
-	mux.HandleFunc("DELETE /users/me", requireUser(auth, false, h.deleteUser))
-	mux.HandleFunc("POST /profiles/me", requireUser(auth, false, h.createProfile))
-	mux.HandleFunc("GET /profiles/me", requireUser(auth, false, h.getProfile))
-	mux.HandleFunc("PUT /profiles/me", requireUser(auth, false, h.updateProfile))
-	mux.HandleFunc("DELETE /profiles/me", requireUser(auth, false, h.deleteProfile))
-	mux.HandleFunc("POST /orders", requireUser(auth, false, h.createOrder))
-	mux.HandleFunc("GET /orders", requireUser(auth, false, h.listOrders))
-	mux.HandleFunc("GET /orders/{orderID}", requireUser(auth, false, h.getOrder))
-	mux.HandleFunc("PUT /orders/{orderID}", requireUser(auth, false, h.updateOrder))
-	mux.HandleFunc("DELETE /orders/{orderID}", requireUser(auth, false, h.deleteOrder))
-	mux.HandleFunc("POST /orders/{orderID}/items", requireUser(auth, false, h.createItem))
-	mux.HandleFunc("GET /orders/{orderID}/items", requireUser(auth, false, h.listItems))
-	mux.HandleFunc("GET /orders/{orderID}/items/{id}", requireUser(auth, false, h.getItem))
-	mux.HandleFunc("PUT /orders/{orderID}/items/{id}", requireUser(auth, false, h.updateItem))
-	mux.HandleFunc("DELETE /orders/{orderID}/items/{id}", requireUser(auth, false, h.deleteItem))
-	mux.HandleFunc("POST /likes/{productID}", requireUser(auth, false, h.createLike))
-	mux.HandleFunc("GET /likes", requireUser(auth, false, h.listLikes))
-	mux.HandleFunc("GET /likes/{productID}", requireUser(auth, false, h.getLike))
-	mux.HandleFunc("DELETE /likes/{productID}", requireUser(auth, false, h.deleteLike))
 }
 
 func pathID(w http.ResponseWriter, r *http.Request, key string) (int64, bool) {

@@ -15,7 +15,7 @@ export const TextField = ({ label, error, endAdornment, ...props }: TextFieldPro
       <div className={styles.labelWrapper}>
         <label htmlFor={id}>{label}:</label>
       </div>
-      <div className={`${styles.inputWrapper} ${!!error ? styles.error : ''}`}>
+      <div className={`${styles.inputWrapper} ${error ? styles.error : ''}`}>
         <input type="text" className={styles.input} {...props} id={id} />
         {endAdornment && <div className={styles.endAdornment}>{endAdornment}</div>}
       </div>

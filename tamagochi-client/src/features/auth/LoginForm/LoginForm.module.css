@@ -16,3 +16,8 @@
 .link {
   color: var(--color-pink);
 }
+
+.errorMessage {
+  color: var(--color-error);
+  font-size: 16px;
+}

@@ -1,3 +1,9 @@
+.checkboxContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
 .checkboxWrapper {
   display: flex;
   align-items: center;
@@ -52,4 +58,9 @@
 
 .checkbox:disabled::after {
   filter: grayscale(100%);
+}
+
+.errorMessage {
+  color: var(--color-error);
+  font-size: 16px;
 }

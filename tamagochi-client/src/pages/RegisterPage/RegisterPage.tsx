@@ -1,6 +1,6 @@
 import { AuthLayout } from '@/features/auth/ui/AuthLayout/AuthLayout';
 import styles from './RegisterPage.module.css';
-import { RegisterForm } from '@/features/auth/RegisterForm/RegisterForm';
+import { RegistrationForm } from '@/features/auth/RegistrationForm/RegistrationForm';
 import { AuthSwitch } from '@/features/auth/ui/AuthSwitch';
 import { SocialAuth } from '@/features/auth/ui/SocialAuth/SocialAuth';
 
@@ -11,7 +11,7 @@ export const RegisterPage = () => {
         <h1 className={styles.title}>Регистрация</h1>
         <p className={styles.description}>Заполните данные, чтобы зарегистрировать свой аккаунт</p>
       </header>
-      <RegisterForm />
+      <RegistrationForm />
       <AuthSwitch to="/login" text="У вас есть аккаунта?" linkText="Войти" />
       <SocialAuth />
     </AuthLayout>

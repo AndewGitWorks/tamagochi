@@ -63,6 +63,21 @@ func (h *OrderHandler) UpdateOrder(w http.ResponseWriter, r *http.Request) {
 	respond(w, http.StatusOK, updated, err)
 }
 
+func (h *OrderHandler) PayOrder(w http.ResponseWriter, r *http.Request) {
+	id, ok := pathID(w, r, "orderID")
+	if !ok {
+		return
+	}
+	var input struct {
+		Approved bool `json:"approved"`
+	}
+	if !decodeJSON(w, r, &input) {
+		return
+	}
+	updated, err := h.service.Pay(r.Context(), orderActor(r), id, input.Approved)
+	respond(w, http.StatusOK, updated, err)
+}
+
 func (h *OrderHandler) DeleteOrder(w http.ResponseWriter, r *http.Request) {
 	id, ok := pathID(w, r, "orderID")
 	if !ok {

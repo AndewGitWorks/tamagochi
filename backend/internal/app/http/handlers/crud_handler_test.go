@@ -75,7 +75,7 @@ func TestCatalogWritesRequireAdminAccessToken(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			auth, access, refresh := crudTestAuth(t, tc.role)
 			spy := &productSpy{}
-			router := routes.NewRouter(auth, routes.Config{Products: spy, Images: productsImageStub{}})
+			router := routes.NewRouter(auth, routes.Config{CatalogService: products.NewService(spy, productsImageStub{})})
 			req := httptest.NewRequest(http.MethodPost, "/api/v1/products", strings.NewReader(`{"title":"Товар","price":"19.99"}`))
 			if tc.tokenKind == "access" {
 				req.Header.Set("Authorization", "Bearer "+access)
@@ -111,7 +111,7 @@ func TestCannotReadAnotherUsersOrderOrItems(t *testing.T) {
 
 func TestUserResponseOmitsPasswordHash(t *testing.T) {
 	auth, token, _ := crudTestAuth(t, "USER")
-	router := routes.NewRouter(auth, routes.Config{Users: userCRUDStub{}, Profiles: profileStub{}})
+	router := routes.NewRouter(auth, routes.Config{Users: userCRUDStub{}, UserService: users.NewUserService(userCRUDStub{}), ProfileService: users.NewProfileService(profileStub{})})
 	req := httptest.NewRequest(http.MethodGet, "/api/v1/users/me", nil)
 	req.Header.Set("Authorization", "Bearer "+token)
 	res := httptest.NewRecorder()
@@ -138,7 +138,7 @@ func TestProductBodyRejectsImmutableFieldsAndTrailingJSON(t *testing.T) {
 		`{"title":"Product","price":"1.00"} {}`,
 	} {
 		spy := &productSpy{}
-		router := routes.NewRouter(auth, routes.Config{Products: spy, Images: productsImageStub{}})
+		router := routes.NewRouter(auth, routes.Config{CatalogService: products.NewService(spy, productsImageStub{})})
 		req := httptest.NewRequest(http.MethodPost, "/api/v1/products", strings.NewReader(body))
 		req.Header.Set("Authorization", "Bearer "+token)
 		res := httptest.NewRecorder()

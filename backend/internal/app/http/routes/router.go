@@ -18,12 +18,12 @@ const APIV1Prefix = "/api/v1"
 // always available; a module is registered only when all of its dependencies
 // have been assembled by cmd/api.
 type Config struct {
-	Users        apphttp.UserCRUDStore
-	Profiles     users.ProfileStore
-	Products     products.Store
-	Images       products.ImageStore
-	OrderService *orders.Service
-	Likes        products.LikedProductStore
+	Users           apphttp.UserCRUDStore
+	UserService     *users.UserService
+	ProfileService  *users.ProfileService
+	CatalogService  *products.Service
+	OrderService    *orders.Service
+	FavoriteService *products.FavoriteService
 }
 
 func NewRouter(auth *users.AuthService, configs ...Config) http.Handler {
@@ -43,8 +43,8 @@ func NewRouter(auth *users.AuthService, configs ...Config) http.Handler {
 }
 
 func registerResources(api *http.ServeMux, auth *users.AuthService, config Config) {
-	if config.Products != nil && config.Images != nil {
-		productsHandler := apphttp.NewProductHandler(config.Products, config.Images, auth)
+	if config.CatalogService != nil {
+		productsHandler := apphttp.NewProductHandler(config.CatalogService)
 		api.HandleFunc("GET /products", productsHandler.ListProducts)
 		api.HandleFunc("GET /products/{id}", productsHandler.GetProduct)
 		api.HandleFunc("POST /products", apphttp.RequireUser(auth, true, productsHandler.CreateProduct))
@@ -57,8 +57,8 @@ func registerResources(api *http.ServeMux, auth *users.AuthService, config Confi
 		api.HandleFunc("DELETE /products/{productID}/images/{id}", apphttp.RequireUser(auth, true, productsHandler.DeleteImage))
 	}
 
-	if config.Users != nil && config.Profiles != nil {
-		usersHandler := apphttp.NewUserHandler(config.Users, config.Profiles, auth)
+	if config.Users != nil && config.UserService != nil && config.ProfileService != nil {
+		usersHandler := apphttp.NewUserHandler(config.Users, config.UserService, config.ProfileService)
 		api.HandleFunc("GET /users", apphttp.RequireUser(auth, true, usersHandler.ListUsers))
 		api.HandleFunc("GET /users/me", apphttp.RequireUser(auth, false, usersHandler.GetUser))
 		api.HandleFunc("PUT /users/me", apphttp.RequireUser(auth, false, usersHandler.UpdateUser))
@@ -75,12 +75,14 @@ func registerResources(api *http.ServeMux, auth *users.AuthService, config Confi
 		api.HandleFunc("POST /cart/items", apphttp.RequireUser(auth, false, cartHandler.AddItem))
 		api.HandleFunc("PUT /cart/items/{id}", apphttp.RequireUser(auth, false, cartHandler.UpdateItem))
 		api.HandleFunc("DELETE /cart/items/{id}", apphttp.RequireUser(auth, false, cartHandler.RemoveItem))
+		api.HandleFunc("POST /cart/checkout", apphttp.RequireUser(auth, false, cartHandler.Checkout))
 
 		ordersHandler := apphttp.NewOrderHandler(config.OrderService, auth)
 		api.HandleFunc("POST /orders", apphttp.RequireUser(auth, false, ordersHandler.CreateOrder))
 		api.HandleFunc("GET /orders", apphttp.RequireUser(auth, false, ordersHandler.ListOrders))
 		api.HandleFunc("GET /orders/{orderID}", apphttp.RequireUser(auth, false, ordersHandler.GetOrder))
 		api.HandleFunc("PUT /orders/{orderID}", apphttp.RequireUser(auth, false, ordersHandler.UpdateOrder))
+		api.HandleFunc("POST /orders/{orderID}/payment", apphttp.RequireUser(auth, false, ordersHandler.PayOrder))
 		api.HandleFunc("DELETE /orders/{orderID}", apphttp.RequireUser(auth, false, ordersHandler.DeleteOrder))
 		api.HandleFunc("POST /orders/{orderID}/items", apphttp.RequireUser(auth, false, ordersHandler.CreateItem))
 		api.HandleFunc("GET /orders/{orderID}/items", apphttp.RequireUser(auth, false, ordersHandler.ListItems))
@@ -89,8 +91,8 @@ func registerResources(api *http.ServeMux, auth *users.AuthService, config Confi
 		api.HandleFunc("DELETE /orders/{orderID}/items/{id}", apphttp.RequireUser(auth, false, ordersHandler.DeleteItem))
 	}
 
-	if config.Likes != nil {
-		likesHandler := apphttp.NewLikedProductHandler(config.Likes, auth)
+	if config.FavoriteService != nil {
+		likesHandler := apphttp.NewLikedProductHandler(config.FavoriteService)
 		api.HandleFunc("POST /likes/{productID}", apphttp.RequireUser(auth, false, likesHandler.CreateLike))
 		api.HandleFunc("GET /likes", apphttp.RequireUser(auth, false, likesHandler.ListLikes))
 		api.HandleFunc("GET /likes/{productID}", apphttp.RequireUser(auth, false, likesHandler.GetLike))

@@ -5,6 +5,8 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"errors"
+	"strings"
+	"unicode/utf8"
 
 	"github.com/AndewGitWorks/tamagochi/backend/internal/domain"
 )
@@ -123,6 +125,45 @@ func (s *Service) RemoveFromCart(ctx context.Context, userID, itemID int64) (Car
 		return Cart{}, err
 	}
 	return s.GetCart(ctx, userID)
+}
+
+// Checkout freezes the cart and records the delivery address with the order.
+// The address is copied here so future profile changes never alter its history.
+func (s *Service) Checkout(ctx context.Context, userID int64, deliveryAddress string) (Order, error) {
+	deliveryAddress = strings.TrimSpace(deliveryAddress)
+	if userID <= 0 || utf8.RuneCountInString(deliveryAddress) < 5 || utf8.RuneCountInString(deliveryAddress) > 500 {
+		return Order{}, domain.ErrValidation
+	}
+	order, err := s.pendingCart(ctx, userID, false)
+	if err != nil {
+		return Order{}, err
+	}
+	items, err := s.items.ListByOrder(ctx, order.ID, 1, 0)
+	if err != nil {
+		return Order{}, err
+	}
+	if len(items) == 0 {
+		return Order{}, domain.ErrValidation
+	}
+	return s.orders.Checkout(ctx, order.ID, userID, deliveryAddress)
+}
+
+// Pay is a deterministic payment simulator for the university project. A
+// production integration would call a provider and apply its signed callback.
+func (s *Service) Pay(ctx context.Context, actor Actor, orderID int64, approved bool) (Order, error) {
+	order, err := s.owned(ctx, actor, orderID)
+	if err != nil {
+		return Order{}, err
+	}
+	if order.Status != "AWAITING_PAYMENT" && order.Status != "PAYMENT_FAILED" {
+		return Order{}, domain.ErrOrderTransition
+	}
+	if approved {
+		order.Status = "PAID"
+	} else {
+		order.Status = "PAYMENT_FAILED"
+	}
+	return s.orders.Update(ctx, order)
 }
 
 func (s *Service) Get(ctx context.Context, actor Actor, orderID int64) (Order, error) {
@@ -249,9 +290,9 @@ func (s *Service) pendingCart(ctx context.Context, userID int64, create bool) (O
 func allowedTransition(from, to string) bool {
 	switch from {
 	case "PENDING":
-		return to == "PAID" || to == "PAYMENT_FAILED" || to == "CANCELLED"
-	case "PAYMENT_FAILED":
-		return to == "PENDING" || to == "CANCELLED"
+		return to == "CANCELLED"
+	case "AWAITING_PAYMENT", "PAYMENT_FAILED":
+		return to == "CANCELLED"
 	case "PAID":
 		return to == "DELIVERING"
 	case "DELIVERING":

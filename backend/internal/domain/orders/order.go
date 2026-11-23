@@ -9,12 +9,13 @@ import (
 )
 
 type Order struct {
-	ID         int64     `json:"id"`
-	UserID     int64     `json:"user_id"`
-	Number     string    `json:"number"`
-	TotalPrice string    `json:"total_price"`
-	CreatedAt  time.Time `json:"created_at"`
-	Status     string    `json:"status"`
+	ID              int64     `json:"id"`
+	UserID          int64     `json:"user_id"`
+	Number          string    `json:"number"`
+	TotalPrice      string    `json:"total_price"`
+	DeliveryAddress string    `json:"delivery_address"`
+	CreatedAt       time.Time `json:"created_at"`
+	Status          string    `json:"status"`
 }
 
 type Store interface {
@@ -22,6 +23,7 @@ type Store interface {
 	FindByID(context.Context, int64) (Order, bool, error)
 	FindPendingByUser(context.Context, int64) (Order, bool, error)
 	ListByUser(context.Context, int64, int, int) ([]Order, error)
+	Checkout(context.Context, int64, int64, string) (Order, error)
 	Update(context.Context, Order) (Order, error)
 	Cancel(context.Context, int64, int64) (Order, error)
 	Delete(context.Context, int64) error
@@ -29,7 +31,7 @@ type Store interface {
 
 func ValidStatus(status string) bool {
 	switch status {
-	case "PENDING", "PAID", "PAYMENT_FAILED", "DELIVERING", "DELIVERED", "CANCELLED":
+	case "PENDING", "AWAITING_PAYMENT", "PAID", "PAYMENT_FAILED", "DELIVERING", "DELIVERED", "CANCELLED":
 		return true
 	}
 	return false

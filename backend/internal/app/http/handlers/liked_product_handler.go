@@ -2,17 +2,15 @@ package http
 
 import (
 	"github.com/AndewGitWorks/tamagochi/backend/internal/domain/products"
-	"github.com/AndewGitWorks/tamagochi/backend/internal/domain/users"
 	"net/http"
 )
 
 type LikedProductHandler struct {
-	Likes products.LikedProductStore
-	auth  *users.AuthService
+	service *products.FavoriteService
 }
 
-func NewLikedProductHandler(likes products.LikedProductStore, auth *users.AuthService) *LikedProductHandler {
-	return &LikedProductHandler{Likes: likes, auth: auth}
+func NewLikedProductHandler(service *products.FavoriteService) *LikedProductHandler {
+	return &LikedProductHandler{service: service}
 }
 
 func (h *LikedProductHandler) CreateLike(w http.ResponseWriter, r *http.Request) {
@@ -20,8 +18,8 @@ func (h *LikedProductHandler) CreateLike(w http.ResponseWriter, r *http.Request)
 	if !ok {
 		return
 	}
-	like, err := h.Likes.Create(r.Context(), products.LikedProduct{UserID: currentUser(r).ID, ProductID: productID})
-	respond(w, http.StatusCreated, like, err)
+	like, err := h.service.Add(r.Context(), currentUser(r).ID, productID)
+	respond(w, http.StatusOK, like, err)
 }
 
 func (h *LikedProductHandler) GetLike(w http.ResponseWriter, r *http.Request) {
@@ -29,8 +27,8 @@ func (h *LikedProductHandler) GetLike(w http.ResponseWriter, r *http.Request) {
 	if !ok {
 		return
 	}
-	like, found, err := h.Likes.Find(r.Context(), currentUser(r).ID, productID)
-	respondFound(w, like, found, err)
+	like, err := h.service.Get(r.Context(), currentUser(r).ID, productID)
+	respond(w, http.StatusOK, like, err)
 }
 
 func (h *LikedProductHandler) ListLikes(w http.ResponseWriter, r *http.Request) {
@@ -38,7 +36,7 @@ func (h *LikedProductHandler) ListLikes(w http.ResponseWriter, r *http.Request) 
 	if !ok {
 		return
 	}
-	result, err := h.Likes.ListByUser(r.Context(), currentUser(r).ID, limit, offset)
+	result, err := h.service.List(r.Context(), currentUser(r).ID, limit, offset)
 	respond(w, http.StatusOK, result, err)
 }
 
@@ -47,5 +45,5 @@ func (h *LikedProductHandler) DeleteLike(w http.ResponseWriter, r *http.Request)
 	if !ok {
 		return
 	}
-	respondDeleted(w, h.Likes.Delete(r.Context(), currentUser(r).ID, productID))
+	respondDeleted(w, h.service.Remove(r.Context(), currentUser(r).ID, productID))
 }

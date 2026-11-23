@@ -1,0 +1,1 @@
+DROP INDEX IF EXISTS tamagochi.orders_one_pending_cart_per_user_idx;

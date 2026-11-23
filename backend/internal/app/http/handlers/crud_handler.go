@@ -83,6 +83,8 @@ func writeCRUDError(w http.ResponseWriter, err error) {
 		status, message = http.StatusConflict, "entity conflicts with existing data"
 	case errors.Is(err, domain.ErrOrderLocked):
 		status, message = http.StatusConflict, "only pending orders can be edited"
+	case errors.Is(err, domain.ErrOrderTransition):
+		status, message = http.StatusConflict, "order status transition is not allowed"
 	}
 	writeJSON(w, status, map[string]string{"error": message})
 }

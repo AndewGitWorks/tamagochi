@@ -56,3 +56,14 @@ func (h *CartHandler) RemoveItem(w http.ResponseWriter, r *http.Request) {
 	cart, err := h.service.RemoveFromCart(r.Context(), currentUser(r).ID, itemID)
 	respond(w, http.StatusOK, cart, err)
 }
+
+func (h *CartHandler) Checkout(w http.ResponseWriter, r *http.Request) {
+	var input struct {
+		DeliveryAddress string `json:"delivery_address"`
+	}
+	if !decodeJSON(w, r, &input) {
+		return
+	}
+	order, err := h.service.Checkout(r.Context(), currentUser(r).ID, input.DeliveryAddress)
+	respond(w, http.StatusOK, order, err)
+}

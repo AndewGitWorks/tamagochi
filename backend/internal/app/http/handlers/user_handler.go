@@ -4,17 +4,16 @@ import (
 	"net/http"
 
 	"github.com/AndewGitWorks/tamagochi/backend/internal/domain/users"
-	"github.com/AndewGitWorks/tamagochi/backend/internal/platform/security"
 )
 
 type UserHandler struct {
 	Users    UserCRUDStore
-	Profiles users.ProfileStore
-	auth     *users.AuthService
+	users    *users.UserService
+	profiles *users.ProfileService
 }
 
-func NewUserHandler(usersStore UserCRUDStore, profiles users.ProfileStore, auth *users.AuthService) *UserHandler {
-	return &UserHandler{Users: usersStore, Profiles: profiles, auth: auth}
+func NewUserHandler(usersStore UserCRUDStore, userService *users.UserService, profileService *users.ProfileService) *UserHandler {
+	return &UserHandler{Users: usersStore, users: userService, profiles: profileService}
 }
 
 func (h *UserHandler) GetUser(w http.ResponseWriter, r *http.Request) {
@@ -35,27 +34,12 @@ func (h *UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	if !decodeJSON(w, r, &input) {
 		return
 	}
-	if err := users.ValidateUpdate(input); err != nil {
-		writeCRUDError(w, err)
-		return
-	}
-	user := currentUser(r)
-	user.Name, user.Surname, user.Login = input.Name, input.Surname, input.Login
-	user.Email, user.PhoneNumber = input.Email, input.PhoneNumber
-	if input.Password != "" {
-		hash, err := security.HashPassword(input.Password)
-		if err != nil {
-			writeCRUDError(w, err)
-			return
-		}
-		user.PasswordHash = hash
-	}
-	updated, err := h.Users.Update(r.Context(), user)
+	updated, err := h.users.UpdateSelf(r.Context(), currentUser(r), input)
 	respond(w, http.StatusOK, updated, err)
 }
 
 func (h *UserHandler) DeleteUser(w http.ResponseWriter, r *http.Request) {
-	respondDeleted(w, h.Users.Delete(r.Context(), currentUser(r).ID))
+	respondDeleted(w, h.users.DeleteSelf(r.Context(), currentUser(r).ID))
 }
 
 type profileInput struct {
@@ -68,13 +52,13 @@ func (h *UserHandler) CreateProfile(w http.ResponseWriter, r *http.Request) {
 	if !decodeJSON(w, r, &input) {
 		return
 	}
-	profile, err := h.Profiles.Create(r.Context(), users.Profile{UserID: currentUser(r).ID, Bio: input.Bio, Address: input.Address})
-	respond(w, http.StatusCreated, profile, err)
+	profile, err := h.profiles.Save(r.Context(), users.Profile{UserID: currentUser(r).ID, Bio: input.Bio, Address: input.Address})
+	respond(w, http.StatusOK, profile, err)
 }
 
 func (h *UserHandler) GetProfile(w http.ResponseWriter, r *http.Request) {
-	profile, found, err := h.Profiles.FindByUserID(r.Context(), currentUser(r).ID)
-	respondFound(w, profile, found, err)
+	profile, err := h.profiles.Get(r.Context(), currentUser(r).ID)
+	respond(w, http.StatusOK, profile, err)
 }
 
 func (h *UserHandler) UpdateProfile(w http.ResponseWriter, r *http.Request) {
@@ -82,10 +66,10 @@ func (h *UserHandler) UpdateProfile(w http.ResponseWriter, r *http.Request) {
 	if !decodeJSON(w, r, &input) {
 		return
 	}
-	profile, err := h.Profiles.Update(r.Context(), users.Profile{UserID: currentUser(r).ID, Bio: input.Bio, Address: input.Address})
+	profile, err := h.profiles.Save(r.Context(), users.Profile{UserID: currentUser(r).ID, Bio: input.Bio, Address: input.Address})
 	respond(w, http.StatusOK, profile, err)
 }
 
 func (h *UserHandler) DeleteProfile(w http.ResponseWriter, r *http.Request) {
-	respondDeleted(w, h.Profiles.Delete(r.Context(), currentUser(r).ID))
+	respondDeleted(w, h.profiles.Clear(r.Context(), currentUser(r).ID))
 }

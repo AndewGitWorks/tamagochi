@@ -9,9 +9,10 @@ import (
 )
 
 type serviceOrderStore struct {
-	order       Order
-	updateCalls int
-	cancelCalls int
+	order         Order
+	updateCalls   int
+	cancelCalls   int
+	checkoutCalls int
 }
 
 func (s *serviceOrderStore) Create(_ context.Context, order Order) (Order, error) {
@@ -36,6 +37,16 @@ func (s *serviceOrderStore) FindPendingByUser(_ context.Context, userID int64) (
 
 func (s *serviceOrderStore) ListByUser(context.Context, int64, int, int) ([]Order, error) {
 	return nil, nil
+}
+
+func (s *serviceOrderStore) Checkout(_ context.Context, id, userID int64, address string) (Order, error) {
+	s.checkoutCalls++
+	if id != s.order.ID || userID != s.order.UserID || s.order.Status != "PENDING" {
+		return Order{}, domain.ErrOrderLocked
+	}
+	s.order.Status = "AWAITING_PAYMENT"
+	s.order.DeliveryAddress = address
+	return s.order, nil
 }
 
 func (s *serviceOrderStore) Update(_ context.Context, order Order) (Order, error) {
@@ -147,11 +158,11 @@ func TestServiceRejectsUserPaymentAndInvalidAdminTransition(t *testing.T) {
 }
 
 func TestServiceAllowsOnlyValidAdminStatusSequence(t *testing.T) {
-	store := &serviceOrderStore{order: Order{ID: 7, UserID: 12, Status: "PENDING"}}
+	store := &serviceOrderStore{order: Order{ID: 7, UserID: 12, Status: "PAID"}}
 	service := NewService(store, nil)
 	admin := Actor{ID: 1, Role: "ADMIN"}
 
-	for _, status := range []string{"PAID", "DELIVERING", "DELIVERED"} {
+	for _, status := range []string{"DELIVERING", "DELIVERED"} {
 		updated, err := service.ChangeStatus(context.Background(), admin, 7, status)
 		if err != nil {
 			t.Fatalf("transition to %s: %v", status, err)
@@ -160,8 +171,8 @@ func TestServiceAllowsOnlyValidAdminStatusSequence(t *testing.T) {
 			t.Fatalf("status = %s, want %s", updated.Status, status)
 		}
 	}
-	if store.updateCalls != 3 {
-		t.Fatalf("updates = %d, want 3", store.updateCalls)
+	if store.updateCalls != 2 {
+		t.Fatalf("updates = %d, want 2", store.updateCalls)
 	}
 }
 
@@ -184,5 +195,34 @@ func TestServiceAddToCartCreatesOneLineAndThenIncrementsIt(t *testing.T) {
 	}
 	if len(second.Items) != 1 || second.Items[0].Quantity != 5 {
 		t.Fatalf("second cart: %+v", second)
+	}
+}
+
+func TestServiceCheckoutRequiresItemsAndAllowsPaymentRetry(t *testing.T) {
+	store := &serviceOrderStore{order: Order{ID: 7, UserID: 12, Status: "PENDING"}}
+	items := &serviceItemStore{items: make(map[int64]Item)}
+	service := NewService(store, items)
+
+	_, err := service.Checkout(context.Background(), 12, "Moscow, Test street 1")
+	if !errors.Is(err, domain.ErrValidation) || store.checkoutCalls != 0 {
+		t.Fatalf("empty checkout: err=%v calls=%d", err, store.checkoutCalls)
+	}
+	items.items[1] = Item{ID: 1, OrderID: 7, ProductID: 44, Quantity: 1, Price: "10.00"}
+
+	checkedOut, err := service.Checkout(context.Background(), 12, "Moscow, Test street 1")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if checkedOut.Status != "AWAITING_PAYMENT" || checkedOut.DeliveryAddress != "Moscow, Test street 1" {
+		t.Fatalf("checkout: %+v", checkedOut)
+	}
+
+	failed, err := service.Pay(context.Background(), Actor{ID: 12, Role: "USER"}, 7, false)
+	if err != nil || failed.Status != "PAYMENT_FAILED" {
+		t.Fatalf("failed payment: order=%+v err=%v", failed, err)
+	}
+	paid, err := service.Pay(context.Background(), Actor{ID: 12, Role: "USER"}, 7, true)
+	if err != nil || paid.Status != "PAID" {
+		t.Fatalf("payment retry: order=%+v err=%v", paid, err)
 	}
 }

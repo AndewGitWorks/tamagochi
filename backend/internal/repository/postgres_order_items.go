@@ -59,6 +59,19 @@ func (s *PostgresOrderItemStore) FindByID(ctx context.Context, id, orderID int64
 	return item, true, nil
 }
 
+func (s *PostgresOrderItemStore) FindByProduct(ctx context.Context, orderID, productID int64) (orders.Item, bool, error) {
+	var item orders.Item
+	err := s.db.QueryRowContext(ctx, `SELECT `+itemColumns+` FROM tamagochi.order_items WHERE order_id=$1 AND product_id=$2`, orderID, productID).
+		Scan(&item.ID, &item.OrderID, &item.ProductID, &item.Quantity, &item.Price)
+	if errors.Is(err, sql.ErrNoRows) {
+		return orders.Item{}, false, nil
+	}
+	if err != nil {
+		return orders.Item{}, false, err
+	}
+	return item, true, nil
+}
+
 func (s *PostgresOrderItemStore) ListByOrder(ctx context.Context, orderID int64, limit, offset int) ([]orders.Item, error) {
 	rows, err := s.db.QueryContext(ctx, `SELECT `+itemColumns+` FROM tamagochi.order_items WHERE order_id=$1 ORDER BY id LIMIT $2 OFFSET $3`, orderID, pageSize(limit), offset)
 	if err != nil {

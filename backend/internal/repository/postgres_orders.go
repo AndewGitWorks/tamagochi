@@ -45,6 +45,19 @@ func (s *PostgresOrderStore) FindByID(ctx context.Context, id int64) (orders.Ord
 	return order, true, nil
 }
 
+func (s *PostgresOrderStore) FindPendingByUser(ctx context.Context, userID int64) (orders.Order, bool, error) {
+	var order orders.Order
+	err := s.db.QueryRowContext(ctx, `SELECT `+orderColumns+` FROM tamagochi.orders WHERE user_id=$1 AND status='PENDING'`, userID).
+		Scan(&order.ID, &order.UserID, &order.Number, &order.TotalPrice, &order.CreatedAt, &order.Status)
+	if errors.Is(err, sql.ErrNoRows) {
+		return orders.Order{}, false, nil
+	}
+	if err != nil {
+		return orders.Order{}, false, err
+	}
+	return order, true, nil
+}
+
 func (s *PostgresOrderStore) ListByUser(ctx context.Context, userID int64, limit, offset int) ([]orders.Order, error) {
 	rows, err := s.db.QueryContext(ctx, `SELECT `+orderColumns+` FROM tamagochi.orders WHERE user_id=$1 ORDER BY id DESC LIMIT $2 OFFSET $3`, userID, pageSize(limit), offset)
 	if err != nil {

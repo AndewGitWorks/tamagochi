@@ -6,10 +6,11 @@ import (
 )
 
 var (
-	ErrNotFound    = errors.New("entity was not found")
-	ErrConflict    = errors.New("entity conflicts with existing data")
-	ErrValidation  = errors.New("invalid entity data")
-	ErrOrderLocked = errors.New("only pending orders can be edited")
+	ErrNotFound        = errors.New("entity was not found")
+	ErrConflict        = errors.New("entity conflicts with existing data")
+	ErrValidation      = errors.New("invalid entity data")
+	ErrOrderLocked     = errors.New("only pending orders can be edited")
+	ErrOrderTransition = errors.New("order status transition is not allowed")
 )
 
 // Prices are decimal strings so JSON and SQL never round them through float64.

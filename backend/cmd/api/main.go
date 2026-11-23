@@ -13,7 +13,8 @@ import (
 	"strings"
 	"time"
 
-	apphttp "github.com/AndewGitWorks/tamagochi/backend/internal/app/http/handlers"
+	"github.com/AndewGitWorks/tamagochi/backend/internal/app/http/routes"
+	"github.com/AndewGitWorks/tamagochi/backend/internal/domain/orders"
 	"github.com/AndewGitWorks/tamagochi/backend/internal/domain/users"
 	"github.com/AndewGitWorks/tamagochi/backend/internal/platform/database"
 	"github.com/AndewGitWorks/tamagochi/backend/internal/repository"
@@ -41,14 +42,16 @@ func main() {
 		RefreshTokenTTL: envDurationSeconds("JWT_REFRESH_TTL_SECONDS", 30*24*time.Hour)})
 	address := ":" + envOrDefault("PORT", "8080")
 	log.Printf("Tamagochi API listening on %s", address)
-	if err := http.ListenAndServe(address, apphttp.NewRouter(service, apphttp.RouterConfig{
+	if err := http.ListenAndServe(address, routes.NewRouter(service, routes.Config{
 		Users:    repository.NewPostgresUserStore(db),
 		Profiles: repository.NewPostgresProfileStore(db),
 		Products: repository.NewPostgresProductStore(db),
 		Images:   repository.NewPostgresProductImageStore(db),
-		Orders:   repository.NewPostgresOrderStore(db),
-		Items:    repository.NewPostgresOrderItemStore(db),
-		Likes:    repository.NewPostgresLikedProductStore(db),
+		OrderService: orders.NewService(
+			repository.NewPostgresOrderStore(db),
+			repository.NewPostgresOrderItemStore(db),
+		),
+		Likes: repository.NewPostgresLikedProductStore(db),
 	})); err != nil {
 		log.Fatal(err)
 	}

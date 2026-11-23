@@ -21,7 +21,9 @@ func currentUser(r *http.Request) users.User {
 	return r.Context().Value(userContextKey{}).(users.User)
 }
 
-func requireUser(auth *users.AuthService, admin bool, next http.HandlerFunc) http.HandlerFunc {
+// RequireUser validates an access token and passes the current user to an endpoint.
+// Route composition is kept in the routes package; handlers only implement endpoints.
+func RequireUser(auth *users.AuthService, admin bool, next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		token, ok := bearerToken(r.Header.Get("Authorization"))
 		if !ok {

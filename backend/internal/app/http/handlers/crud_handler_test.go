@@ -1,4 +1,4 @@
-package http
+package http_test
 
 import (
 	"context"
@@ -10,6 +10,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/AndewGitWorks/tamagochi/backend/internal/app/http/routes"
 	"github.com/AndewGitWorks/tamagochi/backend/internal/domain/orders"
 	"github.com/AndewGitWorks/tamagochi/backend/internal/domain/products"
 	"github.com/AndewGitWorks/tamagochi/backend/internal/domain/users"
@@ -20,6 +21,14 @@ type productSpy struct {
 	products.Store
 	created bool
 }
+
+type productsImageStub struct{ products.ImageStore }
+
+type userCRUDStub struct{ users.Store }
+
+func (userCRUDStub) List(context.Context, int, int) ([]users.User, error) { return nil, nil }
+
+type profileStub struct{ users.ProfileStore }
 
 func (s *productSpy) Create(_ context.Context, product products.Product) (products.Product, error) {
 	s.created = true
@@ -66,8 +75,8 @@ func TestCatalogWritesRequireAdminAccessToken(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			auth, access, refresh := crudTestAuth(t, tc.role)
 			spy := &productSpy{}
-			router := NewRouter(auth, RouterConfig{Products: spy})
-			req := httptest.NewRequest(http.MethodPost, "/products", strings.NewReader(`{"title":"Товар","price":"19.99"}`))
+			router := routes.NewRouter(auth, routes.Config{Products: spy, Images: productsImageStub{}})
+			req := httptest.NewRequest(http.MethodPost, "/api/v1/products", strings.NewReader(`{"title":"Товар","price":"19.99"}`))
 			if tc.tokenKind == "access" {
 				req.Header.Set("Authorization", "Bearer "+access)
 			}
@@ -88,8 +97,8 @@ func TestCatalogWritesRequireAdminAccessToken(t *testing.T) {
 
 func TestCannotReadAnotherUsersOrderOrItems(t *testing.T) {
 	auth, token, _ := crudTestAuth(t, "USER")
-	router := NewRouter(auth, RouterConfig{Orders: orderStub{}})
-	for _, path := range []string{"/orders/1", "/orders/1/items", "/orders/1/items/2"} {
+	router := routes.NewRouter(auth, routes.Config{OrderService: orders.NewService(orderStub{}, nil)})
+	for _, path := range []string{"/api/v1/orders/1", "/api/v1/orders/1/items", "/api/v1/orders/1/items/2"} {
 		req := httptest.NewRequest(http.MethodGet, path, nil)
 		req.Header.Set("Authorization", "Bearer "+token)
 		res := httptest.NewRecorder()
@@ -102,8 +111,8 @@ func TestCannotReadAnotherUsersOrderOrItems(t *testing.T) {
 
 func TestUserResponseOmitsPasswordHash(t *testing.T) {
 	auth, token, _ := crudTestAuth(t, "USER")
-	router := NewRouter(auth, RouterConfig{})
-	req := httptest.NewRequest(http.MethodGet, "/users/me", nil)
+	router := routes.NewRouter(auth, routes.Config{Users: userCRUDStub{}, Profiles: profileStub{}})
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/users/me", nil)
 	req.Header.Set("Authorization", "Bearer "+token)
 	res := httptest.NewRecorder()
 	router.ServeHTTP(res, req)
@@ -129,8 +138,8 @@ func TestProductBodyRejectsImmutableFieldsAndTrailingJSON(t *testing.T) {
 		`{"title":"Product","price":"1.00"} {}`,
 	} {
 		spy := &productSpy{}
-		router := NewRouter(auth, RouterConfig{Products: spy})
-		req := httptest.NewRequest(http.MethodPost, "/products", strings.NewReader(body))
+		router := routes.NewRouter(auth, routes.Config{Products: spy, Images: productsImageStub{}})
+		req := httptest.NewRequest(http.MethodPost, "/api/v1/products", strings.NewReader(body))
 		req.Header.Set("Authorization", "Bearer "+token)
 		res := httptest.NewRecorder()
 		router.ServeHTTP(res, req)

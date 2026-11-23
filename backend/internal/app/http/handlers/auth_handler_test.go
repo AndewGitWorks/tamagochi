@@ -1,4 +1,4 @@
-package http
+package http_test
 
 import (
 	"bytes"
@@ -7,6 +7,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/AndewGitWorks/tamagochi/backend/internal/app/http/routes"
 	"github.com/AndewGitWorks/tamagochi/backend/internal/domain/users"
 )
 
@@ -14,14 +15,14 @@ func TestAuthRoutes(t *testing.T) {
 	service := users.NewAuthService(users.AuthConfig{
 		Store: users.NewMemoryStore(), JWTSecret: []byte("another-long-test-secret-that-is-at-least-32-characters"), Issuer: "test-api",
 	})
-	router := NewRouter(service)
+	router := routes.NewRouter(service)
 
-	register := request(router, http.MethodPost, "/register", `{"login":"sasha","name":"Sasha","surname":"Rossi","email":"sasha@example.com","phone_number":"+15551234567","password":"correct-horse-battery-staple"}`, "")
+	register := request(router, http.MethodPost, "/api/v1/register", `{"login":"sasha","name":"Sasha","surname":"Rossi","email":"sasha@example.com","phone_number":"+15551234567","password":"correct-horse-battery-staple"}`, "")
 	if register.Code != http.StatusCreated {
 		t.Fatalf("register status: %d; body: %s", register.Code, register.Body.String())
 	}
 
-	login := request(router, http.MethodPost, "/login", `{"login":"sasha","password":"correct-horse-battery-staple"}`, "")
+	login := request(router, http.MethodPost, "/api/v1/login", `{"login":"sasha","password":"correct-horse-battery-staple"}`, "")
 	if login.Code != http.StatusOK {
 		t.Fatalf("login status: %d; body: %s", login.Code, login.Body.String())
 	}
@@ -30,7 +31,7 @@ func TestAuthRoutes(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	refresh := request(router, http.MethodPost, "/refresh", "", "Bearer "+tokens.RefreshToken)
+	refresh := request(router, http.MethodPost, "/api/v1/refresh", "", "Bearer "+tokens.RefreshToken)
 	if refresh.Code != http.StatusOK {
 		t.Fatalf("refresh status: %d; body: %s", refresh.Code, refresh.Body.String())
 	}
@@ -51,9 +52,19 @@ func request(router http.Handler, method, path, body, authorization string) *htt
 
 func TestRegisterRejectsInvalidRequest(t *testing.T) {
 	service := users.NewAuthService(users.AuthConfig{Store: users.NewMemoryStore(), JWTSecret: []byte("another-long-test-secret-that-is-at-least-32-characters"), Issuer: "test-api"})
-	router := NewRouter(service)
-	response := request(router, http.MethodPost, "/register", `{"login":"ab","name":"A","surname":"B","email":"bad","phone_number":"123","password":"short"}`, "")
+	router := routes.NewRouter(service)
+	response := request(router, http.MethodPost, "/api/v1/register", `{"login":"ab","name":"A","surname":"B","email":"bad","phone_number":"123","password":"short"}`, "")
 	if response.Code != http.StatusBadRequest {
 		t.Fatalf("status: %d; body: %s", response.Code, response.Body.String())
+	}
+}
+
+func TestAuthenticationRoutesRequireAPIVersionPrefix(t *testing.T) {
+	service := users.NewAuthService(users.AuthConfig{Store: users.NewMemoryStore(), JWTSecret: []byte("another-long-test-secret-that-is-at-least-32-characters"), Issuer: "test-api"})
+	router := routes.NewRouter(service)
+
+	legacy := request(router, http.MethodPost, "/login", `{"login":"sasha","password":"correct-horse-battery-staple"}`, "")
+	if legacy.Code != http.StatusNotFound {
+		t.Fatalf("unversioned route status: %d", legacy.Code)
 	}
 }

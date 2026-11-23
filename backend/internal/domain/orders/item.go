@@ -16,6 +16,7 @@ type Item struct {
 type ItemStore interface {
 	Create(context.Context, Item) (Item, error)
 	FindByID(context.Context, int64, int64) (Item, bool, error)
+	FindByProduct(context.Context, int64, int64) (Item, bool, error)
 	ListByOrder(context.Context, int64, int, int) ([]Item, error)
 	Update(context.Context, Item) (Item, error)
 	Delete(context.Context, int64, int64) error

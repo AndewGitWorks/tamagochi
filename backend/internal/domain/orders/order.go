@@ -20,6 +20,7 @@ type Order struct {
 type Store interface {
 	Create(context.Context, Order) (Order, error)
 	FindByID(context.Context, int64) (Order, bool, error)
+	FindPendingByUser(context.Context, int64) (Order, bool, error)
 	ListByUser(context.Context, int64, int, int) ([]Order, error)
 	Update(context.Context, Order) (Order, error)
 	Cancel(context.Context, int64, int64) (Order, error)

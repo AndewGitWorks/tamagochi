@@ -28,25 +28,12 @@ func NewProductHandler(productsStore products.Store, images products.ImageStore,
 	return &ProductHandler{Products: productsStore, Images: images, auth: auth}
 }
 
-func (h *ProductHandler) RegisterRoutes(mux *http.ServeMux) {
-	mux.HandleFunc("GET /products", h.listProducts)
-	mux.HandleFunc("GET /products/{id}", h.getProduct)
-	mux.HandleFunc("POST /products", requireUser(h.auth, true, h.createProduct))
-	mux.HandleFunc("PUT /products/{id}", requireUser(h.auth, true, h.updateProduct))
-	mux.HandleFunc("DELETE /products/{id}", requireUser(h.auth, true, h.deleteProduct))
-	mux.HandleFunc("GET /products/{productID}/images", h.listImages)
-	mux.HandleFunc("GET /products/{productID}/images/{id}", h.getImage)
-	mux.HandleFunc("POST /products/{productID}/images", requireUser(h.auth, true, h.createImage))
-	mux.HandleFunc("PUT /products/{productID}/images/{id}", requireUser(h.auth, true, h.updateImage))
-	mux.HandleFunc("DELETE /products/{productID}/images/{id}", requireUser(h.auth, true, h.deleteImage))
-}
-
 func (input productInput) product(id int64) products.Product {
 	return products.Product{ID: id, Title: input.Title, Price: input.Price, SeriaTitle: input.SeriaTitle,
 		Bio: input.Bio, Description: input.Description, Specifications: input.Specifications}
 }
 
-func (h *ProductHandler) createProduct(w http.ResponseWriter, r *http.Request) {
+func (h *ProductHandler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 	var input productInput
 	if !decodeJSON(w, r, &input) {
 		return
@@ -55,7 +42,7 @@ func (h *ProductHandler) createProduct(w http.ResponseWriter, r *http.Request) {
 	respond(w, http.StatusCreated, product, err)
 }
 
-func (h *ProductHandler) updateProduct(w http.ResponseWriter, r *http.Request) {
+func (h *ProductHandler) UpdateProduct(w http.ResponseWriter, r *http.Request) {
 	id, ok := pathID(w, r, "id")
 	if !ok {
 		return
@@ -68,7 +55,7 @@ func (h *ProductHandler) updateProduct(w http.ResponseWriter, r *http.Request) {
 	respond(w, http.StatusOK, product, err)
 }
 
-func (h *ProductHandler) getProduct(w http.ResponseWriter, r *http.Request) {
+func (h *ProductHandler) GetProduct(w http.ResponseWriter, r *http.Request) {
 	id, ok := pathID(w, r, "id")
 	if !ok {
 		return
@@ -77,7 +64,7 @@ func (h *ProductHandler) getProduct(w http.ResponseWriter, r *http.Request) {
 	respondFound(w, product, found, err)
 }
 
-func (h *ProductHandler) listProducts(w http.ResponseWriter, r *http.Request) {
+func (h *ProductHandler) ListProducts(w http.ResponseWriter, r *http.Request) {
 	limit, offset, ok := pagination(w, r)
 	if !ok {
 		return
@@ -86,7 +73,7 @@ func (h *ProductHandler) listProducts(w http.ResponseWriter, r *http.Request) {
 	respond(w, http.StatusOK, result, err)
 }
 
-func (h *ProductHandler) deleteProduct(w http.ResponseWriter, r *http.Request) {
+func (h *ProductHandler) DeleteProduct(w http.ResponseWriter, r *http.Request) {
 	id, ok := pathID(w, r, "id")
 	if !ok {
 		return
@@ -116,7 +103,7 @@ type imageInput struct {
 	SortOrder  int    `json:"sort_order"`
 }
 
-func (h *ProductHandler) createImage(w http.ResponseWriter, r *http.Request) {
+func (h *ProductHandler) CreateImage(w http.ResponseWriter, r *http.Request) {
 	productID, ok := h.imageProduct(w, r)
 	if !ok {
 		return
@@ -129,7 +116,7 @@ func (h *ProductHandler) createImage(w http.ResponseWriter, r *http.Request) {
 	respond(w, http.StatusCreated, image, err)
 }
 
-func (h *ProductHandler) updateImage(w http.ResponseWriter, r *http.Request) {
+func (h *ProductHandler) UpdateImage(w http.ResponseWriter, r *http.Request) {
 	productID, ok := h.imageProduct(w, r)
 	if !ok {
 		return
@@ -146,7 +133,7 @@ func (h *ProductHandler) updateImage(w http.ResponseWriter, r *http.Request) {
 	respond(w, http.StatusOK, image, err)
 }
 
-func (h *ProductHandler) getImage(w http.ResponseWriter, r *http.Request) {
+func (h *ProductHandler) GetImage(w http.ResponseWriter, r *http.Request) {
 	productID, ok := h.imageProduct(w, r)
 	if !ok {
 		return
@@ -159,7 +146,7 @@ func (h *ProductHandler) getImage(w http.ResponseWriter, r *http.Request) {
 	respondFound(w, image, found, err)
 }
 
-func (h *ProductHandler) listImages(w http.ResponseWriter, r *http.Request) {
+func (h *ProductHandler) ListImages(w http.ResponseWriter, r *http.Request) {
 	productID, ok := h.imageProduct(w, r)
 	if !ok {
 		return
@@ -172,7 +159,7 @@ func (h *ProductHandler) listImages(w http.ResponseWriter, r *http.Request) {
 	respond(w, http.StatusOK, result, err)
 }
 
-func (h *ProductHandler) deleteImage(w http.ResponseWriter, r *http.Request) {
+func (h *ProductHandler) DeleteImage(w http.ResponseWriter, r *http.Request) {
 	productID, ok := h.imageProduct(w, r)
 	if !ok {
 		return

@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"io"
-	"log"
 	"net/http"
 	"strings"
 
@@ -22,13 +21,7 @@ func NewAuthHandler(auth *users.AuthService) *AuthHandler {
 	return &AuthHandler{auth: auth}
 }
 
-func (h *AuthHandler) RegisterRoutes(mux *http.ServeMux) {
-	mux.HandleFunc("POST /register", h.register)
-	mux.HandleFunc("POST /login", h.login)
-	mux.HandleFunc("POST /refresh", h.refresh)
-}
-
-func (h *AuthHandler) register(w http.ResponseWriter, r *http.Request) {
+func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 	var input users.RegisterInput
 	if !decodeJSON(w, r, &input) {
 		return
@@ -41,7 +34,7 @@ func (h *AuthHandler) register(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusCreated, pair)
 }
 
-func (h *AuthHandler) login(w http.ResponseWriter, r *http.Request) {
+func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 	var input users.LoginInput
 	if !decodeJSON(w, r, &input) {
 		return
@@ -54,7 +47,7 @@ func (h *AuthHandler) login(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, pair)
 }
 
-func (h *AuthHandler) refresh(w http.ResponseWriter, r *http.Request) {
+func (h *AuthHandler) Refresh(w http.ResponseWriter, r *http.Request) {
 	token, ok := bearerToken(r.Header.Get("Authorization"))
 	if !ok {
 		writeAuthError(w, security.ErrInvalidToken)
@@ -110,18 +103,4 @@ func writeJSON(w http.ResponseWriter, status int, value any) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(status)
 	_ = json.NewEncoder(w).Encode(value)
-}
-
-func cors(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log.Printf("CORS: %s %s", r.Method, r.URL.Path)
-		w.Header().Set("Access-Control-Allow-Origin", "*")
-		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
-		if r.Method == http.MethodOptions {
-			w.WriteHeader(http.StatusNoContent)
-			return
-		}
-		next.ServeHTTP(w, r)
-	})
 }

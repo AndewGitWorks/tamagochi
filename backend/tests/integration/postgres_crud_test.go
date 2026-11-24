@@ -27,13 +27,13 @@ func TestPostgresCRUD(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer db.Close()
-	check := func(err error) {
-		t.Helper()
-		if err != nil {
-			t.Fatal(err)
-		}
-	}
+	// defer db.Close()
+	// check := func(err error) {
+	// 	t.Helper()
+	// 	if err != nil {
+	// 		t.Fatal(err)
+	// 	}
+	// }
 	userStore := repository.NewPostgresUserStore(db)
 	profileStore := repository.NewPostgresProfileStore(db)
 	productStore := repository.NewPostgresProductStore(db)

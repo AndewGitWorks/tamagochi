@@ -1,0 +1,3282 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>api: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">github.com/AndewGitWorks/tamagochi/backend/cmd/api/main.go (0.0%)</option>
+				
+				<option value="file1">github.com/AndewGitWorks/tamagochi/backend/internal/app/http/handlers/auth_handler.go (78.4%)</option>
+				
+				<option value="file2">github.com/AndewGitWorks/tamagochi/backend/internal/app/http/handlers/cart_handler.go (3.1%)</option>
+				
+				<option value="file3">github.com/AndewGitWorks/tamagochi/backend/internal/app/http/handlers/crud_handler.go (60.0%)</option>
+				
+				<option value="file4">github.com/AndewGitWorks/tamagochi/backend/internal/app/http/handlers/liked_product_handler.go (0.0%)</option>
+				
+				<option value="file5">github.com/AndewGitWorks/tamagochi/backend/internal/app/http/handlers/order_handler.go (21.6%)</option>
+				
+				<option value="file6">github.com/AndewGitWorks/tamagochi/backend/internal/app/http/handlers/product_handler.go (9.7%)</option>
+				
+				<option value="file7">github.com/AndewGitWorks/tamagochi/backend/internal/app/http/handlers/user_handler.go (7.7%)</option>
+				
+				<option value="file8">github.com/AndewGitWorks/tamagochi/backend/internal/app/http/routes/router.go (0.0%)</option>
+				
+				<option value="file9">github.com/AndewGitWorks/tamagochi/backend/internal/domain/errors.go (0.0%)</option>
+				
+				<option value="file10">github.com/AndewGitWorks/tamagochi/backend/internal/domain/orders/item.go (0.0%)</option>
+				
+				<option value="file11">github.com/AndewGitWorks/tamagochi/backend/internal/domain/orders/order.go (0.0%)</option>
+				
+				<option value="file12">github.com/AndewGitWorks/tamagochi/backend/internal/domain/orders/service.go (41.1%)</option>
+				
+				<option value="file13">github.com/AndewGitWorks/tamagochi/backend/internal/domain/products/image.go (0.0%)</option>
+				
+				<option value="file14">github.com/AndewGitWorks/tamagochi/backend/internal/domain/products/product.go (100.0%)</option>
+				
+				<option value="file15">github.com/AndewGitWorks/tamagochi/backend/internal/domain/products/service.go (0.0%)</option>
+				
+				<option value="file16">github.com/AndewGitWorks/tamagochi/backend/internal/domain/users/auth.go (68.4%)</option>
+				
+				<option value="file17">github.com/AndewGitWorks/tamagochi/backend/internal/domain/users/profile.go (0.0%)</option>
+				
+				<option value="file18">github.com/AndewGitWorks/tamagochi/backend/internal/domain/users/service.go (0.0%)</option>
+				
+				<option value="file19">github.com/AndewGitWorks/tamagochi/backend/internal/domain/users/user.go (53.3%)</option>
+				
+				<option value="file20">github.com/AndewGitWorks/tamagochi/backend/internal/platform/database/postgres.go (0.0%)</option>
+				
+				<option value="file21">github.com/AndewGitWorks/tamagochi/backend/internal/platform/security/jwt.go (0.0%)</option>
+				
+				<option value="file22">github.com/AndewGitWorks/tamagochi/backend/internal/platform/security/password.go (88.7%)</option>
+				
+				<option value="file23">github.com/AndewGitWorks/tamagochi/backend/internal/repository/crud.go (0.0%)</option>
+				
+				<option value="file24">github.com/AndewGitWorks/tamagochi/backend/internal/repository/postgres_liked_products.go (0.0%)</option>
+				
+				<option value="file25">github.com/AndewGitWorks/tamagochi/backend/internal/repository/postgres_order_items.go (0.0%)</option>
+				
+				<option value="file26">github.com/AndewGitWorks/tamagochi/backend/internal/repository/postgres_orders.go (0.0%)</option>
+				
+				<option value="file27">github.com/AndewGitWorks/tamagochi/backend/internal/repository/postgres_product_images.go (0.0%)</option>
+				
+				<option value="file28">github.com/AndewGitWorks/tamagochi/backend/internal/repository/postgres_products.go (0.0%)</option>
+				
+				<option value="file29">github.com/AndewGitWorks/tamagochi/backend/internal/repository/postgres_profiles.go (0.0%)</option>
+				
+				<option value="file30">github.com/AndewGitWorks/tamagochi/backend/internal/repository/postgres_refresh_sessions.go (0.0%)</option>
+				
+				<option value="file31">github.com/AndewGitWorks/tamagochi/backend/internal/repository/postgres_users.go (0.0%)</option>
+				
+				<option value="file32">github.com/AndewGitWorks/tamagochi/backend/internal/repository/postgres_users_list.go (0.0%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">not covered</span>
+				<span class="cov8">covered</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package main
+
+import (
+        "bufio"
+        "context"
+        "errors"
+        "fmt"
+        "log"
+        "net/http"
+        "net/url"
+        "os"
+        "strconv"
+        "strings"
+        "time"
+
+        "github.com/AndewGitWorks/tamagochi/backend/internal/app/http/routes"
+        "github.com/AndewGitWorks/tamagochi/backend/internal/domain/orders"
+        "github.com/AndewGitWorks/tamagochi/backend/internal/domain/products"
+        "github.com/AndewGitWorks/tamagochi/backend/internal/domain/users"
+        "github.com/AndewGitWorks/tamagochi/backend/internal/platform/database"
+        "github.com/AndewGitWorks/tamagochi/backend/internal/repository"
+)
+
+func main() {
+        <span class="cov0" title="0">if err := loadProjectEnv(); err != nil </span>{
+                <span class="cov0" title="0">log.Fatal(err)
+</span>        }
+        <span class="cov0" title="0">secret := os.Getenv("JWT_SECRET")
+        if len(secret) &lt; 32 </span>{
+                <span class="cov0" title="0">log.Fatal("JWT_SECRET must be set and contain at least 32 characters")
+</span>        }
+        <span class="cov0" title="0">dsn, err := databaseURLFromEnv()
+        if err != nil </span>{
+                <span class="cov0" title="0">log.Fatal(err)
+</span>        }
+        <span class="cov0" title="0">db, err := database.OpenPostgres(context.Background(), dsn)
+        if err != nil </span>{
+                <span class="cov0" title="0">log.Fatal(err)
+</span>        }
+        <span class="cov0" title="0">defer db.Close()
+        service := users.NewAuthService(users.AuthConfig{Store: repository.NewPostgresUserStore(db), RefreshSessions: repository.NewPostgresRefreshSessionStore(db), JWTSecret: []byte(secret),
+                Issuer: envOrDefault("JWT_ISSUER", "tamagochi-api"), AccessTokenTTL: envDurationSeconds("JWT_ACCESS_TTL_SECONDS", 15*time.Minute),
+                RefreshTokenTTL: envDurationSeconds("JWT_REFRESH_TTL_SECONDS", 30*24*time.Hour)})
+        address := ":" + envOrDefault("PORT", "8080")
+        log.Printf("Tamagochi API listening on %s", address)
+        userStore := repository.NewPostgresUserStore(db)
+        productStore := repository.NewPostgresProductStore(db)
+        imageStore := repository.NewPostgresProductImageStore(db)
+        if err := http.ListenAndServe(address, routes.NewRouter(service, routes.Config{
+                Users:          userStore,
+                UserService:    users.NewUserService(userStore),
+                ProfileService: users.NewProfileService(repository.NewPostgresProfileStore(db)),
+                CatalogService: products.NewService(productStore, imageStore),
+                OrderService: orders.NewService(
+                        repository.NewPostgresOrderStore(db),
+                        repository.NewPostgresOrderItemStore(db),
+                ),
+                FavoriteService: products.NewFavoriteService(productStore, repository.NewPostgresLikedProductStore(db)),
+        })); err != nil </span>{
+                <span class="cov0" title="0">log.Fatal(err)
+</span>        }
+}
+
+func databaseURLFromEnv() (string, error) {
+        <span class="cov0" title="0">if dsn := os.Getenv("DATABASE_URL"); dsn != "" </span>{
+                <span class="cov0" title="0">return dsn, nil
+</span>        }
+        <span class="cov0" title="0">user, password, dbName := os.Getenv("POSTGRES_USER"), os.Getenv("POSTGRES_PASSWORD"), os.Getenv("POSTGRES_DB")
+        if user == "" || password == "" || dbName == "" </span>{
+                <span class="cov0" title="0">return "", fmt.Errorf("set DATABASE_URL or POSTGRES_USER, POSTGRES_PASSWORD, and POSTGRES_DB")
+</span>        }
+        <span class="cov0" title="0">host := envOrDefault("POSTGRES_HOST", "localhost")
+        port := envOrDefault("POSTGRES_PORT", "5432")
+        sslMode := envOrDefault("POSTGRES_SSLMODE", "disable")
+        u := url.URL{Scheme: "postgres", User: url.UserPassword(user, password), Host: host + ":" + port, Path: "/" + dbName}
+        q := u.Query()
+        q.Set("sslmode", sslMode)
+        u.RawQuery = q.Encode()
+        return u.String(), nil</span>
+}
+
+func envOrDefault(name, fallback string) string {
+        <span class="cov0" title="0">if value := os.Getenv(name); value != "" </span>{
+                <span class="cov0" title="0">return value
+</span>        }
+        <span class="cov0" title="0">return fallback</span>
+}
+
+func envDurationSeconds(name string, fallback time.Duration) time.Duration {
+        <span class="cov0" title="0">value := os.Getenv(name)
+        if value == "" </span>{
+                <span class="cov0" title="0">return fallback
+</span>        }
+        <span class="cov0" title="0">seconds, err := strconv.Atoi(value)
+        if err != nil || seconds &lt;= 0 </span>{
+                <span class="cov0" title="0">log.Fatalf("%s must be a positive number of seconds", name)
+</span>        }
+        <span class="cov0" title="0">return time.Duration(seconds) * time.Second</span>
+}
+
+// loadProjectEnv reads the root .env when the API is started from either the
+// repository root or backend/. Existing shell environment values take priority.
+func loadProjectEnv() error {
+        <span class="cov0" title="0">err := loadEnvFile(".env")
+        if errors.Is(err, os.ErrNotExist) </span>{
+                <span class="cov0" title="0">err = loadEnvFile("../.env")
+</span>        }
+        <span class="cov0" title="0">return err</span>
+}
+
+func loadEnvFile(path string) error {
+        <span class="cov0" title="0">file, err := os.Open(path)
+        if err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">defer file.Close()
+        scanner := bufio.NewScanner(file)
+        lineNumber := 0
+        for scanner.Scan() </span>{
+                <span class="cov0" title="0">lineNumber++
+                line := strings.TrimSpace(scanner.Text())
+                if line == "" || strings.HasPrefix(line, "#") </span>{
+                        <span class="cov0" title="0">continue</span>
+                }
+                <span class="cov0" title="0">key, value, found := strings.Cut(line, "=")
+                if !found || strings.TrimSpace(key) == "" </span>{
+                        <span class="cov0" title="0">return fmt.Errorf("invalid %s line %d", path, lineNumber)
+</span>                }
+                <span class="cov0" title="0">if _, alreadySet := os.LookupEnv(key); !alreadySet </span>{
+                        <span class="cov0" title="0">if err := os.Setenv(key, strings.TrimSpace(value)); err != nil </span>{
+                                <span class="cov0" title="0">return fmt.Errorf("set %s from %s: %w", key, path, err)
+</span>                        }
+                }
+        }
+        <span class="cov0" title="0">return scanner.Err()</span>
+}
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package http
+
+import (
+        "encoding/json"
+        "errors"
+        "io"
+        "net/http"
+        "strings"
+
+        "github.com/AndewGitWorks/tamagochi/backend/internal/domain/users"
+        "github.com/AndewGitWorks/tamagochi/backend/internal/platform/security"
+)
+
+const maxRequestBodySize = 16 &lt;&lt; 10
+
+type AuthHandler struct {
+        auth *users.AuthService
+}
+
+func NewAuthHandler(auth *users.AuthService) *AuthHandler {
+        <span class="cov8" title="1">return &amp;AuthHandler{auth: auth}
+</span>}
+
+func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
+        <span class="cov8" title="1">var input users.RegisterInput
+        if !decodeJSON(w, r, &amp;input) </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov8" title="1">pair, err := h.auth.Register(r.Context(), input)
+        if err != nil </span>{
+                <span class="cov8" title="1">writeAuthError(w, err)
+                return
+</span>        }
+        <span class="cov8" title="1">writeJSON(w, http.StatusCreated, pair)</span>
+}
+
+func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
+        <span class="cov8" title="1">var input users.LoginInput
+        if !decodeJSON(w, r, &amp;input) </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov8" title="1">pair, err := h.auth.Login(r.Context(), input)
+        if err != nil </span>{
+                <span class="cov0" title="0">writeAuthError(w, err)
+                return
+</span>        }
+        <span class="cov8" title="1">writeJSON(w, http.StatusOK, pair)</span>
+}
+func (h *AuthHandler) HealthCheck(w http.ResponseWriter, r *http.Request) {
+        <span class="cov0" title="0">writeJSON(w, http.StatusOK, map[string]string{
+                "status": "ok",
+        })
+</span>}
+func (h *AuthHandler) Refresh(w http.ResponseWriter, r *http.Request) {
+        <span class="cov8" title="1">token, ok := bearerToken(r.Header.Get("Authorization"))
+        if !ok </span>{
+                <span class="cov0" title="0">writeAuthError(w, security.ErrInvalidToken)
+                return
+</span>        }
+        <span class="cov8" title="1">pair, err := h.auth.Refresh(r.Context(), token)
+        if err != nil </span>{
+                <span class="cov0" title="0">writeAuthError(w, err)
+                return
+</span>        }
+        <span class="cov8" title="1">writeJSON(w, http.StatusOK, pair)</span>
+}
+
+func decodeJSON(w http.ResponseWriter, r *http.Request, target any) bool {
+        <span class="cov8" title="1">r.Body = http.MaxBytesReader(w, r.Body, maxRequestBodySize)
+        decoder := json.NewDecoder(r.Body)
+        decoder.DisallowUnknownFields()
+        if err := decoder.Decode(target); err != nil </span>{
+                <span class="cov8" title="1">writeJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid_request", "message": "request body must be valid JSON"})
+                return false
+</span>        }
+        <span class="cov8" title="1">if err := decoder.Decode(new(any)); err != io.EOF </span>{
+                <span class="cov8" title="1">writeJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid_request", "message": "request body must contain one JSON value"})
+                return false
+</span>        }
+        <span class="cov8" title="1">return true</span>
+}
+
+func bearerToken(value string) (string, bool) {
+        <span class="cov8" title="1">parts := strings.Fields(value)
+        returnToken := len(parts) == 2 &amp;&amp; strings.EqualFold(parts[0], "Bearer") &amp;&amp; parts[1] != ""
+        if !returnToken </span>{
+                <span class="cov8" title="1">return "", false
+</span>        }
+        <span class="cov8" title="1">return parts[1], true</span>
+}
+
+func writeAuthError(w http.ResponseWriter, err error) {
+        <span class="cov8" title="1">switch </span>{
+        case errors.Is(err, users.ErrValidation):
+                <span class="cov8" title="1">writeJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid_request", "message": err.Error()})</span>
+        case errors.Is(err, users.ErrLoginTaken), errors.Is(err, users.ErrUserConflict):
+                <span class="cov0" title="0">writeJSON(w, http.StatusConflict, map[string]string{"error": "login_taken", "message": err.Error()})</span>
+        case errors.Is(err, users.ErrInvalidCredentials), errors.Is(err, security.ErrInvalidToken):
+                <span class="cov8" title="1">w.Header().Set("WWW-Authenticate", `Bearer realm="tamagochi-api"`)
+                writeJSON(w, http.StatusUnauthorized, map[string]string{"error": "authentication_error", "message": err.Error()})</span>
+        default:
+                <span class="cov0" title="0">writeJSON(w, http.StatusInternalServerError, map[string]string{"error": "internal_error", "message": "an unexpected error occurred"})</span>
+        }
+}
+
+func writeJSON(w http.ResponseWriter, status int, value any) {
+        <span class="cov8" title="1">w.Header().Set("Content-Type", "application/json; charset=utf-8")
+        w.WriteHeader(status)
+        _ = json.NewEncoder(w).Encode(value)
+</span>}
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package http
+
+import (
+        "net/http"
+
+        "github.com/AndewGitWorks/tamagochi/backend/internal/domain/orders"
+)
+
+// CartHandler exposes the active PENDING order as a shopping cart. It contains
+// no business decisions; those remain in orders.Service.
+type CartHandler struct {
+        service *orders.Service
+}
+
+func NewCartHandler(service *orders.Service) *CartHandler {
+        <span class="cov8" title="1">return &amp;CartHandler{service: service}
+</span>}
+
+func (h *CartHandler) GetCart(w http.ResponseWriter, r *http.Request) {
+        <span class="cov0" title="0">cart, err := h.service.GetCart(r.Context(), currentUser(r).ID)
+        respond(w, http.StatusOK, cart, err)
+</span>}
+
+func (h *CartHandler) AddItem(w http.ResponseWriter, r *http.Request) {
+        <span class="cov0" title="0">var input struct {
+                ProductID int64 `json:"product_id"`
+                Quantity  int64 `json:"quantity"`
+</span>        }
+        <span class="cov0" title="0">if !decodeJSON(w, r, &amp;input) </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">cart, err := h.service.AddToCart(r.Context(), currentUser(r).ID, input.ProductID, input.Quantity)
+        respond(w, http.StatusOK, cart, err)</span>
+}
+
+func (h *CartHandler) UpdateItem(w http.ResponseWriter, r *http.Request) {
+        <span class="cov0" title="0">itemID, ok := pathID(w, r, "id")
+        if !ok </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">var input struct {
+                Quantity int64 `json:"quantity"`
+</span>        }
+        <span class="cov0" title="0">if !decodeJSON(w, r, &amp;input) </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">cart, err := h.service.UpdateCartItem(r.Context(), currentUser(r).ID, itemID, input.Quantity)
+        respond(w, http.StatusOK, cart, err)</span>
+}
+
+func (h *CartHandler) RemoveItem(w http.ResponseWriter, r *http.Request) {
+        <span class="cov0" title="0">itemID, ok := pathID(w, r, "id")
+        if !ok </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">cart, err := h.service.RemoveFromCart(r.Context(), currentUser(r).ID, itemID)
+        respond(w, http.StatusOK, cart, err)</span>
+}
+
+func (h *CartHandler) Checkout(w http.ResponseWriter, r *http.Request) {
+        <span class="cov0" title="0">var input struct {
+                DeliveryAddress string `json:"delivery_address"`
+</span>        }
+        <span class="cov0" title="0">if !decodeJSON(w, r, &amp;input) </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">order, err := h.service.Checkout(r.Context(), currentUser(r).ID, input.DeliveryAddress)
+        respond(w, http.StatusOK, order, err)</span>
+}
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package http
+
+import (
+        "context"
+        "errors"
+        "net/http"
+        "strconv"
+
+        "github.com/AndewGitWorks/tamagochi/backend/internal/domain"
+        "github.com/AndewGitWorks/tamagochi/backend/internal/domain/users"
+)
+
+type UserCRUDStore interface {
+        users.Store
+        List(context.Context, int, int) ([]users.User, error)
+}
+
+type userContextKey struct{}
+
+func currentUser(r *http.Request) users.User {
+        <span class="cov8" title="1">return r.Context().Value(userContextKey{}).(users.User)
+</span>}
+
+// RequireUser validates an access token and passes the current user to an endpoint.
+// Route composition is kept in the routes package; handlers only implement endpoints.
+func RequireUser(auth *users.AuthService, admin bool, next http.HandlerFunc) http.HandlerFunc {
+        <span class="cov8" title="1">return func(w http.ResponseWriter, r *http.Request) </span>{
+                <span class="cov8" title="1">token, ok := bearerToken(r.Header.Get("Authorization"))
+                if !ok </span>{
+                        <span class="cov8" title="1">writeJSON(w, http.StatusUnauthorized, map[string]string{"error": "access token required"})
+                        return
+</span>                }
+                <span class="cov8" title="1">user, err := auth.AuthenticateAccess(r.Context(), token)
+                if err != nil </span>{
+                        <span class="cov8" title="1">writeAuthError(w, err)
+                        return
+</span>                }
+                <span class="cov8" title="1">if admin &amp;&amp; user.Role != "ADMIN" </span>{
+                        <span class="cov8" title="1">writeJSON(w, http.StatusForbidden, map[string]string{"error": "admin role required"})
+                        return
+</span>                }
+                <span class="cov8" title="1">next(w, r.WithContext(context.WithValue(r.Context(), userContextKey{}, user)))</span>
+        }
+}
+
+func pathID(w http.ResponseWriter, r *http.Request, key string) (int64, bool) {
+        <span class="cov8" title="1">id, err := strconv.ParseInt(r.PathValue(key), 10, 64)
+        if err != nil || id &lt;= 0 </span>{
+                <span class="cov0" title="0">writeCRUDError(w, domain.ErrValidation)
+                return 0, false
+</span>        }
+        <span class="cov8" title="1">return id, true</span>
+}
+
+func pagination(w http.ResponseWriter, r *http.Request) (int, int, bool) {
+        <span class="cov8" title="1">limit, offset := 20, 0
+        var err error
+        if value := r.URL.Query().Get("limit"); value != "" </span>{
+                <span class="cov0" title="0">limit, err = strconv.Atoi(value)
+                if err != nil || limit &lt; 1 || limit &gt; 100 </span>{
+                        <span class="cov0" title="0">writeCRUDError(w, domain.ErrValidation)
+                        return 0, 0, false
+</span>                }
+        }
+        <span class="cov8" title="1">if value := r.URL.Query().Get("offset"); value != "" </span>{
+                <span class="cov0" title="0">offset, err = strconv.Atoi(value)
+                if err != nil || offset &lt; 0 </span>{
+                        <span class="cov0" title="0">writeCRUDError(w, domain.ErrValidation)
+                        return 0, 0, false
+</span>                }
+        }
+        <span class="cov8" title="1">return limit, offset, true</span>
+}
+
+func writeCRUDError(w http.ResponseWriter, err error) {
+        <span class="cov8" title="1">status, message := http.StatusInternalServerError, "an unexpected error occurred"
+        switch </span>{
+        case errors.Is(err, domain.ErrNotFound), errors.Is(err, users.ErrUserNotFound):
+                <span class="cov8" title="1">status, message = http.StatusNotFound, "entity was not found"</span>
+        case errors.Is(err, domain.ErrValidation), errors.Is(err, users.ErrValidation):
+                <span class="cov0" title="0">status, message = http.StatusBadRequest, "invalid entity data"</span>
+        case errors.Is(err, domain.ErrConflict), errors.Is(err, users.ErrUserConflict), errors.Is(err, users.ErrLoginTaken):
+                <span class="cov0" title="0">status, message = http.StatusConflict, "entity conflicts with existing data"</span>
+        case errors.Is(err, domain.ErrOrderLocked):
+                <span class="cov0" title="0">status, message = http.StatusConflict, "only pending orders can be edited"</span>
+        case errors.Is(err, domain.ErrOrderTransition):
+                <span class="cov0" title="0">status, message = http.StatusConflict, "order status transition is not allowed"</span>
+        }
+        <span class="cov8" title="1">writeJSON(w, status, map[string]string{"error": message})</span>
+}
+
+func respond(w http.ResponseWriter, status int, value any, err error) {
+        <span class="cov8" title="1">if err != nil </span>{
+                <span class="cov8" title="1">writeCRUDError(w, err)
+                return
+</span>        }
+        <span class="cov8" title="1">writeJSON(w, status, value)</span>
+}
+
+func respondFound(w http.ResponseWriter, value any, found bool, err error) {
+        <span class="cov8" title="1">if err != nil </span>{
+                <span class="cov8" title="1">writeCRUDError(w, err)
+                return
+</span>        }
+        <span class="cov0" title="0">if !found </span>{
+                <span class="cov0" title="0">writeCRUDError(w, domain.ErrNotFound)
+                return
+</span>        }
+        <span class="cov0" title="0">writeJSON(w, http.StatusOK, value)</span>
+}
+
+func respondDeleted(w http.ResponseWriter, err error) {
+        <span class="cov0" title="0">if err != nil </span>{
+                <span class="cov0" title="0">writeCRUDError(w, err)
+                return
+</span>        }
+        <span class="cov0" title="0">w.WriteHeader(http.StatusNoContent)</span>
+}
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package http
+
+import (
+        "github.com/AndewGitWorks/tamagochi/backend/internal/domain/products"
+        "net/http"
+)
+
+type LikedProductHandler struct {
+        service *products.FavoriteService
+}
+
+func NewLikedProductHandler(service *products.FavoriteService) *LikedProductHandler {
+        <span class="cov0" title="0">return &amp;LikedProductHandler{service: service}
+</span>}
+
+func (h *LikedProductHandler) CreateLike(w http.ResponseWriter, r *http.Request) {
+        <span class="cov0" title="0">productID, ok := pathID(w, r, "productID")
+        if !ok </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">like, err := h.service.Add(r.Context(), currentUser(r).ID, productID)
+        respond(w, http.StatusOK, like, err)</span>
+}
+
+func (h *LikedProductHandler) GetLike(w http.ResponseWriter, r *http.Request) {
+        <span class="cov0" title="0">productID, ok := pathID(w, r, "productID")
+        if !ok </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">like, err := h.service.Get(r.Context(), currentUser(r).ID, productID)
+        respond(w, http.StatusOK, like, err)</span>
+}
+
+func (h *LikedProductHandler) ListLikes(w http.ResponseWriter, r *http.Request) {
+        <span class="cov0" title="0">limit, offset, ok := pagination(w, r)
+        if !ok </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">result, err := h.service.List(r.Context(), currentUser(r).ID, limit, offset)
+        respond(w, http.StatusOK, result, err)</span>
+}
+
+func (h *LikedProductHandler) DeleteLike(w http.ResponseWriter, r *http.Request) {
+        <span class="cov0" title="0">productID, ok := pathID(w, r, "productID")
+        if !ok </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">respondDeleted(w, h.service.Remove(r.Context(), currentUser(r).ID, productID))</span>
+}
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">package http
+
+import (
+        "net/http"
+
+        "github.com/AndewGitWorks/tamagochi/backend/internal/domain/orders"
+        "github.com/AndewGitWorks/tamagochi/backend/internal/domain/users"
+)
+
+type OrderHandler struct {
+        service *orders.Service
+        auth    *users.AuthService
+}
+
+func NewOrderHandler(service *orders.Service, auth *users.AuthService) *OrderHandler {
+        <span class="cov8" title="1">return &amp;OrderHandler{service: service, auth: auth}
+</span>}
+
+func orderActor(r *http.Request) orders.Actor {
+        <span class="cov8" title="1">user := currentUser(r)
+        return orders.Actor{ID: user.ID, Role: user.Role}
+</span>}
+
+func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
+        <span class="cov0" title="0">var input struct{}
+        if !decodeJSON(w, r, &amp;input) </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">order, err := h.service.OpenCart(r.Context(), currentUser(r).ID)
+        respond(w, http.StatusOK, order, err)</span>
+}
+
+func (h *OrderHandler) GetOrder(w http.ResponseWriter, r *http.Request) {
+        <span class="cov8" title="1">id, ok := pathID(w, r, "orderID")
+        if !ok </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov8" title="1">order, err := h.service.Get(r.Context(), orderActor(r), id)
+        respond(w, http.StatusOK, order, err)</span>
+}
+
+func (h *OrderHandler) ListOrders(w http.ResponseWriter, r *http.Request) {
+        <span class="cov0" title="0">limit, offset, ok := pagination(w, r)
+        if !ok </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">result, err := h.service.List(r.Context(), currentUser(r).ID, limit, offset)
+        respond(w, http.StatusOK, result, err)</span>
+}
+
+func (h *OrderHandler) UpdateOrder(w http.ResponseWriter, r *http.Request) {
+        <span class="cov0" title="0">id, ok := pathID(w, r, "orderID")
+        if !ok </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">var input struct {
+                Status string `json:"status"`
+</span>        }
+        <span class="cov0" title="0">if !decodeJSON(w, r, &amp;input) </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">updated, err := h.service.ChangeStatus(r.Context(), orderActor(r), id, input.Status)
+        respond(w, http.StatusOK, updated, err)</span>
+}
+
+func (h *OrderHandler) PayOrder(w http.ResponseWriter, r *http.Request) {
+        <span class="cov0" title="0">id, ok := pathID(w, r, "orderID")
+        if !ok </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">var input struct {
+                Approved bool `json:"approved"`
+</span>        }
+        <span class="cov0" title="0">if !decodeJSON(w, r, &amp;input) </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">updated, err := h.service.Pay(r.Context(), orderActor(r), id, input.Approved)
+        respond(w, http.StatusOK, updated, err)</span>
+}
+
+func (h *OrderHandler) DeleteOrder(w http.ResponseWriter, r *http.Request) {
+        <span class="cov0" title="0">id, ok := pathID(w, r, "orderID")
+        if !ok </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">respondDeleted(w, h.service.Delete(r.Context(), orderActor(r), id))</span>
+}
+
+func (h *OrderHandler) CreateItem(w http.ResponseWriter, r *http.Request) {
+        <span class="cov0" title="0">orderID, ok := pathID(w, r, "orderID")
+        if !ok </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">var input struct {
+                ProductID int64 `json:"product_id"`
+                Quantity  int64 `json:"quantity"`
+</span>        }
+        <span class="cov0" title="0">if !decodeJSON(w, r, &amp;input) </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">item, err := h.service.CreateItem(r.Context(), orderActor(r), orderID, input.ProductID, input.Quantity)
+        respond(w, http.StatusCreated, item, err)</span>
+}
+
+func (h *OrderHandler) GetItem(w http.ResponseWriter, r *http.Request) {
+        <span class="cov8" title="1">orderID, ok := pathID(w, r, "orderID")
+        if !ok </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov8" title="1">id, ok := pathID(w, r, "id")
+        if !ok </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov8" title="1">item, found, err := h.service.GetItem(r.Context(), orderActor(r), orderID, id)
+        respondFound(w, item, found, err)</span>
+}
+
+func (h *OrderHandler) ListItems(w http.ResponseWriter, r *http.Request) {
+        <span class="cov8" title="1">orderID, ok := pathID(w, r, "orderID")
+        if !ok </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov8" title="1">limit, offset, ok := pagination(w, r)
+        if !ok </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov8" title="1">result, err := h.service.ListItems(r.Context(), orderActor(r), orderID, limit, offset)
+        respond(w, http.StatusOK, result, err)</span>
+}
+
+func (h *OrderHandler) UpdateItem(w http.ResponseWriter, r *http.Request) {
+        <span class="cov0" title="0">orderID, ok := pathID(w, r, "orderID")
+        if !ok </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">id, ok := pathID(w, r, "id")
+        if !ok </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">var input struct {
+                Quantity int64 `json:"quantity"`
+</span>        }
+        <span class="cov0" title="0">if !decodeJSON(w, r, &amp;input) </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">item, err := h.service.UpdateItem(r.Context(), orderActor(r), orderID, id, input.Quantity)
+        respond(w, http.StatusOK, item, err)</span>
+}
+
+func (h *OrderHandler) DeleteItem(w http.ResponseWriter, r *http.Request) {
+        <span class="cov0" title="0">orderID, ok := pathID(w, r, "orderID")
+        if !ok </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">id, ok := pathID(w, r, "id")
+        if !ok </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">respondDeleted(w, h.service.DeleteItem(r.Context(), orderActor(r), orderID, id))</span>
+}
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">package http
+
+import (
+        "encoding/json"
+        "net/http"
+
+        "github.com/AndewGitWorks/tamagochi/backend/internal/domain/products"
+)
+
+type productInput struct {
+        Title          string          `json:"title"`
+        Price          string          `json:"price"`
+        SeriaTitle     string          `json:"seria_title"`
+        Bio            string          `json:"bio"`
+        Description    string          `json:"description"`
+        Specifications json.RawMessage `json:"specifications"`
+}
+
+type ProductHandler struct {
+        service *products.Service
+}
+
+func NewProductHandler(service *products.Service) *ProductHandler {
+        <span class="cov8" title="1">return &amp;ProductHandler{service: service}
+</span>}
+
+func (input productInput) product(id int64) products.Product {
+        <span class="cov8" title="1">return products.Product{ID: id, Title: input.Title, Price: input.Price, SeriaTitle: input.SeriaTitle,
+                Bio: input.Bio, Description: input.Description, Specifications: input.Specifications}
+</span>}
+
+func (h *ProductHandler) CreateProduct(w http.ResponseWriter, r *http.Request) {
+        <span class="cov8" title="1">var input productInput
+        if !decodeJSON(w, r, &amp;input) </span>{
+                <span class="cov8" title="1">return
+</span>        }
+        <span class="cov8" title="1">product, err := h.service.Create(r.Context(), input.product(0))
+        respond(w, http.StatusCreated, product, err)</span>
+}
+
+func (h *ProductHandler) UpdateProduct(w http.ResponseWriter, r *http.Request) {
+        <span class="cov0" title="0">id, ok := pathID(w, r, "id")
+        if !ok </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">var input productInput
+        if !decodeJSON(w, r, &amp;input) </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">product, err := h.service.Update(r.Context(), input.product(id))
+        respond(w, http.StatusOK, product, err)</span>
+}
+
+func (h *ProductHandler) GetProduct(w http.ResponseWriter, r *http.Request) {
+        <span class="cov0" title="0">id, ok := pathID(w, r, "id")
+        if !ok </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">product, err := h.service.Get(r.Context(), id)
+        respond(w, http.StatusOK, product, err)</span>
+}
+
+func (h *ProductHandler) ListProducts(w http.ResponseWriter, r *http.Request) {
+        <span class="cov0" title="0">limit, offset, ok := pagination(w, r)
+        if !ok </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">result, err := h.service.List(r.Context(), limit, offset)
+        respond(w, http.StatusOK, result, err)</span>
+}
+
+func (h *ProductHandler) DeleteProduct(w http.ResponseWriter, r *http.Request) {
+        <span class="cov0" title="0">id, ok := pathID(w, r, "id")
+        if !ok </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">respondDeleted(w, h.service.Delete(r.Context(), id))</span>
+}
+
+func (h *ProductHandler) imageProduct(w http.ResponseWriter, r *http.Request) (int64, bool) {
+        <span class="cov0" title="0">return pathID(w, r, "productID")
+</span>}
+
+type imageInput struct {
+        StorageKey string `json:"storage_key"`
+        SortOrder  int    `json:"sort_order"`
+}
+
+func (h *ProductHandler) CreateImage(w http.ResponseWriter, r *http.Request) {
+        <span class="cov0" title="0">productID, ok := h.imageProduct(w, r)
+        if !ok </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">var input imageInput
+        if !decodeJSON(w, r, &amp;input) </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">image, err := h.service.CreateImage(r.Context(), products.Image{ProductID: productID, StorageKey: input.StorageKey, SortOrder: input.SortOrder})
+        respond(w, http.StatusCreated, image, err)</span>
+}
+
+func (h *ProductHandler) UpdateImage(w http.ResponseWriter, r *http.Request) {
+        <span class="cov0" title="0">productID, ok := h.imageProduct(w, r)
+        if !ok </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">id, ok := pathID(w, r, "id")
+        if !ok </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">var input imageInput
+        if !decodeJSON(w, r, &amp;input) </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">image, err := h.service.UpdateImage(r.Context(), products.Image{ID: id, ProductID: productID, StorageKey: input.StorageKey, SortOrder: input.SortOrder})
+        respond(w, http.StatusOK, image, err)</span>
+}
+
+func (h *ProductHandler) GetImage(w http.ResponseWriter, r *http.Request) {
+        <span class="cov0" title="0">productID, ok := h.imageProduct(w, r)
+        if !ok </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">id, ok := pathID(w, r, "id")
+        if !ok </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">image, err := h.service.GetImage(r.Context(), productID, id)
+        respond(w, http.StatusOK, image, err)</span>
+}
+
+func (h *ProductHandler) ListImages(w http.ResponseWriter, r *http.Request) {
+        <span class="cov0" title="0">productID, ok := h.imageProduct(w, r)
+        if !ok </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">limit, offset, ok := pagination(w, r)
+        if !ok </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">result, err := h.service.ListImages(r.Context(), productID, limit, offset)
+        respond(w, http.StatusOK, result, err)</span>
+}
+
+func (h *ProductHandler) DeleteImage(w http.ResponseWriter, r *http.Request) {
+        <span class="cov0" title="0">productID, ok := h.imageProduct(w, r)
+        if !ok </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">id, ok := pathID(w, r, "id")
+        if !ok </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">respondDeleted(w, h.service.DeleteImage(r.Context(), productID, id))</span>
+}
+</pre>
+		
+		<pre class="file" id="file7" style="display: none">package http
+
+import (
+        "net/http"
+
+        "github.com/AndewGitWorks/tamagochi/backend/internal/domain/users"
+)
+
+type UserHandler struct {
+        Users    UserCRUDStore
+        users    *users.UserService
+        profiles *users.ProfileService
+}
+
+func NewUserHandler(usersStore UserCRUDStore, userService *users.UserService, profileService *users.ProfileService) *UserHandler {
+        <span class="cov8" title="1">return &amp;UserHandler{Users: usersStore, users: userService, profiles: profileService}
+</span>}
+
+func (h *UserHandler) GetUser(w http.ResponseWriter, r *http.Request) {
+        <span class="cov8" title="1">writeJSON(w, http.StatusOK, currentUser(r))
+</span>}
+
+func (h *UserHandler) ListUsers(w http.ResponseWriter, r *http.Request) {
+        <span class="cov0" title="0">limit, offset, ok := pagination(w, r)
+        if !ok </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">result, err := h.Users.List(r.Context(), limit, offset)
+        respond(w, http.StatusOK, result, err)</span>
+}
+
+func (h *UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
+        <span class="cov0" title="0">var input users.RegisterInput
+        if !decodeJSON(w, r, &amp;input) </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">updated, err := h.users.UpdateSelf(r.Context(), currentUser(r), input)
+        respond(w, http.StatusOK, updated, err)</span>
+}
+
+func (h *UserHandler) DeleteUser(w http.ResponseWriter, r *http.Request) {
+        <span class="cov0" title="0">respondDeleted(w, h.users.DeleteSelf(r.Context(), currentUser(r).ID))
+</span>}
+
+type profileInput struct {
+        Bio     string `json:"bio"`
+        Address string `json:"address"`
+}
+
+func (h *UserHandler) CreateProfile(w http.ResponseWriter, r *http.Request) {
+        <span class="cov0" title="0">var input profileInput
+        if !decodeJSON(w, r, &amp;input) </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">profile, err := h.profiles.Save(r.Context(), users.Profile{UserID: currentUser(r).ID, Bio: input.Bio, Address: input.Address})
+        respond(w, http.StatusOK, profile, err)</span>
+}
+
+func (h *UserHandler) GetProfile(w http.ResponseWriter, r *http.Request) {
+        <span class="cov0" title="0">profile, err := h.profiles.Get(r.Context(), currentUser(r).ID)
+        respond(w, http.StatusOK, profile, err)
+</span>}
+
+func (h *UserHandler) UpdateProfile(w http.ResponseWriter, r *http.Request) {
+        <span class="cov0" title="0">var input profileInput
+        if !decodeJSON(w, r, &amp;input) </span>{
+                <span class="cov0" title="0">return
+</span>        }
+        <span class="cov0" title="0">profile, err := h.profiles.Save(r.Context(), users.Profile{UserID: currentUser(r).ID, Bio: input.Bio, Address: input.Address})
+        respond(w, http.StatusOK, profile, err)</span>
+}
+
+func (h *UserHandler) DeleteProfile(w http.ResponseWriter, r *http.Request) {
+        <span class="cov0" title="0">respondDeleted(w, h.profiles.Clear(r.Context(), currentUser(r).ID))
+</span>}
+</pre>
+		
+		<pre class="file" id="file8" style="display: none">// Package routes owns the public HTTP contract of the API. Handlers do not
+// register themselves: every URL and middleware assignment is visible here.
+package routes
+
+import (
+        "log"
+        "net/http"
+
+        apphttp "github.com/AndewGitWorks/tamagochi/backend/internal/app/http/handlers"
+        "github.com/AndewGitWorks/tamagochi/backend/internal/domain/orders"
+        "github.com/AndewGitWorks/tamagochi/backend/internal/domain/products"
+        "github.com/AndewGitWorks/tamagochi/backend/internal/domain/users"
+)
+
+const APIV1Prefix = "/api/v1"
+
+// Config supplies the dependencies for optional API modules. Authentication is
+// always available; a module is registered only when all of its dependencies
+// have been assembled by cmd/api.
+type Config struct {
+        Users           apphttp.UserCRUDStore
+        UserService     *users.UserService
+        ProfileService  *users.ProfileService
+        CatalogService  *products.Service
+        OrderService    *orders.Service
+        FavoriteService *products.FavoriteService
+}
+
+func NewRouter(auth *users.AuthService, configs ...Config) http.Handler {
+        <span class="cov0" title="0">api := http.NewServeMux()
+        authHandler := apphttp.NewAuthHandler(auth)
+        api.HandleFunc("POST /register", authHandler.Register)
+        api.HandleFunc("POST /login", authHandler.Login)
+        api.HandleFunc("POST /refresh", authHandler.Refresh)
+        api.HandleFunc("GET /health", authHandler.HealthCheck)
+        if len(configs) &gt; 0 </span>{
+                <span class="cov0" title="0">registerResources(api, auth, configs[0])
+</span>        }
+
+        <span class="cov0" title="0">root := http.NewServeMux()
+        root.Handle(APIV1Prefix+"/", http.StripPrefix(APIV1Prefix, api))
+        return cors(root)</span>
+}
+
+func registerResources(api *http.ServeMux, auth *users.AuthService, config Config) {
+        <span class="cov0" title="0">if config.CatalogService != nil </span>{
+                <span class="cov0" title="0">productsHandler := apphttp.NewProductHandler(config.CatalogService)
+                api.HandleFunc("GET /products", productsHandler.ListProducts)
+                api.HandleFunc("GET /products/{id}", productsHandler.GetProduct)
+                api.HandleFunc("POST /products", apphttp.RequireUser(auth, true, productsHandler.CreateProduct))
+                api.HandleFunc("PUT /products/{id}", apphttp.RequireUser(auth, true, productsHandler.UpdateProduct))
+                api.HandleFunc("DELETE /products/{id}", apphttp.RequireUser(auth, true, productsHandler.DeleteProduct))
+                api.HandleFunc("GET /products/{productID}/images", productsHandler.ListImages)
+                api.HandleFunc("GET /products/{productID}/images/{id}", productsHandler.GetImage)
+                api.HandleFunc("POST /products/{productID}/images", apphttp.RequireUser(auth, true, productsHandler.CreateImage))
+                api.HandleFunc("PUT /products/{productID}/images/{id}", apphttp.RequireUser(auth, true, productsHandler.UpdateImage))
+                api.HandleFunc("DELETE /products/{productID}/images/{id}", apphttp.RequireUser(auth, true, productsHandler.DeleteImage))
+</span>        }
+
+        <span class="cov0" title="0">if config.Users != nil &amp;&amp; config.UserService != nil &amp;&amp; config.ProfileService != nil </span>{
+                <span class="cov0" title="0">usersHandler := apphttp.NewUserHandler(config.Users, config.UserService, config.ProfileService)
+                api.HandleFunc("GET /users", apphttp.RequireUser(auth, true, usersHandler.ListUsers))
+                api.HandleFunc("GET /users/me", apphttp.RequireUser(auth, false, usersHandler.GetUser))
+                api.HandleFunc("PUT /users/me", apphttp.RequireUser(auth, false, usersHandler.UpdateUser))
+                api.HandleFunc("DELETE /users/me", apphttp.RequireUser(auth, false, usersHandler.DeleteUser))
+                api.HandleFunc("POST /profiles/me", apphttp.RequireUser(auth, false, usersHandler.CreateProfile))
+                api.HandleFunc("GET /profiles/me", apphttp.RequireUser(auth, false, usersHandler.GetProfile))
+                api.HandleFunc("PUT /profiles/me", apphttp.RequireUser(auth, false, usersHandler.UpdateProfile))
+                api.HandleFunc("DELETE /profiles/me", apphttp.RequireUser(auth, false, usersHandler.DeleteProfile))
+</span>        }
+
+        <span class="cov0" title="0">if config.OrderService != nil </span>{
+                <span class="cov0" title="0">cartHandler := apphttp.NewCartHandler(config.OrderService)
+                api.HandleFunc("GET /cart", apphttp.RequireUser(auth, false, cartHandler.GetCart))
+                api.HandleFunc("POST /cart/items", apphttp.RequireUser(auth, false, cartHandler.AddItem))
+                api.HandleFunc("PUT /cart/items/{id}", apphttp.RequireUser(auth, false, cartHandler.UpdateItem))
+                api.HandleFunc("DELETE /cart/items/{id}", apphttp.RequireUser(auth, false, cartHandler.RemoveItem))
+                api.HandleFunc("POST /cart/checkout", apphttp.RequireUser(auth, false, cartHandler.Checkout))
+</span>
+                <span class="cov0" title="0">ordersHandler := apphttp.NewOrderHandler(config.OrderService, auth)
+                api.HandleFunc("POST /orders", apphttp.RequireUser(auth, false, ordersHandler.CreateOrder))
+                api.HandleFunc("GET /orders", apphttp.RequireUser(auth, false, ordersHandler.ListOrders))
+                api.HandleFunc("GET /orders/{orderID}", apphttp.RequireUser(auth, false, ordersHandler.GetOrder))
+                api.HandleFunc("PUT /orders/{orderID}", apphttp.RequireUser(auth, false, ordersHandler.UpdateOrder))
+                api.HandleFunc("POST /orders/{orderID}/payment", apphttp.RequireUser(auth, false, ordersHandler.PayOrder))
+                api.HandleFunc("DELETE /orders/{orderID}", apphttp.RequireUser(auth, false, ordersHandler.DeleteOrder))
+                api.HandleFunc("POST /orders/{orderID}/items", apphttp.RequireUser(auth, false, ordersHandler.CreateItem))
+                api.HandleFunc("GET /orders/{orderID}/items", apphttp.RequireUser(auth, false, ordersHandler.ListItems))
+                api.HandleFunc("GET /orders/{orderID}/items/{id}", apphttp.RequireUser(auth, false, ordersHandler.GetItem))
+                api.HandleFunc("PUT /orders/{orderID}/items/{id}", apphttp.RequireUser(auth, false, ordersHandler.UpdateItem))
+                api.HandleFunc("DELETE /orders/{orderID}/items/{id}", apphttp.RequireUser(auth, false, ordersHandler.DeleteItem))
+</span>        }
+
+        <span class="cov0" title="0">if config.FavoriteService != nil </span>{
+                <span class="cov0" title="0">likesHandler := apphttp.NewLikedProductHandler(config.FavoriteService)
+                api.HandleFunc("POST /likes/{productID}", apphttp.RequireUser(auth, false, likesHandler.CreateLike))
+                api.HandleFunc("GET /likes", apphttp.RequireUser(auth, false, likesHandler.ListLikes))
+                api.HandleFunc("GET /likes/{productID}", apphttp.RequireUser(auth, false, likesHandler.GetLike))
+                api.HandleFunc("DELETE /likes/{productID}", apphttp.RequireUser(auth, false, likesHandler.DeleteLike))
+</span>        }
+}
+
+func cors(next http.Handler) http.Handler {
+        <span class="cov0" title="0">return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) </span>{
+                <span class="cov0" title="0">log.Printf("CORS: %s %s", r.Method, r.URL.Path)
+                w.Header().Set("Access-Control-Allow-Origin", "*")
+                w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+                w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+                if r.Method == http.MethodOptions </span>{
+                        <span class="cov0" title="0">w.WriteHeader(http.StatusNoContent)
+                        return
+</span>                }
+                <span class="cov0" title="0">next.ServeHTTP(w, r)</span>
+        })
+}
+</pre>
+		
+		<pre class="file" id="file9" style="display: none">package domain
+
+import (
+        "errors"
+        "regexp"
+)
+
+var (
+        ErrNotFound        = errors.New("entity was not found")
+        ErrConflict        = errors.New("entity conflicts with existing data")
+        ErrValidation      = errors.New("invalid entity data")
+        ErrOrderLocked     = errors.New("only pending orders can be edited")
+        ErrOrderTransition = errors.New("order status transition is not allowed")
+)
+
+// Prices are decimal strings so JSON and SQL never round them through float64.
+var moneyPattern = regexp.MustCompile(`^(0|[1-9][0-9]{0,7})(\.[0-9]{1,2})?$`)
+
+func ValidPrice(value string) bool { <span class="cov0" title="0">return moneyPattern.MatchString(value) }</span>
+</pre>
+		
+		<pre class="file" id="file10" style="display: none">package orders
+
+import (
+        "context"
+        "github.com/AndewGitWorks/tamagochi/backend/internal/domain"
+)
+
+type Item struct {
+        ID        int64  `json:"id"`
+        OrderID   int64  `json:"order_id"`
+        ProductID int64  `json:"product_id"`
+        Quantity  int64  `json:"quantity"`
+        Price     string `json:"price"`
+}
+
+type ItemStore interface {
+        Create(context.Context, Item) (Item, error)
+        FindByID(context.Context, int64, int64) (Item, bool, error)
+        FindByProduct(context.Context, int64, int64) (Item, bool, error)
+        ListByOrder(context.Context, int64, int, int) ([]Item, error)
+        Update(context.Context, Item) (Item, error)
+        Delete(context.Context, int64, int64) error
+}
+
+func (item Item) Validate() error {
+        <span class="cov0" title="0">if item.OrderID &lt;= 0 || item.ProductID &lt;= 0 || item.Quantity &lt;= 0 </span>{
+                <span class="cov0" title="0">return domain.ErrValidation
+</span>        }
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file11" style="display: none">package orders
+
+import (
+        "context"
+        "time"
+        "unicode/utf8"
+
+        "github.com/AndewGitWorks/tamagochi/backend/internal/domain"
+)
+
+type Order struct {
+        ID              int64     `json:"id"`
+        UserID          int64     `json:"user_id"`
+        Number          string    `json:"number"`
+        TotalPrice      string    `json:"total_price"`
+        DeliveryAddress string    `json:"delivery_address"`
+        CreatedAt       time.Time `json:"created_at"`
+        Status          string    `json:"status"`
+}
+
+type Store interface {
+        Create(context.Context, Order) (Order, error)
+        FindByID(context.Context, int64) (Order, bool, error)
+        FindPendingByUser(context.Context, int64) (Order, bool, error)
+        ListByUser(context.Context, int64, int, int) ([]Order, error)
+        Checkout(context.Context, int64, int64, string) (Order, error)
+        Update(context.Context, Order) (Order, error)
+        Cancel(context.Context, int64, int64) (Order, error)
+        Delete(context.Context, int64) error
+}
+
+func ValidStatus(status string) bool {
+        <span class="cov0" title="0">switch status </span>{
+        case "PENDING", "AWAITING_PAYMENT", "PAID", "PAYMENT_FAILED", "DELIVERING", "DELIVERED", "CANCELLED":
+                <span class="cov0" title="0">return true</span>
+        }
+        <span class="cov0" title="0">return false</span>
+}
+
+func (order Order) Validate() error {
+        <span class="cov0" title="0">if order.UserID &lt;= 0 || utf8.RuneCountInString(order.Number) &lt; 3 || utf8.RuneCountInString(order.Number) &gt; 64 || !ValidStatus(order.Status) </span>{
+                <span class="cov0" title="0">return domain.ErrValidation
+</span>        }
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file12" style="display: none">package orders
+
+import (
+        "context"
+        "crypto/rand"
+        "encoding/hex"
+        "errors"
+        "strings"
+        "unicode/utf8"
+
+        "github.com/AndewGitWorks/tamagochi/backend/internal/domain"
+)
+
+// Actor is the minimum identity required to apply order access rules. The HTTP
+// layer converts the authenticated user to this type before calling the service.
+type Actor struct {
+        ID   int64
+        Role string
+}
+
+func (a Actor) IsAdmin() bool { <span class="cov8" title="1">return a.Role == "ADMIN" }</span>
+
+// Service is the business boundary for carts and orders. Repositories persist
+// data and protect transactions; this service owns permissions and state rules.
+type Service struct {
+        orders Store
+        items  ItemStore
+        number func() (string, error)
+}
+
+// Cart is a pending order together with its current line items. A user has at
+// most one cart; the database enforces that invariant with a partial index.
+type Cart struct {
+        Order Order  `json:"order"`
+        Items []Item `json:"items"`
+}
+
+func NewService(orders Store, items ItemStore) *Service {
+        <span class="cov8" title="1">return &amp;Service{orders: orders, items: items, number: newOrderNumber}
+</span>}
+
+func (s *Service) Create(ctx context.Context, userID int64) (Order, error) {
+        <span class="cov0" title="0">if userID &lt;= 0 </span>{
+                <span class="cov0" title="0">return Order{}, domain.ErrValidation
+</span>        }
+        <span class="cov0" title="0">number, err := s.number()
+        if err != nil </span>{
+                <span class="cov0" title="0">return Order{}, err
+</span>        }
+        <span class="cov0" title="0">return s.orders.Create(ctx, Order{UserID: userID, Number: number, Status: "PENDING"})</span>
+}
+
+// OpenCart returns the user's active cart or creates it. If two concurrent
+// requests try to create it, the unique database index lets one succeed and
+// the other request reads the newly created cart.
+func (s *Service) OpenCart(ctx context.Context, userID int64) (Order, error) {
+        <span class="cov0" title="0">return s.pendingCart(ctx, userID, true)
+</span>}
+
+func (s *Service) GetCart(ctx context.Context, userID int64) (Cart, error) {
+        <span class="cov8" title="1">if userID &lt;= 0 </span>{
+                <span class="cov0" title="0">return Cart{}, domain.ErrValidation
+</span>        }
+        <span class="cov8" title="1">order, err := s.pendingCart(ctx, userID, false)
+        if err != nil </span>{
+                <span class="cov0" title="0">return Cart{}, err
+</span>        }
+        <span class="cov8" title="1">items, err := s.items.ListByOrder(ctx, order.ID, 100, 0)
+        if err != nil </span>{
+                <span class="cov0" title="0">return Cart{}, err
+</span>        }
+        <span class="cov8" title="1">return Cart{Order: order, Items: items}, nil</span>
+}
+
+// AddToCart increments an existing line instead of creating duplicate lines
+// for the same product. The repository recalculates total_price atomically.
+func (s *Service) AddToCart(ctx context.Context, userID, productID, quantity int64) (Cart, error) {
+        <span class="cov8" title="1">if userID &lt;= 0 || productID &lt;= 0 || quantity &lt;= 0 </span>{
+                <span class="cov0" title="0">return Cart{}, domain.ErrValidation
+</span>        }
+        <span class="cov8" title="1">order, err := s.pendingCart(ctx, userID, true)
+        if err != nil </span>{
+                <span class="cov0" title="0">return Cart{}, err
+</span>        }
+        <span class="cov8" title="1">item, found, err := s.items.FindByProduct(ctx, order.ID, productID)
+        if err != nil </span>{
+                <span class="cov0" title="0">return Cart{}, err
+</span>        }
+        <span class="cov8" title="1">if found </span>{
+                <span class="cov8" title="1">if quantity &gt; (1&lt;&lt;63-1)-item.Quantity </span>{
+                        <span class="cov0" title="0">return Cart{}, domain.ErrValidation
+</span>                }
+                <span class="cov8" title="1">if _, err = s.items.Update(ctx, Item{ID: item.ID, OrderID: order.ID, Quantity: item.Quantity + quantity}); err != nil </span>{
+                        <span class="cov0" title="0">return Cart{}, err
+</span>                }
+        } else <span class="cov8" title="1">if _, err = s.items.Create(ctx, Item{OrderID: order.ID, ProductID: productID, Quantity: quantity}); err != nil </span>{
+                <span class="cov0" title="0">return Cart{}, err
+</span>        }
+        <span class="cov8" title="1">return s.GetCart(ctx, userID)</span>
+}
+
+func (s *Service) UpdateCartItem(ctx context.Context, userID, itemID, quantity int64) (Cart, error) {
+        <span class="cov0" title="0">if userID &lt;= 0 || itemID &lt;= 0 || quantity &lt;= 0 </span>{
+                <span class="cov0" title="0">return Cart{}, domain.ErrValidation
+</span>        }
+        <span class="cov0" title="0">order, err := s.pendingCart(ctx, userID, false)
+        if err != nil </span>{
+                <span class="cov0" title="0">return Cart{}, err
+</span>        }
+        <span class="cov0" title="0">if _, err = s.items.Update(ctx, Item{ID: itemID, OrderID: order.ID, Quantity: quantity}); err != nil </span>{
+                <span class="cov0" title="0">return Cart{}, err
+</span>        }
+        <span class="cov0" title="0">return s.GetCart(ctx, userID)</span>
+}
+
+func (s *Service) RemoveFromCart(ctx context.Context, userID, itemID int64) (Cart, error) {
+        <span class="cov0" title="0">if userID &lt;= 0 || itemID &lt;= 0 </span>{
+                <span class="cov0" title="0">return Cart{}, domain.ErrValidation
+</span>        }
+        <span class="cov0" title="0">order, err := s.pendingCart(ctx, userID, false)
+        if err != nil </span>{
+                <span class="cov0" title="0">return Cart{}, err
+</span>        }
+        <span class="cov0" title="0">if err = s.items.Delete(ctx, itemID, order.ID); err != nil </span>{
+                <span class="cov0" title="0">return Cart{}, err
+</span>        }
+        <span class="cov0" title="0">return s.GetCart(ctx, userID)</span>
+}
+
+// Checkout freezes the cart and records the delivery address with the order.
+// The address is copied here so future profile changes never alter its history.
+func (s *Service) Checkout(ctx context.Context, userID int64, deliveryAddress string) (Order, error) {
+        <span class="cov8" title="1">deliveryAddress = strings.TrimSpace(deliveryAddress)
+        if userID &lt;= 0 || utf8.RuneCountInString(deliveryAddress) &lt; 5 || utf8.RuneCountInString(deliveryAddress) &gt; 500 </span>{
+                <span class="cov0" title="0">return Order{}, domain.ErrValidation
+</span>        }
+        <span class="cov8" title="1">order, err := s.pendingCart(ctx, userID, false)
+        if err != nil </span>{
+                <span class="cov0" title="0">return Order{}, err
+</span>        }
+        <span class="cov8" title="1">items, err := s.items.ListByOrder(ctx, order.ID, 1, 0)
+        if err != nil </span>{
+                <span class="cov0" title="0">return Order{}, err
+</span>        }
+        <span class="cov8" title="1">if len(items) == 0 </span>{
+                <span class="cov8" title="1">return Order{}, domain.ErrValidation
+</span>        }
+        <span class="cov8" title="1">return s.orders.Checkout(ctx, order.ID, userID, deliveryAddress)</span>
+}
+
+// Pay is a deterministic payment simulator for the university project. A
+// production integration would call a provider and apply its signed callback.
+func (s *Service) Pay(ctx context.Context, actor Actor, orderID int64, approved bool) (Order, error) {
+        <span class="cov8" title="1">order, err := s.owned(ctx, actor, orderID)
+        if err != nil </span>{
+                <span class="cov0" title="0">return Order{}, err
+</span>        }
+        <span class="cov8" title="1">if order.Status != "AWAITING_PAYMENT" &amp;&amp; order.Status != "PAYMENT_FAILED" </span>{
+                <span class="cov0" title="0">return Order{}, domain.ErrOrderTransition
+</span>        }
+        <span class="cov8" title="1">if approved </span>{
+                <span class="cov8" title="1">order.Status = "PAID"
+</span>        } else {
+                <span class="cov8" title="1">order.Status = "PAYMENT_FAILED"
+</span>        }
+        <span class="cov8" title="1">return s.orders.Update(ctx, order)</span>
+}
+
+func (s *Service) Get(ctx context.Context, actor Actor, orderID int64) (Order, error) {
+        <span class="cov0" title="0">return s.owned(ctx, actor, orderID)
+</span>}
+
+func (s *Service) List(ctx context.Context, userID int64, limit, offset int) ([]Order, error) {
+        <span class="cov0" title="0">if userID &lt;= 0 </span>{
+                <span class="cov0" title="0">return nil, domain.ErrValidation
+</span>        }
+        <span class="cov0" title="0">return s.orders.ListByUser(ctx, userID, limit, offset)</span>
+}
+
+func (s *Service) ChangeStatus(ctx context.Context, actor Actor, orderID int64, target string) (Order, error) {
+        <span class="cov8" title="1">order, err := s.owned(ctx, actor, orderID)
+        if err != nil </span>{
+                <span class="cov8" title="1">return Order{}, err
+</span>        }
+        <span class="cov8" title="1">if !actor.IsAdmin() </span>{
+                <span class="cov8" title="1">if target != "CANCELLED" </span>{
+                        <span class="cov8" title="1">return Order{}, domain.ErrOrderTransition
+</span>                }
+                <span class="cov8" title="1">return s.orders.Cancel(ctx, order.ID, actor.ID)</span>
+        }
+        <span class="cov8" title="1">if !allowedTransition(order.Status, target) </span>{
+                <span class="cov8" title="1">return Order{}, domain.ErrOrderTransition
+</span>        }
+        <span class="cov8" title="1">order.Status = target
+        return s.orders.Update(ctx, order)</span>
+}
+
+func (s *Service) Delete(ctx context.Context, actor Actor, orderID int64) error {
+        <span class="cov0" title="0">order, err := s.owned(ctx, actor, orderID)
+        if err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">if order.Status != "PENDING" &amp;&amp; order.Status != "CANCELLED" </span>{
+                <span class="cov0" title="0">return domain.ErrOrderLocked
+</span>        }
+        <span class="cov0" title="0">return s.orders.Delete(ctx, order.ID)</span>
+}
+
+func (s *Service) CreateItem(ctx context.Context, actor Actor, orderID, productID, quantity int64) (Item, error) {
+        <span class="cov0" title="0">if _, err := s.owned(ctx, actor, orderID); err != nil </span>{
+                <span class="cov0" title="0">return Item{}, err
+</span>        }
+        <span class="cov0" title="0">return s.items.Create(ctx, Item{OrderID: orderID, ProductID: productID, Quantity: quantity})</span>
+}
+
+func (s *Service) GetItem(ctx context.Context, actor Actor, orderID, itemID int64) (Item, bool, error) {
+        <span class="cov0" title="0">if _, err := s.owned(ctx, actor, orderID); err != nil </span>{
+                <span class="cov0" title="0">return Item{}, false, err
+</span>        }
+        <span class="cov0" title="0">return s.items.FindByID(ctx, itemID, orderID)</span>
+}
+
+func (s *Service) ListItems(ctx context.Context, actor Actor, orderID int64, limit, offset int) ([]Item, error) {
+        <span class="cov0" title="0">if _, err := s.owned(ctx, actor, orderID); err != nil </span>{
+                <span class="cov0" title="0">return nil, err
+</span>        }
+        <span class="cov0" title="0">return s.items.ListByOrder(ctx, orderID, limit, offset)</span>
+}
+
+func (s *Service) UpdateItem(ctx context.Context, actor Actor, orderID, itemID, quantity int64) (Item, error) {
+        <span class="cov0" title="0">if _, err := s.owned(ctx, actor, orderID); err != nil </span>{
+                <span class="cov0" title="0">return Item{}, err
+</span>        }
+        <span class="cov0" title="0">return s.items.Update(ctx, Item{ID: itemID, OrderID: orderID, Quantity: quantity})</span>
+}
+
+func (s *Service) DeleteItem(ctx context.Context, actor Actor, orderID, itemID int64) error {
+        <span class="cov0" title="0">if _, err := s.owned(ctx, actor, orderID); err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">return s.items.Delete(ctx, itemID, orderID)</span>
+}
+
+func (s *Service) owned(ctx context.Context, actor Actor, orderID int64) (Order, error) {
+        <span class="cov8" title="1">if actor.ID &lt;= 0 || orderID &lt;= 0 </span>{
+                <span class="cov0" title="0">return Order{}, domain.ErrValidation
+</span>        }
+        <span class="cov8" title="1">order, found, err := s.orders.FindByID(ctx, orderID)
+        if err != nil </span>{
+                <span class="cov0" title="0">return Order{}, err
+</span>        }
+        <span class="cov8" title="1">if !found || (!actor.IsAdmin() &amp;&amp; order.UserID != actor.ID) </span>{
+                // Do not disclose whether an order belonging to another user exists.
+                <span class="cov8" title="1">return Order{}, domain.ErrNotFound
+</span>        }
+        <span class="cov8" title="1">return order, nil</span>
+}
+
+func (s *Service) pendingCart(ctx context.Context, userID int64, create bool) (Order, error) {
+        <span class="cov8" title="1">if userID &lt;= 0 </span>{
+                <span class="cov0" title="0">return Order{}, domain.ErrValidation
+</span>        }
+        <span class="cov8" title="1">cart, found, err := s.orders.FindPendingByUser(ctx, userID)
+        if err != nil </span>{
+                <span class="cov0" title="0">return Order{}, err
+</span>        }
+        <span class="cov8" title="1">if found </span>{
+                <span class="cov8" title="1">return cart, nil
+</span>        }
+        <span class="cov0" title="0">if !create </span>{
+                <span class="cov0" title="0">return Order{}, domain.ErrNotFound
+</span>        }
+        <span class="cov0" title="0">cart, err = s.Create(ctx, userID)
+        if err == nil </span>{
+                <span class="cov0" title="0">return cart, nil
+</span>        }
+        <span class="cov0" title="0">if !errors.Is(err, domain.ErrConflict) </span>{
+                <span class="cov0" title="0">return Order{}, err
+</span>        }
+        <span class="cov0" title="0">cart, found, findErr := s.orders.FindPendingByUser(ctx, userID)
+        if findErr != nil </span>{
+                <span class="cov0" title="0">return Order{}, findErr
+</span>        }
+        <span class="cov0" title="0">if !found </span>{
+                <span class="cov0" title="0">return Order{}, err
+</span>        }
+        <span class="cov0" title="0">return cart, nil</span>
+}
+
+func allowedTransition(from, to string) bool {
+        <span class="cov8" title="1">switch from </span>{
+        case "PENDING":
+                <span class="cov8" title="1">return to == "CANCELLED"</span>
+        case "AWAITING_PAYMENT", "PAYMENT_FAILED":
+                <span class="cov0" title="0">return to == "CANCELLED"</span>
+        case "PAID":
+                <span class="cov8" title="1">return to == "DELIVERING"</span>
+        case "DELIVERING":
+                <span class="cov8" title="1">return to == "DELIVERED"</span>
+        }
+        <span class="cov0" title="0">return false</span>
+}
+
+func newOrderNumber() (string, error) {
+        <span class="cov0" title="0">var value [16]byte
+        if _, err := rand.Read(value[:]); err != nil </span>{
+                <span class="cov0" title="0">return "", err
+</span>        }
+        <span class="cov0" title="0">return hex.EncodeToString(value[:]), nil</span>
+}
+
+// Keep errors.Is useful for callers that want to identify terminal-state
+// failures without leaking persistence details.
+func IsTransitionError(err error) bool { <span class="cov0" title="0">return errors.Is(err, domain.ErrOrderTransition) }</span>
+</pre>
+		
+		<pre class="file" id="file13" style="display: none">package products
+
+import (
+        "context"
+        "strings"
+        "time"
+        "unicode/utf8"
+
+        "github.com/AndewGitWorks/tamagochi/backend/internal/domain"
+)
+
+type Image struct {
+        ID         int64     `json:"id"`
+        ProductID  int64     `json:"product_id"`
+        StorageKey string    `json:"storage_key"`
+        SortOrder  int       `json:"sort_order"`
+        CreatedAt  time.Time `json:"created_at"`
+}
+
+type ImageStore interface {
+        Create(context.Context, Image) (Image, error)
+        FindByID(context.Context, int64, int64) (Image, bool, error)
+        ListByProduct(context.Context, int64, int, int) ([]Image, error)
+        Update(context.Context, Image) (Image, error)
+        Delete(context.Context, int64, int64) error
+}
+
+func (image Image) Validate() error {
+        <span class="cov0" title="0">if image.ProductID &lt;= 0 || strings.TrimSpace(image.StorageKey) == "" || utf8.RuneCountInString(image.StorageKey) &gt; 500 || image.SortOrder &lt; 0 </span>{
+                <span class="cov0" title="0">return domain.ErrValidation
+</span>        }
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file14" style="display: none">package products
+
+import (
+        "context"
+        "encoding/json"
+        "unicode/utf8"
+
+        "github.com/AndewGitWorks/tamagochi/backend/internal/domain"
+)
+
+type Product struct {
+        ID             int64           `json:"id"`
+        Title          string          `json:"title"`
+        Price          string          `json:"price"`
+        SeriaTitle     string          `json:"seria_title"`
+        Bio            string          `json:"bio"`
+        Description    string          `json:"description"`
+        Specifications json.RawMessage `json:"specifications"`
+}
+
+type Store interface {
+        Create(context.Context, Product) (Product, error)
+        FindByID(context.Context, int64) (Product, bool, error)
+        List(context.Context, int, int) ([]Product, error)
+        Update(context.Context, Product) (Product, error)
+        Delete(context.Context, int64) error
+}
+
+func (p Product) Validate() error {
+        <span class="cov8" title="1">if utf8.RuneCountInString(p.Title) &lt; 3 || utf8.RuneCountInString(p.Title) &gt; 100 ||
+                utf8.RuneCountInString(p.SeriaTitle) &lt; 3 || utf8.RuneCountInString(p.SeriaTitle) &gt; 100 ||
+                !domain.ValidPrice(p.Price) || (len(p.Specifications) &gt; 0 &amp;&amp; !json.Valid(p.Specifications)) </span>{
+                <span class="cov8" title="1">return domain.ErrValidation
+</span>        }
+        <span class="cov8" title="1">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file15" style="display: none">package products
+
+import (
+        "context"
+
+        "github.com/AndewGitWorks/tamagochi/backend/internal/domain"
+)
+
+// Service owns catalog rules; HTTP handlers only decode and encode requests.
+type Service struct {
+        products Store
+        images   ImageStore
+}
+
+func NewService(products Store, images ImageStore) *Service {
+        <span class="cov0" title="0">return &amp;Service{products: products, images: images}
+</span>}
+
+func (s *Service) Create(ctx context.Context, product Product) (Product, error) {
+        <span class="cov0" title="0">return s.products.Create(ctx, product)
+</span>}
+func (s *Service) Update(ctx context.Context, product Product) (Product, error) {
+        <span class="cov0" title="0">if product.ID &lt;= 0 </span>{
+                <span class="cov0" title="0">return Product{}, domain.ErrValidation
+</span>        }
+        <span class="cov0" title="0">return s.products.Update(ctx, product)</span>
+}
+func (s *Service) Get(ctx context.Context, id int64) (Product, error) {
+        <span class="cov0" title="0">if id &lt;= 0 </span>{
+                <span class="cov0" title="0">return Product{}, domain.ErrValidation
+</span>        }
+        <span class="cov0" title="0">p, found, err := s.products.FindByID(ctx, id)
+        if err != nil || !found </span>{
+                <span class="cov0" title="0">if err != nil </span>{
+                        <span class="cov0" title="0">return Product{}, err
+</span>                }
+                <span class="cov0" title="0">return Product{}, domain.ErrNotFound</span>
+        }
+        <span class="cov0" title="0">return p, nil</span>
+}
+func (s *Service) List(ctx context.Context, limit, offset int) ([]Product, error) {
+        <span class="cov0" title="0">return s.products.List(ctx, limit, offset)
+</span>}
+func (s *Service) Delete(ctx context.Context, id int64) error {
+        <span class="cov0" title="0">if id &lt;= 0 </span>{
+                <span class="cov0" title="0">return domain.ErrValidation
+</span>        }
+        <span class="cov0" title="0">return s.products.Delete(ctx, id)</span>
+}
+
+func (s *Service) CreateImage(ctx context.Context, image Image) (Image, error) {
+        <span class="cov0" title="0">if _, err := s.Get(ctx, image.ProductID); err != nil </span>{
+                <span class="cov0" title="0">return Image{}, err
+</span>        }
+        <span class="cov0" title="0">return s.images.Create(ctx, image)</span>
+}
+func (s *Service) UpdateImage(ctx context.Context, image Image) (Image, error) {
+        <span class="cov0" title="0">if _, err := s.Get(ctx, image.ProductID); err != nil </span>{
+                <span class="cov0" title="0">return Image{}, err
+</span>        }
+        <span class="cov0" title="0">return s.images.Update(ctx, image)</span>
+}
+func (s *Service) GetImage(ctx context.Context, productID, id int64) (Image, error) {
+        <span class="cov0" title="0">if _, err := s.Get(ctx, productID); err != nil </span>{
+                <span class="cov0" title="0">return Image{}, err
+</span>        }
+        <span class="cov0" title="0">image, found, err := s.images.FindByID(ctx, id, productID)
+        if err != nil || !found </span>{
+                <span class="cov0" title="0">if err != nil </span>{
+                        <span class="cov0" title="0">return Image{}, err
+</span>                }
+                <span class="cov0" title="0">return Image{}, domain.ErrNotFound</span>
+        }
+        <span class="cov0" title="0">return image, nil</span>
+}
+func (s *Service) ListImages(ctx context.Context, productID int64, limit, offset int) ([]Image, error) {
+        <span class="cov0" title="0">if _, err := s.Get(ctx, productID); err != nil </span>{
+                <span class="cov0" title="0">return nil, err
+</span>        }
+        <span class="cov0" title="0">return s.images.ListByProduct(ctx, productID, limit, offset)</span>
+}
+func (s *Service) DeleteImage(ctx context.Context, productID, id int64) error {
+        <span class="cov0" title="0">if _, err := s.Get(ctx, productID); err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">return s.images.Delete(ctx, id, productID)</span>
+}
+
+// FavoriteService makes adding and removing favorites idempotent.
+type FavoriteService struct {
+        products Store
+        likes    LikedProductStore
+}
+
+func NewFavoriteService(products Store, likes LikedProductStore) *FavoriteService {
+        <span class="cov0" title="0">return &amp;FavoriteService{products: products, likes: likes}
+</span>}
+func (s *FavoriteService) Add(ctx context.Context, userID, productID int64) (LikedProduct, error) {
+        <span class="cov0" title="0">if userID &lt;= 0 || productID &lt;= 0 </span>{
+                <span class="cov0" title="0">return LikedProduct{}, domain.ErrValidation
+</span>        }
+        <span class="cov0" title="0">if _, found, err := s.products.FindByID(ctx, productID); err != nil </span>{
+                <span class="cov0" title="0">return LikedProduct{}, err
+</span>        } else <span class="cov0" title="0">if !found </span>{
+                <span class="cov0" title="0">return LikedProduct{}, domain.ErrNotFound
+</span>        }
+        <span class="cov0" title="0">if like, found, err := s.likes.Find(ctx, userID, productID); err != nil </span>{
+                <span class="cov0" title="0">return LikedProduct{}, err
+</span>        } else <span class="cov0" title="0">if found </span>{
+                <span class="cov0" title="0">return like, nil
+</span>        }
+        <span class="cov0" title="0">return s.likes.Create(ctx, LikedProduct{UserID: userID, ProductID: productID})</span>
+}
+func (s *FavoriteService) Get(ctx context.Context, userID, productID int64) (LikedProduct, error) {
+        <span class="cov0" title="0">like, found, err := s.likes.Find(ctx, userID, productID)
+        if err != nil || !found </span>{
+                <span class="cov0" title="0">if err != nil </span>{
+                        <span class="cov0" title="0">return LikedProduct{}, err
+</span>                }
+                <span class="cov0" title="0">return LikedProduct{}, domain.ErrNotFound</span>
+        }
+        <span class="cov0" title="0">return like, nil</span>
+}
+func (s *FavoriteService) List(ctx context.Context, userID int64, limit, offset int) ([]LikedProduct, error) {
+        <span class="cov0" title="0">if userID &lt;= 0 </span>{
+                <span class="cov0" title="0">return nil, domain.ErrValidation
+</span>        }
+        <span class="cov0" title="0">return s.likes.ListByUser(ctx, userID, limit, offset)</span>
+}
+func (s *FavoriteService) Remove(ctx context.Context, userID, productID int64) error {
+        <span class="cov0" title="0">if userID &lt;= 0 || productID &lt;= 0 </span>{
+                <span class="cov0" title="0">return domain.ErrValidation
+</span>        }
+        <span class="cov0" title="0">_, found, err := s.likes.Find(ctx, userID, productID)
+        if err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">if !found </span>{
+                <span class="cov0" title="0">return nil
+</span>        }
+        <span class="cov0" title="0">return s.likes.Delete(ctx, userID, productID)</span>
+}
+</pre>
+		
+		<pre class="file" id="file16" style="display: none">package users
+
+import (
+        "context"
+        "crypto/rand"
+        "encoding/base64"
+        "errors"
+        "fmt"
+        "net/mail"
+        "regexp"
+        "strconv"
+        "time"
+
+        "github.com/AndewGitWorks/tamagochi/backend/internal/platform/security"
+)
+
+var (
+        ErrValidation         = errors.New("invalid authentication request")
+        ErrInvalidCredentials = errors.New("invalid login or password")
+)
+
+var (
+        loginPattern = regexp.MustCompile(`^[A-Za-z0-9_.-]{3,24}$`)
+        phonePattern = regexp.MustCompile(`^\+[0-9]{9,14}$`)
+)
+
+type AuthConfig struct {
+        Store           Store
+        JWTSecret       []byte
+        Issuer          string
+        AccessTokenTTL  time.Duration
+        RefreshTokenTTL time.Duration
+        RefreshSessions RefreshSessionStore
+}
+
+type AuthService struct {
+        store           Store
+        jwtSecret       []byte
+        issuer          string
+        accessTTL       time.Duration
+        refreshTTL      time.Duration
+        now             func() time.Time
+        refreshSessions RefreshSessionStore
+}
+
+type RegisterInput struct {
+        Login       string `json:"login"`
+        Name        string `json:"name"`
+        Surname     string `json:"surname"`
+        Email       string `json:"email"`
+        PhoneNumber string `json:"phone_number"`
+        Password    string `json:"password"`
+}
+
+type LoginInput struct {
+        Login    string `json:"login"`
+        Password string `json:"password"`
+}
+
+type TokenPair struct {
+        AccessToken      string `json:"access_token"`
+        RefreshToken     string `json:"refresh_token"`
+        TokenType        string `json:"token_type"`
+        AccessExpiresAt  string `json:"access_expires_at"`
+        RefreshExpiresAt string `json:"refresh_expires_at"`
+}
+
+func NewAuthService(config AuthConfig) *AuthService {
+        <span class="cov8" title="1">if config.AccessTokenTTL &lt;= 0 </span>{
+                <span class="cov8" title="1">config.AccessTokenTTL = 15 * time.Minute
+</span>        }
+        <span class="cov8" title="1">if config.RefreshTokenTTL &lt;= 0 </span>{
+                <span class="cov8" title="1">config.RefreshTokenTTL = 30 * 24 * time.Hour
+</span>        }
+        <span class="cov8" title="1">if config.RefreshSessions == nil </span>{
+                <span class="cov8" title="1">config.RefreshSessions = NewMemoryRefreshSessionStore()
+</span>        }
+        <span class="cov8" title="1">return &amp;AuthService{store: config.Store, jwtSecret: config.JWTSecret, issuer: config.Issuer,
+                accessTTL: config.AccessTokenTTL, refreshTTL: config.RefreshTokenTTL,
+                now: time.Now, refreshSessions: config.RefreshSessions}</span>
+}
+
+func (s *AuthService) Register(ctx context.Context, input RegisterInput) (TokenPair, error) {
+        <span class="cov8" title="1">if err := validateRegistration(input); err != nil </span>{
+                <span class="cov8" title="1">return TokenPair{}, err
+</span>        }
+        <span class="cov8" title="1">hash, err := security.HashPassword(input.Password)
+        if err != nil </span>{
+                <span class="cov0" title="0">return TokenPair{}, err
+</span>        }
+        <span class="cov8" title="1">user, err := s.store.Create(ctx, User{Login: input.Login, Name: input.Name, Surname: input.Surname,
+                Email: input.Email, PhoneNumber: input.PhoneNumber, Role: "USER", PasswordHash: hash})
+        if err != nil </span>{
+                <span class="cov0" title="0">return TokenPair{}, err
+</span>        }
+        <span class="cov8" title="1">return s.issuePair(ctx, user)</span>
+}
+
+func validateRegistration(input RegisterInput) error {
+        <span class="cov8" title="1">if !loginPattern.MatchString(input.Login) || len([]rune(input.Name)) &lt; 3 || len([]rune(input.Name)) &gt; 100 ||
+                len([]rune(input.Surname)) &lt; 3 || len([]rune(input.Surname)) &gt; 100 || len(input.Email) &lt; 3 || len(input.Email) &gt; 100 || len(input.Password) &lt; 8 ||
+                len(input.PhoneNumber) &lt; 10 || len(input.PhoneNumber) &gt; 15 || !phonePattern.MatchString(input.PhoneNumber) </span>{
+                <span class="cov8" title="1">return fmt.Errorf("%w: login, name, surname, email, phone number or password does not meet requirements", ErrValidation)
+</span>        }
+        <span class="cov8" title="1">address, err := mail.ParseAddress(input.Email)
+        if err != nil || address.Address != input.Email </span>{
+                <span class="cov8" title="1">return fmt.Errorf("%w: email is invalid", ErrValidation)
+</span>        }
+        <span class="cov8" title="1">return nil</span>
+}
+
+func (s *AuthService) Login(ctx context.Context, input LoginInput) (TokenPair, error) {
+        <span class="cov8" title="1">user, found, err := s.store.FindByLogin(ctx, input.Login)
+        if err != nil </span>{
+                <span class="cov0" title="0">return TokenPair{}, err
+</span>        }
+        <span class="cov8" title="1">if !found || !security.VerifyPassword(input.Password, user.PasswordHash) </span>{
+                <span class="cov8" title="1">return TokenPair{}, ErrInvalidCredentials
+</span>        }
+        <span class="cov8" title="1">return s.issuePair(ctx, user)</span>
+}
+
+func (s *AuthService) Refresh(ctx context.Context, refreshToken string) (TokenPair, error) {
+        <span class="cov8" title="1">claims, err := security.VerifyJWT(refreshToken, s.jwtSecret, s.issuer, "refresh", s.now())
+        if err != nil </span>{
+                <span class="cov0" title="0">return TokenPair{}, err
+</span>        }
+        <span class="cov8" title="1">id, parseErr := strconv.ParseInt(claims.Subject, 10, 64)
+        if parseErr != nil </span>{
+                <span class="cov0" title="0">return TokenPair{}, security.ErrInvalidToken
+</span>        }
+        <span class="cov8" title="1">consumed, err := s.refreshSessions.Consume(ctx, claims.ID, id)
+        if err != nil </span>{
+                <span class="cov0" title="0">return TokenPair{}, err
+</span>        }
+        <span class="cov8" title="1">if !consumed </span>{
+                <span class="cov8" title="1">return TokenPair{}, security.ErrInvalidToken
+</span>        }
+        <span class="cov8" title="1">user, found, err := s.store.FindByID(ctx, id)
+        if err != nil || !found || strconv.FormatInt(user.ID, 10) != claims.Subject || user.Login != claims.Login </span>{
+                <span class="cov0" title="0">return TokenPair{}, security.ErrInvalidToken
+</span>        }
+        <span class="cov8" title="1">return s.issuePair(ctx, user)</span>
+}
+
+func (s *AuthService) issuePair(ctx context.Context, user User) (TokenPair, error) {
+        <span class="cov8" title="1">now := s.now().UTC()
+        access, accessExpiry, _, err := s.issueToken(user, "access", s.accessTTL, now)
+        if err != nil </span>{
+                <span class="cov0" title="0">return TokenPair{}, err
+</span>        }
+        <span class="cov8" title="1">refresh, refreshExpiry, refreshID, err := s.issueToken(user, "refresh", s.refreshTTL, now)
+        if err != nil </span>{
+                <span class="cov0" title="0">return TokenPair{}, err
+</span>        }
+        <span class="cov8" title="1">if err := s.refreshSessions.Create(ctx, RefreshSession{ID: refreshID, UserID: user.ID, ExpiresAt: refreshExpiry}); err != nil </span>{
+                <span class="cov0" title="0">return TokenPair{}, err
+</span>        }
+        <span class="cov8" title="1">return TokenPair{AccessToken: access, RefreshToken: refresh, TokenType: "Bearer", AccessExpiresAt: accessExpiry.Format(time.RFC3339), RefreshExpiresAt: refreshExpiry.Format(time.RFC3339)}, nil</span>
+}
+
+func (s *AuthService) issueToken(user User, tokenType string, ttl time.Duration, now time.Time) (token string, expiresAt time.Time, id string, err error) {
+        <span class="cov8" title="1">id, err = randomID()
+        if err != nil </span>{
+                <span class="cov0" title="0">return "", time.Time{}, "", err
+</span>        }
+        <span class="cov8" title="1">expiresAt = now.Add(ttl)
+        claims := security.Claims{Issuer: s.issuer, Subject: strconv.FormatInt(user.ID, 10), Login: user.Login, Name: user.Name, Role: user.Role,
+                TimeCreation: now.Format(time.RFC3339), TimeExpiration: expiresAt.Format(time.RFC3339),
+                IssuedAt: now.Unix(), ExpiresAt: expiresAt.Unix(), ID: id, TokenType: tokenType}
+        token, err = security.SignJWT(claims, s.jwtSecret)
+        return token, expiresAt, id, err</span>
+}
+
+func randomID() (string, error) {
+        <span class="cov8" title="1">bytes := make([]byte, 16)
+        if _, err := rand.Read(bytes); err != nil </span>{
+                <span class="cov0" title="0">return "", err
+</span>        }
+        <span class="cov8" title="1">return base64.RawURLEncoding.EncodeToString(bytes), nil</span>
+}
+
+// AuthenticateAccess checks the token and reads the current role from the store.
+// Deleted users and users whose login changed cannot keep using an old token.
+func (s *AuthService) AuthenticateAccess(ctx context.Context, token string) (User, error) {
+        <span class="cov0" title="0">claims, err := security.VerifyJWT(token, s.jwtSecret, s.issuer, "access", s.now())
+        if err != nil </span>{
+                <span class="cov0" title="0">return User{}, err
+</span>        }
+        <span class="cov0" title="0">id, err := strconv.ParseInt(claims.Subject, 10, 64)
+        if err != nil || id &lt;= 0 </span>{
+                <span class="cov0" title="0">return User{}, security.ErrInvalidToken
+</span>        }
+        <span class="cov0" title="0">user, found, err := s.store.FindByID(ctx, id)
+        if err != nil </span>{
+                <span class="cov0" title="0">return User{}, err
+</span>        }
+        <span class="cov0" title="0">if !found || user.Login != claims.Login </span>{
+                <span class="cov0" title="0">return User{}, security.ErrInvalidToken
+</span>        }
+        <span class="cov0" title="0">return user, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file17" style="display: none">package users
+
+import "context"
+
+type ProfileStore interface {
+        Create(context.Context, Profile) (Profile, error)
+        FindByUserID(context.Context, int64) (Profile, bool, error)
+        Update(context.Context, Profile) (Profile, error)
+        Delete(context.Context, int64) error
+}
+
+// Update keeps the same validation rules as registration. Password changes
+// are optional; the HTTP handler hashes a new password before saving it.
+func ValidateUpdate(input RegisterInput) error {
+        <span class="cov0" title="0">if input.Password == "" </span>{
+                <span class="cov0" title="0">input.Password = "unchanged-password"
+</span>        }
+        <span class="cov0" title="0">return validateRegistration(input)</span>
+}
+</pre>
+		
+		<pre class="file" id="file18" style="display: none">package users
+
+import (
+        "context"
+        "strings"
+        "unicode/utf8"
+
+        "github.com/AndewGitWorks/tamagochi/backend/internal/domain"
+        "github.com/AndewGitWorks/tamagochi/backend/internal/platform/security"
+)
+
+type UserService struct{ store Store }
+
+func NewUserService(store Store) *UserService { <span class="cov0" title="0">return &amp;UserService{store: store} }</span>
+func (s *UserService) UpdateSelf(ctx context.Context, current User, input RegisterInput) (User, error) {
+        <span class="cov0" title="0">if current.ID &lt;= 0 </span>{
+                <span class="cov0" title="0">return User{}, domain.ErrValidation
+</span>        }
+        <span class="cov0" title="0">if err := ValidateUpdate(input); err != nil </span>{
+                <span class="cov0" title="0">return User{}, err
+</span>        }
+        <span class="cov0" title="0">current.Name, current.Surname, current.Login, current.Email, current.PhoneNumber = input.Name, input.Surname, input.Login, input.Email, input.PhoneNumber
+        if input.Password != "" </span>{
+                <span class="cov0" title="0">hash, err := security.HashPassword(input.Password)
+                if err != nil </span>{
+                        <span class="cov0" title="0">return User{}, err
+</span>                }
+                <span class="cov0" title="0">current.PasswordHash = hash</span>
+        }
+        <span class="cov0" title="0">return s.store.Update(ctx, current)</span>
+}
+func (s *UserService) DeleteSelf(ctx context.Context, userID int64) error {
+        <span class="cov0" title="0">if userID &lt;= 0 </span>{
+                <span class="cov0" title="0">return domain.ErrValidation
+</span>        }
+        <span class="cov0" title="0">return s.store.Delete(ctx, userID)</span>
+}
+
+type ProfileService struct{ store ProfileStore }
+
+func NewProfileService(store ProfileStore) *ProfileService { <span class="cov0" title="0">return &amp;ProfileService{store: store} }</span>
+func validateProfile(p Profile) error {
+        <span class="cov0" title="0">if p.UserID &lt;= 0 || utf8.RuneCountInString(p.Bio) &gt; 1000 || utf8.RuneCountInString(p.Address) &gt; 500 </span>{
+                <span class="cov0" title="0">return domain.ErrValidation
+</span>        }
+        <span class="cov0" title="0">return nil</span>
+}
+func (s *ProfileService) Get(ctx context.Context, userID int64) (Profile, error) {
+        <span class="cov0" title="0">p, found, err := s.store.FindByUserID(ctx, userID)
+        if err != nil || !found </span>{
+                <span class="cov0" title="0">if err != nil </span>{
+                        <span class="cov0" title="0">return Profile{}, err
+</span>                }
+                <span class="cov0" title="0">return Profile{}, domain.ErrNotFound</span>
+        }
+        <span class="cov0" title="0">return p, nil</span>
+}
+func (s *ProfileService) Save(ctx context.Context, profile Profile) (Profile, error) {
+        <span class="cov0" title="0">profile.Bio, profile.Address = strings.TrimSpace(profile.Bio), strings.TrimSpace(profile.Address)
+        if err := validateProfile(profile); err != nil </span>{
+                <span class="cov0" title="0">return Profile{}, err
+</span>        }
+        <span class="cov0" title="0">existing, found, err := s.store.FindByUserID(ctx, profile.UserID)
+        if err != nil </span>{
+                <span class="cov0" title="0">return Profile{}, err
+</span>        }
+        <span class="cov0" title="0">if found </span>{
+                <span class="cov0" title="0">profile.ID, profile.OrdersCount = existing.ID, existing.OrdersCount
+                return s.store.Update(ctx, profile)
+</span>        }
+        <span class="cov0" title="0">return s.store.Create(ctx, profile)</span>
+}
+func (s *ProfileService) Clear(ctx context.Context, userID int64) error {
+        <span class="cov0" title="0">_, err := s.Save(ctx, Profile{UserID: userID})
+        return err
+</span>}
+</pre>
+		
+		<pre class="file" id="file19" style="display: none">package users
+
+import (
+        "context"
+        "errors"
+        "sync"
+        "time"
+)
+
+var (
+        ErrLoginTaken   = errors.New("a user with this login already exists")
+        ErrUserConflict = errors.New("a user with these unique fields already exists")
+        ErrUserNotFound = errors.New("user was not found")
+)
+
+type User struct {
+        ID           int64  `json:"id"`
+        Name         string `json:"name"`
+        Surname      string `json:"surname"`
+        Login        string `json:"login"`
+        Email        string `json:"email"`
+        PasswordHash string `json:"-"`
+        PhoneNumber  string `json:"phone_number"`
+        Version      int64  `json:"version"`
+        Role         string `json:"role"`
+}
+
+type Profile struct {
+        ID          int64  `json:"id"`
+        UserID      int64  `json:"user_id"`
+        Bio         string `json:"bio"`
+        Address     string `json:"address"`
+        OrdersCount int64  `json:"orders_count"`
+}
+
+// Store is the persistence boundary for user CRUD. The PostgreSQL implementation
+// also creates the initial profile atomically; MemoryStore is only for unit tests.
+type Store interface {
+        Create(ctx context.Context, user User) (User, error)
+        FindByLogin(ctx context.Context, login string) (User, bool, error)
+        FindByID(ctx context.Context, id int64) (User, bool, error)
+        Update(ctx context.Context, user User) (User, error)
+        Delete(ctx context.Context, id int64) error
+}
+
+// RefreshSessionStore persists single-use refresh-token identifiers. It is
+// separate from Store so that a database-backed implementation can rotate a
+// token atomically without coupling it to user CRUD.
+type RefreshSessionStore interface {
+        Create(ctx context.Context, session RefreshSession) error
+        Consume(ctx context.Context, id string, userID int64) (bool, error)
+}
+
+type RefreshSession struct {
+        ID        string `json:"id"`
+        UserID    int64  `json:"user_id"`
+        ExpiresAt time.Time
+}
+
+// MemoryStore is used by isolated service tests and local development.
+type MemoryStore struct {
+        mu      sync.RWMutex
+        nextID  int64
+        byID    map[int64]User
+        byLogin map[string]int64
+        byEmail map[string]int64
+}
+
+func NewMemoryStore() *MemoryStore {
+        <span class="cov8" title="1">return &amp;MemoryStore{byID: make(map[int64]User), byLogin: make(map[string]int64), byEmail: make(map[string]int64)}
+</span>}
+
+func (s *MemoryStore) Create(_ context.Context, user User) (User, error) {
+        <span class="cov8" title="1">s.mu.Lock()
+        defer s.mu.Unlock()
+        if _, exists := s.byLogin[user.Login]; exists </span>{
+                <span class="cov0" title="0">return User{}, ErrLoginTaken
+</span>        }
+        <span class="cov8" title="1">if _, exists := s.byEmail[user.Email]; exists </span>{
+                <span class="cov0" title="0">return User{}, ErrUserConflict
+</span>        }
+        <span class="cov8" title="1">s.nextID++
+        user.ID, user.Version = s.nextID, 1
+        if user.Role == "" </span>{
+                <span class="cov0" title="0">user.Role = "USER"
+</span>        }
+        <span class="cov8" title="1">s.byID[user.ID], s.byLogin[user.Login], s.byEmail[user.Email] = user, user.ID, user.ID
+        return user, nil</span>
+}
+
+func (s *MemoryStore) FindByLogin(_ context.Context, login string) (User, bool, error) {
+        <span class="cov8" title="1">s.mu.RLock()
+        defer s.mu.RUnlock()
+        id, ok := s.byLogin[login]
+        if !ok </span>{
+                <span class="cov8" title="1">return User{}, false, nil
+</span>        }
+        <span class="cov8" title="1">return s.byID[id], true, nil</span>
+}
+
+func (s *MemoryStore) FindByID(_ context.Context, id int64) (User, bool, error) {
+        <span class="cov8" title="1">s.mu.RLock()
+        defer s.mu.RUnlock()
+        user, ok := s.byID[id]
+        return user, ok, nil
+</span>}
+
+func (s *MemoryStore) Update(_ context.Context, user User) (User, error) {
+        <span class="cov0" title="0">s.mu.Lock()
+        defer s.mu.Unlock()
+        old, ok := s.byID[user.ID]
+        if !ok </span>{
+                <span class="cov0" title="0">return User{}, ErrUserNotFound
+</span>        }
+        <span class="cov0" title="0">if id, exists := s.byLogin[user.Login]; exists &amp;&amp; id != user.ID </span>{
+                <span class="cov0" title="0">return User{}, ErrLoginTaken
+</span>        }
+        <span class="cov0" title="0">if id, exists := s.byEmail[user.Email]; exists &amp;&amp; id != user.ID </span>{
+                <span class="cov0" title="0">return User{}, ErrUserConflict
+</span>        }
+        <span class="cov0" title="0">delete(s.byLogin, old.Login)
+        delete(s.byEmail, old.Email)
+        user.Version = old.Version + 1
+        if user.Role == "" </span>{
+                <span class="cov0" title="0">user.Role = old.Role
+</span>        }
+        <span class="cov0" title="0">s.byID[user.ID], s.byLogin[user.Login], s.byEmail[user.Email] = user, user.ID, user.ID
+        return user, nil</span>
+}
+
+func (s *MemoryStore) Delete(_ context.Context, id int64) error {
+        <span class="cov0" title="0">s.mu.Lock()
+        defer s.mu.Unlock()
+        user, ok := s.byID[id]
+        if !ok </span>{
+                <span class="cov0" title="0">return ErrUserNotFound
+</span>        }
+        <span class="cov0" title="0">delete(s.byID, id)
+        delete(s.byLogin, user.Login)
+        delete(s.byEmail, user.Email)
+        return nil</span>
+}
+
+// MemoryRefreshSessionStore is only the default for isolated unit tests.
+// The running API uses repository.PostgresRefreshSessionStore.
+type MemoryRefreshSessionStore struct {
+        mu       sync.Mutex
+        sessions map[string]RefreshSession
+}
+
+func NewMemoryRefreshSessionStore() *MemoryRefreshSessionStore {
+        <span class="cov8" title="1">return &amp;MemoryRefreshSessionStore{sessions: make(map[string]RefreshSession)}
+</span>}
+
+func (s *MemoryRefreshSessionStore) Create(_ context.Context, session RefreshSession) error {
+        <span class="cov8" title="1">s.mu.Lock()
+        defer s.mu.Unlock()
+        s.sessions[session.ID] = session
+        return nil
+</span>}
+
+func (s *MemoryRefreshSessionStore) Consume(_ context.Context, id string, userID int64) (bool, error) {
+        <span class="cov8" title="1">s.mu.Lock()
+        defer s.mu.Unlock()
+        session, found := s.sessions[id]
+        if !found || session.UserID != userID || !session.ExpiresAt.After(time.Now()) </span>{
+                <span class="cov8" title="1">return false, nil
+</span>        }
+        <span class="cov8" title="1">delete(s.sessions, id)
+        return true, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file20" style="display: none">package database
+
+import (
+        "context"
+        "database/sql"
+        "fmt"
+        "time"
+
+        _ "github.com/jackc/pgx/v5/stdlib"
+)
+
+func OpenPostgres(ctx context.Context, databaseURL string) (*sql.DB, error) {
+        <span class="cov0" title="0">if databaseURL == "" </span>{
+                <span class="cov0" title="0">return nil, fmt.Errorf("database URL is required")
+</span>        }
+        <span class="cov0" title="0">db, err := sql.Open("pgx", databaseURL)
+        if err != nil </span>{
+                <span class="cov0" title="0">return nil, fmt.Errorf("open PostgreSQL connection: %w", err)
+</span>        }
+        <span class="cov0" title="0">db.SetMaxOpenConns(25)
+        db.SetMaxIdleConns(5)
+        db.SetConnMaxLifetime(5 * time.Minute)
+        if err := db.PingContext(ctx); err != nil </span>{
+                <span class="cov0" title="0">_ = db.Close()
+                return nil, fmt.Errorf("ping PostgreSQL: %w", err)
+</span>        }
+        <span class="cov0" title="0">return db, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file21" style="display: none">package security
+
+import (
+        "crypto/hmac"
+        "crypto/sha256"
+        "crypto/subtle"
+        "encoding/base64"
+        "encoding/json"
+        "errors"
+        "strings"
+        "time"
+)
+
+var ErrInvalidToken = errors.New("bearer token is invalid or has expired")
+
+type Claims struct {
+        Issuer         string `json:"iss"`
+        Subject        string `json:"sub"`
+        Login          string `json:"login"`
+        Name           string `json:"name"`
+        Role           string `json:"role"`
+        TimeExpiration string `json:"time_expiration"`
+        TimeCreation   string `json:"time_creation"`
+        IssuedAt       int64  `json:"iat"`
+        ExpiresAt      int64  `json:"exp"`
+        ID             string `json:"jti"`
+        TokenType      string `json:"token_type"`
+}
+
+func SignJWT(claims Claims, secret []byte) (string, error) {
+        <span class="cov0" title="0">header, err := json.Marshal(struct {
+                Algorithm string `json:"alg"`
+                Type      string `json:"typ"`
+        }{Algorithm: "HS256", Type: "JWT"})
+        if err != nil </span>{
+                <span class="cov0" title="0">return "", err
+</span>        }
+        <span class="cov0" title="0">payload, err := json.Marshal(claims)
+        if err != nil </span>{
+                <span class="cov0" title="0">return "", err
+</span>        }
+        <span class="cov0" title="0">unsigned := base64.RawURLEncoding.EncodeToString(header) + "." + base64.RawURLEncoding.EncodeToString(payload)
+        return unsigned + "." + signature(unsigned, secret), nil</span>
+}
+
+func VerifyJWT(token string, secret []byte, issuer, expectedType string, now time.Time) (Claims, error) {
+        <span class="cov0" title="0">parts := strings.Split(token, ".")
+        if len(parts) != 3 </span>{
+                <span class="cov0" title="0">return Claims{}, ErrInvalidToken
+</span>        }
+        <span class="cov0" title="0">if subtle.ConstantTimeCompare([]byte(parts[2]), []byte(signature(parts[0]+"."+parts[1], secret))) != 1 </span>{
+                <span class="cov0" title="0">return Claims{}, ErrInvalidToken
+</span>        }
+
+        <span class="cov0" title="0">var header struct {
+                Algorithm string `json:"alg"`
+                Type      string `json:"typ"`
+</span>        }
+        <span class="cov0" title="0">headerJSON, err := base64.RawURLEncoding.DecodeString(parts[0])
+        if err != nil || json.Unmarshal(headerJSON, &amp;header) != nil || header.Algorithm != "HS256" || header.Type != "JWT" </span>{
+                <span class="cov0" title="0">return Claims{}, ErrInvalidToken
+</span>        }
+        <span class="cov0" title="0">payloadJSON, err := base64.RawURLEncoding.DecodeString(parts[1])
+        if err != nil </span>{
+                <span class="cov0" title="0">return Claims{}, ErrInvalidToken
+</span>        }
+        <span class="cov0" title="0">var claims Claims
+        if json.Unmarshal(payloadJSON, &amp;claims) != nil ||
+                claims.Issuer != issuer || claims.TokenType != expectedType ||
+                claims.Subject == "" || claims.Login == "" || claims.Name == "" || claims.Role == "" || claims.ID == "" ||
+                claims.IssuedAt == 0 || claims.ExpiresAt &lt;= now.Unix() </span>{
+                <span class="cov0" title="0">return Claims{}, ErrInvalidToken
+</span>        }
+        <span class="cov0" title="0">return claims, nil</span>
+}
+
+func signature(unsigned string, secret []byte) string {
+        <span class="cov0" title="0">mac := hmac.New(sha256.New, secret)
+        mac.Write([]byte(unsigned))
+        return base64.RawURLEncoding.EncodeToString(mac.Sum(nil))
+</span>}
+</pre>
+		
+		<pre class="file" id="file22" style="display: none">package security
+
+import (
+        "crypto/hmac"
+        "crypto/rand"
+        "crypto/sha256"
+        "crypto/subtle"
+        "encoding/base64"
+        "fmt"
+        "strconv"
+        "strings"
+)
+
+const passwordIterations = 210_000
+const passwordKeyLength = 24 // 192-bit key; keeps the complete encoding within VARCHAR(64).
+const passwordSaltLength = 16
+const passwordHashVersion = 1
+const passwordIterationBytes = 3
+
+// HashPassword uses PBKDF2-HMAC-SHA256 with a unique random salt. The compact
+// versioned encoding stores version, iteration count, salt, and derived key in
+// one base64 value so it fits the existing password_hashed VARCHAR(64) column.
+func HashPassword(password string) (string, error) {
+        <span class="cov8" title="1">salt := make([]byte, passwordSaltLength)
+        if _, err := rand.Read(salt); err != nil </span>{
+                <span class="cov0" title="0">return "", fmt.Errorf("create password salt: %w", err)
+</span>        }
+        <span class="cov8" title="1">derived := pbkdf2SHA256([]byte(password), salt, passwordIterations, passwordKeyLength)
+        encoded := make([]byte, 1+passwordIterationBytes+len(salt)+len(derived))
+        encoded[0] = passwordHashVersion
+        encoded[1] = byte(passwordIterations &gt;&gt; 16)
+        encoded[2] = byte(passwordIterations &gt;&gt; 8 &amp; 0xff)
+        encoded[3] = byte(passwordIterations &amp; 0xff)
+        copy(encoded[4:], salt)
+        copy(encoded[4+len(salt):], derived)
+        return base64.RawURLEncoding.EncodeToString(encoded), nil</span>
+}
+
+func VerifyPassword(password, encoded string) bool {
+        // Keep support for hashes created by the previous textual representation.
+        <span class="cov8" title="1">if strings.HasPrefix(encoded, "pbkdf2-sha256$") </span>{
+                <span class="cov8" title="1">return verifyLegacyPassword(password, encoded)
+</span>        }
+        <span class="cov8" title="1">data, err := base64.RawURLEncoding.DecodeString(encoded)
+        if err != nil || len(data) != 1+passwordIterationBytes+passwordSaltLength+passwordKeyLength || data[0] != passwordHashVersion </span>{
+                <span class="cov8" title="1">return false
+</span>        }
+        <span class="cov8" title="1">iterations := int(data[1])&lt;&lt;16 | int(data[2])&lt;&lt;8 | int(data[3])
+        if iterations &lt; 1 </span>{
+                <span class="cov0" title="0">return false
+</span>        }
+        <span class="cov8" title="1">salt := data[4 : 4+passwordSaltLength]
+        expected := data[4+passwordSaltLength:]
+        actual := pbkdf2SHA256([]byte(password), salt, iterations, len(expected))
+        return subtle.ConstantTimeCompare(expected, actual) == 1</span>
+}
+
+func verifyLegacyPassword(password, encoded string) bool {
+        <span class="cov8" title="1">parts := strings.Split(encoded, "$")
+        if len(parts) != 4 || parts[0] != "pbkdf2-sha256" </span>{
+                <span class="cov0" title="0">return false
+</span>        }
+        <span class="cov8" title="1">iterations, err := strconv.Atoi(parts[1])
+        if err != nil || iterations &lt; 1 </span>{
+                <span class="cov0" title="0">return false
+</span>        }
+        <span class="cov8" title="1">salt, err := base64.RawURLEncoding.DecodeString(parts[2])
+        if err != nil </span>{
+                <span class="cov0" title="0">return false
+</span>        }
+        <span class="cov8" title="1">expected, err := base64.RawURLEncoding.DecodeString(parts[3])
+        if err != nil || len(expected) == 0 </span>{
+                <span class="cov0" title="0">return false
+</span>        }
+        <span class="cov8" title="1">actual := pbkdf2SHA256([]byte(password), salt, iterations, len(expected))
+        return subtle.ConstantTimeCompare(expected, actual) == 1</span>
+}
+
+func pbkdf2SHA256(password, salt []byte, iterations, length int) []byte {
+        <span class="cov8" title="1">result := make([]byte, 0, length)
+        for block := uint32(1); len(result) &lt; length; block++ </span>{
+                <span class="cov8" title="1">mac := hmac.New(sha256.New, password)
+                mac.Write(salt)
+                mac.Write([]byte{byte(block &gt;&gt; 24), byte(block &gt;&gt; 16), byte(block &gt;&gt; 8), byte(block)})
+                u := mac.Sum(nil)
+                t := append([]byte(nil), u...)
+                for round := 1; round &lt; iterations; round++ </span>{
+                        <span class="cov8" title="1">mac = hmac.New(sha256.New, password)
+                        mac.Write(u)
+                        u = mac.Sum(nil)
+                        for i := range t </span>{
+                                <span class="cov8" title="1">t[i] ^= u[i]
+</span>                        }
+                }
+                <span class="cov8" title="1">result = append(result, t...)</span>
+        }
+        <span class="cov8" title="1">return result[:length]</span>
+}
+</pre>
+		
+		<pre class="file" id="file23" style="display: none">package repository
+
+import (
+        "database/sql"
+        "errors"
+        "fmt"
+        "github.com/AndewGitWorks/tamagochi/backend/internal/domain"
+)
+
+func mapCRUDError(err error) error {
+        <span class="cov0" title="0">if err == nil </span>{
+                <span class="cov0" title="0">return nil
+</span>        }
+        <span class="cov0" title="0">if errors.Is(err, sql.ErrNoRows) </span>{
+                <span class="cov0" title="0">return domain.ErrNotFound
+</span>        }
+        <span class="cov0" title="0">var state sqlStateError
+        if errors.As(err, &amp;state) </span>{
+                <span class="cov0" title="0">switch state.SQLState() </span>{
+                case "23505", "23503", "23001":
+                        <span class="cov0" title="0">return fmt.Errorf("%w: %v", domain.ErrConflict, err)</span>
+                case "23514", "23502", "22003", "22P02", "22001":
+                        <span class="cov0" title="0">return fmt.Errorf("%w: %v", domain.ErrValidation, err)</span>
+                }
+        }
+        <span class="cov0" title="0">return err</span>
+}
+
+func requireAffected(result sql.Result, err error) error {
+        <span class="cov0" title="0">if err != nil </span>{
+                <span class="cov0" title="0">return mapCRUDError(err)
+</span>        }
+        <span class="cov0" title="0">count, err := result.RowsAffected()
+        if err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">if count == 0 </span>{
+                <span class="cov0" title="0">return domain.ErrNotFound
+</span>        }
+        <span class="cov0" title="0">return nil</span>
+}
+
+func pageSize(limit int) int {
+        <span class="cov0" title="0">if limit &lt; 1 || limit &gt; 100 </span>{
+                <span class="cov0" title="0">return 20
+</span>        }
+        <span class="cov0" title="0">return limit</span>
+}
+</pre>
+		
+		<pre class="file" id="file24" style="display: none">package repository
+
+import (
+        "context"
+        "database/sql"
+        "errors"
+
+        "github.com/AndewGitWorks/tamagochi/backend/internal/domain/products"
+)
+
+type PostgresLikedProductStore struct{ db *sql.DB }
+
+const likeColumns = `user_id, product_id, created_at`
+
+func NewPostgresLikedProductStore(db *sql.DB) *PostgresLikedProductStore {
+        <span class="cov0" title="0">return &amp;PostgresLikedProductStore{db: db}
+</span>}
+
+func (s *PostgresLikedProductStore) Create(ctx context.Context, like products.LikedProduct) (products.LikedProduct, error) {
+
+        <span class="cov0" title="0">err := s.db.QueryRowContext(ctx, `INSERT INTO tamagochi.user_liked_products (user_id, product_id)
+ VALUES ($1, $2) RETURNING `+likeColumns, like.UserID, like.ProductID).Scan(&amp;like.UserID, &amp;like.ProductID, &amp;like.CreatedAt)
+        if err != nil </span>{
+                <span class="cov0" title="0">return products.LikedProduct{}, mapCRUDError(err)
+</span>        }
+        <span class="cov0" title="0">return like, nil</span>
+}
+
+func (s *PostgresLikedProductStore) Find(ctx context.Context, userID, productID int64) (products.LikedProduct, bool, error) {
+        <span class="cov0" title="0">var like products.LikedProduct
+        err := s.db.QueryRowContext(ctx, `SELECT `+likeColumns+` FROM tamagochi.user_liked_products WHERE user_id=$1 AND product_id=$2`, userID, productID).Scan(&amp;like.UserID, &amp;like.ProductID, &amp;like.CreatedAt)
+        if errors.Is(err, sql.ErrNoRows) </span>{
+                <span class="cov0" title="0">return products.LikedProduct{}, false, nil
+</span>        }
+        <span class="cov0" title="0">if err != nil </span>{
+                <span class="cov0" title="0">return products.LikedProduct{}, false, err
+</span>        }
+        <span class="cov0" title="0">return like, true, nil</span>
+}
+
+func (s *PostgresLikedProductStore) ListByUser(ctx context.Context, userID int64, limit, offset int) ([]products.LikedProduct, error) {
+        <span class="cov0" title="0">rows, err := s.db.QueryContext(ctx, `SELECT `+likeColumns+` FROM tamagochi.user_liked_products WHERE user_id=$1 ORDER BY created_at DESC, product_id LIMIT $2 OFFSET $3`, userID, pageSize(limit), offset)
+        if err != nil </span>{
+                <span class="cov0" title="0">return nil, err
+</span>        }
+        <span class="cov0" title="0">defer rows.Close()
+        likes := make([]products.LikedProduct, 0)
+        for rows.Next() </span>{
+                <span class="cov0" title="0">var like products.LikedProduct
+                if err := rows.Scan(&amp;like.UserID, &amp;like.ProductID, &amp;like.CreatedAt); err != nil </span>{
+                        <span class="cov0" title="0">return nil, err
+</span>                }
+                <span class="cov0" title="0">likes = append(likes, like)</span>
+        }
+        <span class="cov0" title="0">return likes, rows.Err()</span>
+}
+
+func (s *PostgresLikedProductStore) Delete(ctx context.Context, userID, productID int64) error {
+        <span class="cov0" title="0">result, err := s.db.ExecContext(ctx, `DELETE FROM tamagochi.user_liked_products WHERE user_id=$1 AND product_id=$2`, userID, productID)
+        return requireAffected(result, err)
+</span>}
+</pre>
+		
+		<pre class="file" id="file25" style="display: none">package repository
+
+import (
+        "context"
+        "database/sql"
+        "errors"
+
+        "github.com/AndewGitWorks/tamagochi/backend/internal/domain"
+        "github.com/AndewGitWorks/tamagochi/backend/internal/domain/orders"
+)
+
+type PostgresOrderItemStore struct{ db *sql.DB }
+
+func NewPostgresOrderItemStore(db *sql.DB) *PostgresOrderItemStore {
+        <span class="cov0" title="0">return &amp;PostgresOrderItemStore{db: db}
+</span>}
+
+const itemColumns = `id, order_id, product_id, quantity, price`
+
+func (s *PostgresOrderItemStore) Create(ctx context.Context, item orders.Item) (orders.Item, error) {
+        <span class="cov0" title="0">if err := item.Validate(); err != nil </span>{
+                <span class="cov0" title="0">return orders.Item{}, err
+</span>        }
+        <span class="cov0" title="0">tx, err := s.db.BeginTx(ctx, nil)
+        if err != nil </span>{
+                <span class="cov0" title="0">return orders.Item{}, err
+</span>        }
+        <span class="cov0" title="0">defer tx.Rollback()
+        if err = lockPendingOrder(ctx, tx, item.OrderID); err != nil </span>{
+                <span class="cov0" title="0">return orders.Item{}, err
+</span>        }
+        // Keep the current product price as a snapshot; the client cannot set it.
+        <span class="cov0" title="0">err = tx.QueryRowContext(ctx, `INSERT INTO tamagochi.order_items (order_id, product_id, quantity, price)
+ SELECT $1, id, $3, price FROM tamagochi.products WHERE id=$2
+ RETURNING `+itemColumns, item.OrderID, item.ProductID, item.Quantity).
+                Scan(&amp;item.ID, &amp;item.OrderID, &amp;item.ProductID, &amp;item.Quantity, &amp;item.Price)
+        if err != nil </span>{
+                <span class="cov0" title="0">return orders.Item{}, mapCRUDError(err)
+</span>        }
+        <span class="cov0" title="0">if err = updateOrderTotal(ctx, tx, item.OrderID); err != nil </span>{
+                <span class="cov0" title="0">return orders.Item{}, err
+</span>        }
+        <span class="cov0" title="0">if err = tx.Commit(); err != nil </span>{
+                <span class="cov0" title="0">return orders.Item{}, mapCRUDError(err)
+</span>        }
+        <span class="cov0" title="0">return item, nil</span>
+}
+
+func (s *PostgresOrderItemStore) FindByID(ctx context.Context, id, orderID int64) (orders.Item, bool, error) {
+        <span class="cov0" title="0">var item orders.Item
+        err := s.db.QueryRowContext(ctx, `SELECT `+itemColumns+` FROM tamagochi.order_items WHERE id=$1 AND order_id=$2`, id, orderID).
+                Scan(&amp;item.ID, &amp;item.OrderID, &amp;item.ProductID, &amp;item.Quantity, &amp;item.Price)
+        if errors.Is(err, sql.ErrNoRows) </span>{
+                <span class="cov0" title="0">return orders.Item{}, false, nil
+</span>        }
+        <span class="cov0" title="0">if err != nil </span>{
+                <span class="cov0" title="0">return orders.Item{}, false, err
+</span>        }
+        <span class="cov0" title="0">return item, true, nil</span>
+}
+
+func (s *PostgresOrderItemStore) FindByProduct(ctx context.Context, orderID, productID int64) (orders.Item, bool, error) {
+        <span class="cov0" title="0">var item orders.Item
+        err := s.db.QueryRowContext(ctx, `SELECT `+itemColumns+` FROM tamagochi.order_items WHERE order_id=$1 AND product_id=$2`, orderID, productID).
+                Scan(&amp;item.ID, &amp;item.OrderID, &amp;item.ProductID, &amp;item.Quantity, &amp;item.Price)
+        if errors.Is(err, sql.ErrNoRows) </span>{
+                <span class="cov0" title="0">return orders.Item{}, false, nil
+</span>        }
+        <span class="cov0" title="0">if err != nil </span>{
+                <span class="cov0" title="0">return orders.Item{}, false, err
+</span>        }
+        <span class="cov0" title="0">return item, true, nil</span>
+}
+
+func (s *PostgresOrderItemStore) ListByOrder(ctx context.Context, orderID int64, limit, offset int) ([]orders.Item, error) {
+        <span class="cov0" title="0">rows, err := s.db.QueryContext(ctx, `SELECT `+itemColumns+` FROM tamagochi.order_items WHERE order_id=$1 ORDER BY id LIMIT $2 OFFSET $3`, orderID, pageSize(limit), offset)
+        if err != nil </span>{
+                <span class="cov0" title="0">return nil, err
+</span>        }
+        <span class="cov0" title="0">defer rows.Close()
+        items := make([]orders.Item, 0)
+        for rows.Next() </span>{
+                <span class="cov0" title="0">var item orders.Item
+                if err := rows.Scan(&amp;item.ID, &amp;item.OrderID, &amp;item.ProductID, &amp;item.Quantity, &amp;item.Price); err != nil </span>{
+                        <span class="cov0" title="0">return nil, err
+</span>                }
+                <span class="cov0" title="0">items = append(items, item)</span>
+        }
+        <span class="cov0" title="0">return items, rows.Err()</span>
+}
+
+func (s *PostgresOrderItemStore) Update(ctx context.Context, item orders.Item) (orders.Item, error) {
+        <span class="cov0" title="0">if item.ID &lt;= 0 || item.OrderID &lt;= 0 || item.Quantity &lt;= 0 </span>{
+                <span class="cov0" title="0">return orders.Item{}, domain.ErrValidation
+</span>        }
+        <span class="cov0" title="0">tx, err := s.db.BeginTx(ctx, nil)
+        if err != nil </span>{
+                <span class="cov0" title="0">return orders.Item{}, err
+</span>        }
+        <span class="cov0" title="0">defer tx.Rollback()
+        if err = lockPendingOrder(ctx, tx, item.OrderID); err != nil </span>{
+                <span class="cov0" title="0">return orders.Item{}, err
+</span>        }
+        // Product and price stay unchanged. To replace a product, remove the line and add a new one.
+        <span class="cov0" title="0">err = tx.QueryRowContext(ctx, `UPDATE tamagochi.order_items SET quantity=$1 WHERE id=$2 AND order_id=$3 RETURNING `+itemColumns,
+                item.Quantity, item.ID, item.OrderID).Scan(&amp;item.ID, &amp;item.OrderID, &amp;item.ProductID, &amp;item.Quantity, &amp;item.Price)
+        if err != nil </span>{
+                <span class="cov0" title="0">return orders.Item{}, mapCRUDError(err)
+</span>        }
+        <span class="cov0" title="0">if err = updateOrderTotal(ctx, tx, item.OrderID); err != nil </span>{
+                <span class="cov0" title="0">return orders.Item{}, err
+</span>        }
+        <span class="cov0" title="0">if err = tx.Commit(); err != nil </span>{
+                <span class="cov0" title="0">return orders.Item{}, mapCRUDError(err)
+</span>        }
+        <span class="cov0" title="0">return item, nil</span>
+}
+
+func (s *PostgresOrderItemStore) Delete(ctx context.Context, id, orderID int64) error {
+        <span class="cov0" title="0">tx, err := s.db.BeginTx(ctx, nil)
+        if err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">defer tx.Rollback()
+        if err = lockPendingOrder(ctx, tx, orderID); err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">result, err := tx.ExecContext(ctx, `DELETE FROM tamagochi.order_items WHERE id=$1 AND order_id=$2`, id, orderID)
+        if err = requireAffected(result, err); err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">if err = updateOrderTotal(ctx, tx, orderID); err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">return mapCRUDError(tx.Commit())</span>
+}
+
+func lockPendingOrder(ctx context.Context, tx *sql.Tx, id int64) error {
+        <span class="cov0" title="0">var status string
+        err := tx.QueryRowContext(ctx, `SELECT status FROM tamagochi.orders WHERE id=$1 FOR UPDATE`, id).Scan(&amp;status)
+        if err != nil </span>{
+                <span class="cov0" title="0">return mapCRUDError(err)
+</span>        }
+        <span class="cov0" title="0">if status != "PENDING" </span>{
+                <span class="cov0" title="0">return domain.ErrOrderLocked
+</span>        }
+        <span class="cov0" title="0">return nil</span>
+}
+
+func updateOrderTotal(ctx context.Context, tx *sql.Tx, orderID int64) error {
+        <span class="cov0" title="0">_, err := tx.ExecContext(ctx, `UPDATE tamagochi.orders SET total_price=
+ (SELECT COALESCE(SUM(quantity * price), 0) FROM tamagochi.order_items WHERE order_id=$1) WHERE id=$1`, orderID)
+        return mapCRUDError(err)
+</span>}
+</pre>
+		
+		<pre class="file" id="file26" style="display: none">package repository
+
+import (
+        "context"
+        "database/sql"
+        "errors"
+
+        "github.com/AndewGitWorks/tamagochi/backend/internal/domain"
+        "github.com/AndewGitWorks/tamagochi/backend/internal/domain/orders"
+)
+
+type PostgresOrderStore struct{ db *sql.DB }
+
+const orderColumns = `id, user_id, number, total_price, delivery_address, created_at, status`
+
+func NewPostgresOrderStore(db *sql.DB) *PostgresOrderStore { <span class="cov0" title="0">return &amp;PostgresOrderStore{db: db} }</span>
+
+func (s *PostgresOrderStore) Create(ctx context.Context, order orders.Order) (orders.Order, error) {
+        <span class="cov0" title="0">if order.Status == "" </span>{
+                <span class="cov0" title="0">order.Status = "PENDING"
+</span>        }
+        <span class="cov0" title="0">if err := order.Validate(); err != nil </span>{
+                <span class="cov0" title="0">return orders.Order{}, err
+</span>        }
+        <span class="cov0" title="0">if order.Status != "PENDING" </span>{
+                <span class="cov0" title="0">return orders.Order{}, domain.ErrValidation
+</span>        }
+        <span class="cov0" title="0">err := s.db.QueryRowContext(ctx, `INSERT INTO tamagochi.orders (user_id, number, status)
+ VALUES ($1, $2, $3) RETURNING `+orderColumns, order.UserID, order.Number, order.Status).Scan(&amp;order.ID, &amp;order.UserID, &amp;order.Number, &amp;order.TotalPrice, &amp;order.DeliveryAddress, &amp;order.CreatedAt, &amp;order.Status)
+        if err != nil </span>{
+                <span class="cov0" title="0">return orders.Order{}, mapCRUDError(err)
+</span>        }
+        <span class="cov0" title="0">return order, nil</span>
+}
+
+func (s *PostgresOrderStore) FindByID(ctx context.Context, id int64) (orders.Order, bool, error) {
+        <span class="cov0" title="0">var order orders.Order
+        err := s.db.QueryRowContext(ctx, `SELECT `+orderColumns+` FROM tamagochi.orders WHERE id=$1`, id).Scan(&amp;order.ID, &amp;order.UserID, &amp;order.Number, &amp;order.TotalPrice, &amp;order.DeliveryAddress, &amp;order.CreatedAt, &amp;order.Status)
+        if errors.Is(err, sql.ErrNoRows) </span>{
+                <span class="cov0" title="0">return orders.Order{}, false, nil
+</span>        }
+        <span class="cov0" title="0">if err != nil </span>{
+                <span class="cov0" title="0">return orders.Order{}, false, err
+</span>        }
+        <span class="cov0" title="0">return order, true, nil</span>
+}
+
+func (s *PostgresOrderStore) FindPendingByUser(ctx context.Context, userID int64) (orders.Order, bool, error) {
+        <span class="cov0" title="0">var order orders.Order
+        err := s.db.QueryRowContext(ctx, `SELECT `+orderColumns+` FROM tamagochi.orders WHERE user_id=$1 AND status='PENDING'`, userID).
+                Scan(&amp;order.ID, &amp;order.UserID, &amp;order.Number, &amp;order.TotalPrice, &amp;order.DeliveryAddress, &amp;order.CreatedAt, &amp;order.Status)
+        if errors.Is(err, sql.ErrNoRows) </span>{
+                <span class="cov0" title="0">return orders.Order{}, false, nil
+</span>        }
+        <span class="cov0" title="0">if err != nil </span>{
+                <span class="cov0" title="0">return orders.Order{}, false, err
+</span>        }
+        <span class="cov0" title="0">return order, true, nil</span>
+}
+
+func (s *PostgresOrderStore) ListByUser(ctx context.Context, userID int64, limit, offset int) ([]orders.Order, error) {
+        <span class="cov0" title="0">rows, err := s.db.QueryContext(ctx, `SELECT `+orderColumns+` FROM tamagochi.orders WHERE user_id=$1 ORDER BY id DESC LIMIT $2 OFFSET $3`, userID, pageSize(limit), offset)
+        if err != nil </span>{
+                <span class="cov0" title="0">return nil, err
+</span>        }
+        <span class="cov0" title="0">defer rows.Close()
+        result := make([]orders.Order, 0)
+        for rows.Next() </span>{
+                <span class="cov0" title="0">var order orders.Order
+                if err := rows.Scan(&amp;order.ID, &amp;order.UserID, &amp;order.Number, &amp;order.TotalPrice, &amp;order.DeliveryAddress, &amp;order.CreatedAt, &amp;order.Status); err != nil </span>{
+                        <span class="cov0" title="0">return nil, err
+</span>                }
+                <span class="cov0" title="0">result = append(result, order)</span>
+        }
+        <span class="cov0" title="0">return result, rows.Err()</span>
+}
+
+func (s *PostgresOrderStore) Update(ctx context.Context, order orders.Order) (orders.Order, error) {
+        <span class="cov0" title="0">if !orders.ValidStatus(order.Status) </span>{
+                <span class="cov0" title="0">return orders.Order{}, domain.ErrValidation
+</span>        }
+        <span class="cov0" title="0">err := s.db.QueryRowContext(ctx, `UPDATE tamagochi.orders SET status=$1 WHERE id=$2 RETURNING `+orderColumns, order.Status, order.ID).Scan(&amp;order.ID, &amp;order.UserID, &amp;order.Number, &amp;order.TotalPrice, &amp;order.DeliveryAddress, &amp;order.CreatedAt, &amp;order.Status)
+        if err != nil </span>{
+                <span class="cov0" title="0">return orders.Order{}, mapCRUDError(err)
+</span>        }
+        <span class="cov0" title="0">return order, nil</span>
+}
+
+func (s *PostgresOrderStore) Delete(ctx context.Context, id int64) error {
+        <span class="cov0" title="0">result, err := s.db.ExecContext(ctx, `DELETE FROM tamagochi.orders WHERE id=$1 AND status IN ('PENDING','CANCELLED')`, id)
+        return requireAffected(result, err)
+</span>}
+
+func (s *PostgresOrderStore) Checkout(ctx context.Context, id, userID int64, address string) (orders.Order, error) {
+        <span class="cov0" title="0">var order orders.Order
+        err := s.db.QueryRowContext(ctx, `UPDATE tamagochi.orders
+ SET status='AWAITING_PAYMENT', delivery_address=$3
+ WHERE id=$1 AND user_id=$2 AND status='PENDING'
+   AND EXISTS (SELECT 1 FROM tamagochi.order_items WHERE order_id=$1)
+ RETURNING `+orderColumns, id, userID, address).
+                Scan(&amp;order.ID, &amp;order.UserID, &amp;order.Number, &amp;order.TotalPrice, &amp;order.DeliveryAddress, &amp;order.CreatedAt, &amp;order.Status)
+        if errors.Is(err, sql.ErrNoRows) </span>{
+                <span class="cov0" title="0">return orders.Order{}, domain.ErrOrderLocked
+</span>        }
+        <span class="cov0" title="0">if err != nil </span>{
+                <span class="cov0" title="0">return orders.Order{}, mapCRUDError(err)
+</span>        }
+        <span class="cov0" title="0">return order, nil</span>
+}
+
+// Cancel checks ownership and status in the same statement as the update.
+func (s *PostgresOrderStore) Cancel(ctx context.Context, id, userID int64) (orders.Order, error) {
+        <span class="cov0" title="0">var order orders.Order
+        err := s.db.QueryRowContext(ctx, `UPDATE tamagochi.orders SET status='CANCELLED'
+         WHERE id=$1 AND user_id=$2 AND status IN ('PENDING','AWAITING_PAYMENT','PAYMENT_FAILED')
+ RETURNING `+orderColumns, id, userID).
+                Scan(&amp;order.ID, &amp;order.UserID, &amp;order.Number, &amp;order.TotalPrice, &amp;order.DeliveryAddress, &amp;order.CreatedAt, &amp;order.Status)
+        if errors.Is(err, sql.ErrNoRows) </span>{
+                <span class="cov0" title="0">return orders.Order{}, domain.ErrOrderLocked
+</span>        }
+        <span class="cov0" title="0">if err != nil </span>{
+                <span class="cov0" title="0">return orders.Order{}, mapCRUDError(err)
+</span>        }
+        <span class="cov0" title="0">return order, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file27" style="display: none">package repository
+
+import (
+        "context"
+        "database/sql"
+        "errors"
+
+        "github.com/AndewGitWorks/tamagochi/backend/internal/domain/products"
+)
+
+type PostgresProductImageStore struct{ db *sql.DB }
+
+const imageColumns = `id, product_id, storage_key, sort_order, created_at`
+
+func NewPostgresProductImageStore(db *sql.DB) *PostgresProductImageStore {
+        <span class="cov0" title="0">return &amp;PostgresProductImageStore{db: db}
+</span>}
+
+func (s *PostgresProductImageStore) Create(ctx context.Context, image products.Image) (products.Image, error) {
+        <span class="cov0" title="0">if err := image.Validate(); err != nil </span>{
+                <span class="cov0" title="0">return products.Image{}, err
+</span>        }
+        <span class="cov0" title="0">err := s.db.QueryRowContext(ctx, `INSERT INTO tamagochi.product_images (product_id, storage_key, sort_order)
+ VALUES ($1, $2, $3) RETURNING `+imageColumns, image.ProductID, image.StorageKey, image.SortOrder).Scan(&amp;image.ID, &amp;image.ProductID, &amp;image.StorageKey, &amp;image.SortOrder, &amp;image.CreatedAt)
+        if err != nil </span>{
+                <span class="cov0" title="0">return products.Image{}, mapCRUDError(err)
+</span>        }
+        <span class="cov0" title="0">return image, nil</span>
+}
+
+func (s *PostgresProductImageStore) FindByID(ctx context.Context, id, productID int64) (products.Image, bool, error) {
+        <span class="cov0" title="0">var image products.Image
+        err := s.db.QueryRowContext(ctx, `SELECT `+imageColumns+` FROM tamagochi.product_images WHERE id=$1 AND product_id=$2`, id, productID).Scan(&amp;image.ID, &amp;image.ProductID, &amp;image.StorageKey, &amp;image.SortOrder, &amp;image.CreatedAt)
+        if errors.Is(err, sql.ErrNoRows) </span>{
+                <span class="cov0" title="0">return products.Image{}, false, nil
+</span>        }
+        <span class="cov0" title="0">if err != nil </span>{
+                <span class="cov0" title="0">return products.Image{}, false, err
+</span>        }
+        <span class="cov0" title="0">return image, true, nil</span>
+}
+
+func (s *PostgresProductImageStore) ListByProduct(ctx context.Context, productID int64, limit, offset int) ([]products.Image, error) {
+        <span class="cov0" title="0">rows, err := s.db.QueryContext(ctx, `SELECT `+imageColumns+` FROM tamagochi.product_images WHERE product_id=$1 ORDER BY sort_order, id LIMIT $2 OFFSET $3`, productID, pageSize(limit), offset)
+        if err != nil </span>{
+                <span class="cov0" title="0">return nil, err
+</span>        }
+        <span class="cov0" title="0">defer rows.Close()
+        images := make([]products.Image, 0)
+        for rows.Next() </span>{
+                <span class="cov0" title="0">var image products.Image
+                if err := rows.Scan(&amp;image.ID, &amp;image.ProductID, &amp;image.StorageKey, &amp;image.SortOrder, &amp;image.CreatedAt); err != nil </span>{
+                        <span class="cov0" title="0">return nil, err
+</span>                }
+                <span class="cov0" title="0">images = append(images, image)</span>
+        }
+        <span class="cov0" title="0">return images, rows.Err()</span>
+}
+
+func (s *PostgresProductImageStore) Update(ctx context.Context, image products.Image) (products.Image, error) {
+        <span class="cov0" title="0">if err := image.Validate(); err != nil </span>{
+                <span class="cov0" title="0">return products.Image{}, err
+</span>        }
+        <span class="cov0" title="0">err := s.db.QueryRowContext(ctx, `UPDATE tamagochi.product_images SET storage_key=$1, sort_order=$2 WHERE id=$3 AND product_id=$4 RETURNING `+imageColumns, image.StorageKey, image.SortOrder, image.ID, image.ProductID).Scan(&amp;image.ID, &amp;image.ProductID, &amp;image.StorageKey, &amp;image.SortOrder, &amp;image.CreatedAt)
+        if err != nil </span>{
+                <span class="cov0" title="0">return products.Image{}, mapCRUDError(err)
+</span>        }
+        <span class="cov0" title="0">return image, nil</span>
+}
+
+func (s *PostgresProductImageStore) Delete(ctx context.Context, id, productID int64) error {
+        <span class="cov0" title="0">result, err := s.db.ExecContext(ctx, `DELETE FROM tamagochi.product_images WHERE id=$1 AND product_id=$2`, id, productID)
+        return requireAffected(result, err)
+</span>}
+</pre>
+		
+		<pre class="file" id="file28" style="display: none">package repository
+
+import (
+        "context"
+        "database/sql"
+        "errors"
+
+        "github.com/AndewGitWorks/tamagochi/backend/internal/domain/products"
+)
+
+type PostgresProductStore struct{ db *sql.DB }
+
+func NewPostgresProductStore(db *sql.DB) *PostgresProductStore { <span class="cov0" title="0">return &amp;PostgresProductStore{db: db} }</span>
+
+const productColumns = `id, title, price, seria_title, COALESCE(bio,''), COALESCE(description,''), COALESCE(specifications,'null'::jsonb)`
+
+func (s *PostgresProductStore) Create(ctx context.Context, product products.Product) (products.Product, error) {
+        <span class="cov0" title="0">if product.SeriaTitle == "" </span>{
+                <span class="cov0" title="0">product.SeriaTitle = "NEWBIE"
+</span>        }
+        <span class="cov0" title="0">if len(product.Specifications) == 0 </span>{
+                <span class="cov0" title="0">product.Specifications = []byte("null")
+</span>        }
+        <span class="cov0" title="0">if err := product.Validate(); err != nil </span>{
+                <span class="cov0" title="0">return products.Product{}, err
+</span>        }
+        <span class="cov0" title="0">err := s.db.QueryRowContext(ctx, `INSERT INTO tamagochi.products (title, price, seria_title, bio, description, specifications)
+ VALUES ($1, $2, $3, $4, $5, $6) RETURNING `+productColumns, product.Title, product.Price, product.SeriaTitle, product.Bio, product.Description, product.Specifications).Scan(&amp;product.ID, &amp;product.Title, &amp;product.Price, &amp;product.SeriaTitle, &amp;product.Bio, &amp;product.Description, &amp;product.Specifications)
+        if err != nil </span>{
+                <span class="cov0" title="0">return products.Product{}, mapCRUDError(err)
+</span>        }
+        <span class="cov0" title="0">return product, nil</span>
+}
+
+func (s *PostgresProductStore) FindByID(ctx context.Context, id int64) (products.Product, bool, error) {
+        <span class="cov0" title="0">var product products.Product
+        err := s.db.QueryRowContext(ctx, `SELECT `+productColumns+` FROM tamagochi.products WHERE id=$1`, id).Scan(&amp;product.ID, &amp;product.Title, &amp;product.Price, &amp;product.SeriaTitle, &amp;product.Bio, &amp;product.Description, &amp;product.Specifications)
+        if errors.Is(err, sql.ErrNoRows) </span>{
+                <span class="cov0" title="0">return products.Product{}, false, nil
+</span>        }
+        <span class="cov0" title="0">if err != nil </span>{
+                <span class="cov0" title="0">return products.Product{}, false, err
+</span>        }
+        <span class="cov0" title="0">return product, true, nil</span>
+}
+
+func (s *PostgresProductStore) List(ctx context.Context, limit, offset int) ([]products.Product, error) {
+        <span class="cov0" title="0">rows, err := s.db.QueryContext(ctx, `SELECT `+productColumns+` FROM tamagochi.products ORDER BY id LIMIT $1 OFFSET $2`, pageSize(limit), offset)
+        if err != nil </span>{
+                <span class="cov0" title="0">return nil, err
+</span>        }
+        <span class="cov0" title="0">defer rows.Close()
+        result := make([]products.Product, 0)
+        for rows.Next() </span>{
+                <span class="cov0" title="0">var product products.Product
+                if err := rows.Scan(&amp;product.ID, &amp;product.Title, &amp;product.Price, &amp;product.SeriaTitle, &amp;product.Bio, &amp;product.Description, &amp;product.Specifications); err != nil </span>{
+                        <span class="cov0" title="0">return nil, err
+</span>                }
+                <span class="cov0" title="0">result = append(result, product)</span>
+        }
+        <span class="cov0" title="0">return result, rows.Err()</span>
+}
+
+func (s *PostgresProductStore) Update(ctx context.Context, product products.Product) (products.Product, error) {
+        <span class="cov0" title="0">if product.SeriaTitle == "" </span>{
+                <span class="cov0" title="0">product.SeriaTitle = "NEWBIE"
+</span>        }
+        <span class="cov0" title="0">if len(product.Specifications) == 0 </span>{
+                <span class="cov0" title="0">product.Specifications = []byte("null")
+</span>        }
+        <span class="cov0" title="0">if err := product.Validate(); err != nil </span>{
+                <span class="cov0" title="0">return products.Product{}, err
+</span>        }
+        <span class="cov0" title="0">err := s.db.QueryRowContext(ctx, `UPDATE tamagochi.products SET title=$1, price=$2, seria_title=$3, bio=$4, description=$5, specifications=$6 WHERE id=$7 RETURNING `+productColumns, product.Title, product.Price, product.SeriaTitle, product.Bio, product.Description, product.Specifications, product.ID).Scan(&amp;product.ID, &amp;product.Title, &amp;product.Price, &amp;product.SeriaTitle, &amp;product.Bio, &amp;product.Description, &amp;product.Specifications)
+        if err != nil </span>{
+                <span class="cov0" title="0">return products.Product{}, mapCRUDError(err)
+</span>        }
+        <span class="cov0" title="0">return product, nil</span>
+}
+
+func (s *PostgresProductStore) Delete(ctx context.Context, id int64) error {
+        <span class="cov0" title="0">result, err := s.db.ExecContext(ctx, `DELETE FROM tamagochi.products WHERE id=$1`, id)
+        return requireAffected(result, err)
+</span>}
+</pre>
+		
+		<pre class="file" id="file29" style="display: none">package repository
+
+import (
+        "context"
+        "database/sql"
+        "errors"
+
+        "github.com/AndewGitWorks/tamagochi/backend/internal/domain/users"
+)
+
+type PostgresProfileStore struct{ db *sql.DB }
+
+const profileColumns = `id, user_id, COALESCE(bio,''), COALESCE(address,''), (SELECT count(*) FROM tamagochi.orders WHERE user_id=tamagochi.profiles.user_id)`
+
+func NewPostgresProfileStore(db *sql.DB) *PostgresProfileStore { <span class="cov0" title="0">return &amp;PostgresProfileStore{db: db} }</span>
+
+func (s *PostgresProfileStore) Create(ctx context.Context, profile users.Profile) (users.Profile, error) {
+
+        <span class="cov0" title="0">err := s.db.QueryRowContext(ctx, `INSERT INTO tamagochi.profiles (user_id, bio, address)
+ VALUES ($1, $2, $3) RETURNING `+profileColumns, profile.UserID, profile.Bio, profile.Address).Scan(&amp;profile.ID, &amp;profile.UserID, &amp;profile.Bio, &amp;profile.Address, &amp;profile.OrdersCount)
+        if err != nil </span>{
+                <span class="cov0" title="0">return users.Profile{}, mapCRUDError(err)
+</span>        }
+        <span class="cov0" title="0">return profile, nil</span>
+}
+
+func (s *PostgresProfileStore) FindByUserID(ctx context.Context, userID int64) (users.Profile, bool, error) {
+        <span class="cov0" title="0">var profile users.Profile
+        err := s.db.QueryRowContext(ctx, `SELECT `+profileColumns+` FROM tamagochi.profiles WHERE user_id=$1`, userID).Scan(&amp;profile.ID, &amp;profile.UserID, &amp;profile.Bio, &amp;profile.Address, &amp;profile.OrdersCount)
+        if errors.Is(err, sql.ErrNoRows) </span>{
+                <span class="cov0" title="0">return users.Profile{}, false, nil
+</span>        }
+        <span class="cov0" title="0">if err != nil </span>{
+                <span class="cov0" title="0">return users.Profile{}, false, err
+</span>        }
+        <span class="cov0" title="0">return profile, true, nil</span>
+}
+
+func (s *PostgresProfileStore) Update(ctx context.Context, profile users.Profile) (users.Profile, error) {
+
+        <span class="cov0" title="0">err := s.db.QueryRowContext(ctx, `UPDATE tamagochi.profiles SET bio=$1, address=$2 WHERE user_id=$3 RETURNING `+profileColumns, profile.Bio, profile.Address, profile.UserID).Scan(&amp;profile.ID, &amp;profile.UserID, &amp;profile.Bio, &amp;profile.Address, &amp;profile.OrdersCount)
+        if err != nil </span>{
+                <span class="cov0" title="0">return users.Profile{}, mapCRUDError(err)
+</span>        }
+        <span class="cov0" title="0">return profile, nil</span>
+}
+
+func (s *PostgresProfileStore) Delete(ctx context.Context, userID int64) error {
+        <span class="cov0" title="0">result, err := s.db.ExecContext(ctx, `DELETE FROM tamagochi.profiles WHERE user_id=$1`, userID)
+        return requireAffected(result, err)
+</span>}
+</pre>
+		
+		<pre class="file" id="file30" style="display: none">package repository
+
+import (
+        "context"
+        "database/sql"
+        "fmt"
+
+        "github.com/AndewGitWorks/tamagochi/backend/internal/domain/users"
+)
+
+// PostgresRefreshSessionStore keeps only refresh-token IDs. The JWT itself is
+// never stored, so a database leak cannot be used as a bearer credential.
+type PostgresRefreshSessionStore struct{ db *sql.DB }
+
+func NewPostgresRefreshSessionStore(db *sql.DB) *PostgresRefreshSessionStore {
+        <span class="cov0" title="0">return &amp;PostgresRefreshSessionStore{db: db}
+</span>}
+
+func (s *PostgresRefreshSessionStore) Create(ctx context.Context, session users.RefreshSession) error {
+        <span class="cov0" title="0">_, err := s.db.ExecContext(ctx, `INSERT INTO tamagochi.refresh_sessions (id, user_id, expires_at)
+                VALUES ($1, $2, $3)`, session.ID, session.UserID, session.ExpiresAt)
+        if err != nil </span>{
+                <span class="cov0" title="0">return fmt.Errorf("save refresh session: %w", err)
+</span>        }
+        <span class="cov0" title="0">return nil</span>
+}
+
+// Consume deletes a non-expired session in one statement. Only one concurrent
+// refresh request can receive a successful result for the same token ID.
+func (s *PostgresRefreshSessionStore) Consume(ctx context.Context, id string, userID int64) (bool, error) {
+        <span class="cov0" title="0">result, err := s.db.ExecContext(ctx, `DELETE FROM tamagochi.refresh_sessions
+                WHERE id = $1 AND user_id = $2 AND expires_at &gt; CURRENT_TIMESTAMP`, id, userID)
+        if err != nil </span>{
+                <span class="cov0" title="0">return false, fmt.Errorf("consume refresh session: %w", err)
+</span>        }
+        <span class="cov0" title="0">affected, err := result.RowsAffected()
+        if err != nil </span>{
+                <span class="cov0" title="0">return false, fmt.Errorf("read refresh session result: %w", err)
+</span>        }
+        <span class="cov0" title="0">return affected == 1, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file31" style="display: none">package repository
+
+import (
+        "context"
+        "database/sql"
+        "errors"
+        "fmt"
+
+        "github.com/AndewGitWorks/tamagochi/backend/internal/domain/users"
+)
+
+type PostgresUserStore struct{ db *sql.DB }
+
+func NewPostgresUserStore(db *sql.DB) *PostgresUserStore { <span class="cov0" title="0">return &amp;PostgresUserStore{db: db} }</span>
+
+const userColumns = `id, name, surname, login, email, password_hashed, phone_number, version, role`
+
+func (s *PostgresUserStore) Create(ctx context.Context, user users.User) (users.User, error) {
+        <span class="cov0" title="0">tx, err := s.db.BeginTx(ctx, nil)
+        if err != nil </span>{
+                <span class="cov0" title="0">return users.User{}, fmt.Errorf("begin user registration: %w", err)
+</span>        }
+        <span class="cov0" title="0">defer func() </span>{ <span class="cov0" title="0">_ = tx.Rollback() }</span>()
+        <span class="cov0" title="0">if user.Role == "" </span>{
+                <span class="cov0" title="0">user.Role = "USER"
+</span>        }
+        <span class="cov0" title="0">if user.Version == 0 </span>{
+                <span class="cov0" title="0">user.Version = 1
+</span>        }
+        <span class="cov0" title="0">err = tx.QueryRowContext(ctx, `INSERT INTO tamagochi.users
+                (name, surname, login, email, password_hashed, phone_number, version, role)
+                VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING id`,
+                user.Name, user.Surname, user.Login, user.Email, user.PasswordHash, user.PhoneNumber, user.Version, user.Role).Scan(&amp;user.ID)
+        if err != nil </span>{
+                <span class="cov0" title="0">return users.User{}, mapConflict(fmt.Errorf("insert user: %w", err))
+</span>        }
+        <span class="cov0" title="0">if _, err = tx.ExecContext(ctx, `INSERT INTO tamagochi.profiles (user_id) VALUES ($1)`, user.ID); err != nil </span>{
+                <span class="cov0" title="0">return users.User{}, fmt.Errorf("create initial user profile: %w", err)
+</span>        }
+        <span class="cov0" title="0">if err = tx.Commit(); err != nil </span>{
+                <span class="cov0" title="0">return users.User{}, fmt.Errorf("commit user registration: %w", err)
+</span>        }
+        <span class="cov0" title="0">return user, nil</span>
+}
+
+func (s *PostgresUserStore) FindByLogin(ctx context.Context, login string) (users.User, bool, error) {
+        <span class="cov0" title="0">return s.find(ctx, `SELECT `+userColumns+` FROM tamagochi.users WHERE login=$1`, login)
+</span>}
+
+func (s *PostgresUserStore) FindByID(ctx context.Context, id int64) (users.User, bool, error) {
+        <span class="cov0" title="0">return s.find(ctx, `SELECT `+userColumns+` FROM tamagochi.users WHERE id=$1`, id)
+</span>}
+
+func (s *PostgresUserStore) find(ctx context.Context, query string, arg any) (users.User, bool, error) {
+        <span class="cov0" title="0">var user users.User
+        err := s.db.QueryRowContext(ctx, query, arg).Scan(&amp;user.ID, &amp;user.Name, &amp;user.Surname, &amp;user.Login, &amp;user.Email,
+                &amp;user.PasswordHash, &amp;user.PhoneNumber, &amp;user.Version, &amp;user.Role)
+        if errors.Is(err, sql.ErrNoRows) </span>{
+                <span class="cov0" title="0">return users.User{}, false, nil
+</span>        }
+        <span class="cov0" title="0">if err != nil </span>{
+                <span class="cov0" title="0">return users.User{}, false, fmt.Errorf("read user: %w", err)
+</span>        }
+        <span class="cov0" title="0">return user, true, nil</span>
+}
+
+func (s *PostgresUserStore) Update(ctx context.Context, user users.User) (users.User, error) {
+        <span class="cov0" title="0">if user.Role == "" </span>{
+                <span class="cov0" title="0">user.Role = "USER"
+</span>        }
+        <span class="cov0" title="0">row := s.db.QueryRowContext(ctx, `UPDATE tamagochi.users SET name=$1,surname=$2,login=$3,email=$4,
+                password_hashed=$5,phone_number=$6,role=$7,version=version+1 WHERE id=$8
+                RETURNING id,name,surname,login,email,password_hashed,phone_number,version,role`,
+                user.Name, user.Surname, user.Login, user.Email, user.PasswordHash, user.PhoneNumber, user.Role, user.ID)
+        var updated users.User
+        err := row.Scan(&amp;updated.ID, &amp;updated.Name, &amp;updated.Surname, &amp;updated.Login, &amp;updated.Email, &amp;updated.PasswordHash, &amp;updated.PhoneNumber, &amp;updated.Version, &amp;updated.Role)
+        if errors.Is(err, sql.ErrNoRows) </span>{
+                <span class="cov0" title="0">return users.User{}, users.ErrUserNotFound
+</span>        }
+        <span class="cov0" title="0">if err != nil </span>{
+                <span class="cov0" title="0">return users.User{}, mapConflict(fmt.Errorf("update user: %w", err))
+</span>        }
+        <span class="cov0" title="0">return updated, nil</span>
+}
+
+func (s *PostgresUserStore) Delete(ctx context.Context, id int64) error {
+        <span class="cov0" title="0">result, err := s.db.ExecContext(ctx, `DELETE FROM tamagochi.users WHERE id=$1`, id)
+        if err != nil </span>{
+                <span class="cov0" title="0">return mapCRUDError(fmt.Errorf("delete user: %w", err))
+</span>        }
+        <span class="cov0" title="0">count, err := result.RowsAffected()
+        if err != nil </span>{
+                <span class="cov0" title="0">return fmt.Errorf("read delete result: %w", err)
+</span>        }
+        <span class="cov0" title="0">if count == 0 </span>{
+                <span class="cov0" title="0">return users.ErrUserNotFound
+</span>        }
+        <span class="cov0" title="0">return nil</span>
+}
+
+type sqlStateError interface{ SQLState() string }
+
+func mapConflict(err error) error {
+        <span class="cov0" title="0">var stateErr sqlStateError
+        if errors.As(err, &amp;stateErr) &amp;&amp; stateErr.SQLState() == "23505" </span>{
+                <span class="cov0" title="0">return fmt.Errorf("%w: %v", users.ErrUserConflict, err)
+</span>        }
+        <span class="cov0" title="0">return err</span>
+}
+</pre>
+		
+		<pre class="file" id="file32" style="display: none">package repository
+
+import (
+        "context"
+        "github.com/AndewGitWorks/tamagochi/backend/internal/domain/users"
+)
+
+func (s *PostgresUserStore) List(ctx context.Context, limit, offset int) ([]users.User, error) {
+        <span class="cov0" title="0">rows, err := s.db.QueryContext(ctx, `SELECT `+userColumns+` FROM tamagochi.users ORDER BY id LIMIT $1 OFFSET $2`, pageSize(limit), offset)
+        if err != nil </span>{
+                <span class="cov0" title="0">return nil, err
+</span>        }
+        <span class="cov0" title="0">defer rows.Close()
+        result := make([]users.User, 0)
+        for rows.Next() </span>{
+                <span class="cov0" title="0">var user users.User
+                if err := rows.Scan(&amp;user.ID, &amp;user.Name, &amp;user.Surname, &amp;user.Login, &amp;user.Email, &amp;user.PasswordHash, &amp;user.PhoneNumber, &amp;user.Version, &amp;user.Role); err != nil </span>{
+                        <span class="cov0" title="0">return nil, err
+</span>                }
+                <span class="cov0" title="0">result = append(result, user)</span>
+        }
+        <span class="cov0" title="0">return result, rows.Err()</span>
+}
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>

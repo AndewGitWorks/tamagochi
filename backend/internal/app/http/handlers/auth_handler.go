@@ -46,7 +46,11 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 	}
 	writeJSON(w, http.StatusOK, pair)
 }
-
+func (h *AuthHandler) HealthCheck(w http.ResponseWriter, r *http.Request) {
+	writeJSON(w, http.StatusOK, map[string]string{
+		"status": "ok",
+	})
+}
 func (h *AuthHandler) Refresh(w http.ResponseWriter, r *http.Request) {
 	token, ok := bearerToken(r.Header.Get("Authorization"))
 	if !ok {

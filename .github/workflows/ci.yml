@@ -1,0 +1,50 @@
+name: Go checks
+
+on:
+  push:
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: "0 2 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    name: Smoke tests
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.22.x"
+      - run: go test ./internal/domain/users ./internal/platform/security ./internal/app/http/handlers -run 'Test(RegisterIssuesRequiredClaims|LoginAndRefreshRotation|AuthRoutes|CatalogWritesRequireAdminAccessToken)'
+
+  regression:
+    name: Regression tests
+    if: github.event_name == 'pull_request' || github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.22.x"
+      - run: go vet ./...
+      - run: go test ./... -coverprofile=coverage.out
+      - run: go tool cover -html=coverage.out -o coverage.html
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: go-test-report
+          path: |
+            backend/coverage.out
+            backend/coverage.html
+          if-no-files-found: warn

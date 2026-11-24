@@ -1,0 +1,25 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.fullName {
+  display: flex;
+  gap: 14px;
+}
+
+.policy {
+  margin: 10px 0;
+}
+
+.policyLink {
+  margin-left: 2px;
+  color: var(--color-pink);
+  text-decoration: underline;
+}
+
+.errorMessage {
+  color: var(--color-error);
+  font-size: 16px;
+}

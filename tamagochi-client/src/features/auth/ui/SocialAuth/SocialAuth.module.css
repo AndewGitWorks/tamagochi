@@ -1,0 +1,28 @@
+.socialAuth {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: var(--letter-spacing);
+  text-align: center;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.btnProvider {
+  background-color: var(--color-white);
+  height: 60px;
+  border-radius: var(--border-radius-small);
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}

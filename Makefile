@@ -8,7 +8,17 @@ MIGRATION_SERVICE := tamagochi-postgres-migrate
 
 export PROJECT_ROOT := $(CURDIR)
 
-.PHONY: env-up env-down env-dropdown migrate-create migrate-up migrate-down migrate-action
+.PHONY: env-up env-down env-dropdown migrate-create migrate-up migrate-down migrate-action test-smoke test-regression test-coverage
+
+test-smoke:
+	cd backend && go test ./internal/domain/users ./internal/platform/security ./internal/app/http/handlers \
+		-run 'Test(RegisterIssuesRequiredClaims|LoginAndRefreshRotation|AuthRoutes|CatalogWritesRequireAdminAccessToken)'
+
+test-regression:
+	cd backend && go test ./...
+
+test-coverage:
+	cd backend && go test ./... -coverprofile=coverage.out && go tool cover -html=coverage.out -o coverage.html
 
 env-up:
 	$(COMPOSE) up -d --wait $(DB_SERVICE) $(FORWARDER_SERVICE)

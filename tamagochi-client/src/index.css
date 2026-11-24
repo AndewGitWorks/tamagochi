@@ -1,4 +1,5 @@
 @import 'normalize.css/normalize.css';
+@import './app/styles/reset.css';
 @import './app/styles/global.css';
 @import './app/styles/variables.css';
 @import './app/styles/fonts.css';

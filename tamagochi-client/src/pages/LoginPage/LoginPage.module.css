@@ -1,0 +1,11 @@
+.headerLogin {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.title {
+  font-size: 46px;
+  font-weight: 800;
+  letter-spacing: var(--letter-spacing);
+}

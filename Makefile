@@ -8,8 +8,10 @@ MIGRATION_SERVICE := tamagochi-postgres-migrate
 
 export PROJECT_ROOT := $(CURDIR)
 
-.PHONY: env-up env-down env-dropdown migrate-create migrate-up migrate-down migrate-action test-smoke test-regression test-coverage
+.PHONY: run-backend env-up env-down env-dropdown migrate-create migrate-up migrate-down migrate-action test-smoke test-regression test-coverage
 
+run-backend:
+	cd backend && go run cmd/api/main.go
 test-smoke:
 	cd backend && go test ./internal/domain/users ./internal/platform/security ./internal/app/http/handlers \
 		-run 'Test(RegisterIssuesRequiredClaims|LoginAndRefreshRotation|AuthRoutes|CatalogWritesRequireAdminAccessToken)'

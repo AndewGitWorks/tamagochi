@@ -32,7 +32,7 @@ func NewRouter(auth *users.AuthService, configs ...Config) http.Handler {
 	api.HandleFunc("POST /register", authHandler.Register)
 	api.HandleFunc("POST /login", authHandler.Login)
 	api.HandleFunc("POST /refresh", authHandler.Refresh)
-
+	api.HandleFunc("GET /health", apphttp.HealthCheck)
 	if len(configs) > 0 {
 		registerResources(api, auth, configs[0])
 	}

@@ -34,6 +34,10 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusCreated, pair)
 }
 
+func HealthCheck(w http.ResponseWriter, r *http.Request) {
+	writeJSON(w, http.StatusOK, "healthed")
+}
+
 func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 	var input users.LoginInput
 	if !decodeJSON(w, r, &input) {

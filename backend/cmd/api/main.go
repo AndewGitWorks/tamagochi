@@ -132,5 +132,6 @@ func loadEnvFile(path string) error {
 			}
 		}
 	}
+
 	return scanner.Err()
 }
